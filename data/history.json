@@ -1,0 +1,60 @@
+{
+  "days": [
+    {
+      "date": "2026-11-21",
+      "candidates": 200,
+      "papers": [
+        {
+          "id": "2611.25659",
+          "title": "DNA: Unlocking Depth Scaling in CTR Models",
+          "abstract": "Long user behavior sequences are among the strongest signals for click-through rate (CTR) prediction. Cross-attention makes these sequences practical for industrial ranking by keeping compute linear in sequence length. Yet the gains from stacking cross-attention layers taper off: on Taobao search, growing a cross-attention stack from 16 to 28 layers adds only 0.02 percentage points (pt) of AUC. We argue that the key-value side is the bottleneck. Each layer projects the same behavior sequence into keys and values, so adding depth gives the model more reads of a fixed sequence. We propose DNA (Dual-stream Nexus Attention), which lets the sequence itself evolve with depth. At each layer, the request representation (the search query, user features and scene) first reads the sequence. Each behavior token then attends to the updated request representation and uses what it reads to update itself, so the next layer reads a sequence shaped by the current request. The update runs once per request, all candidates share the resulting sequence, and both the reads and the update keep linear complexity in sequence length. At comparable forward FLOPs, DNA improves AUC over cross-attention stacks by 0.08 to 0.26 pt and keeps improving in the depth range where those stacks level off. DNA-4 is deployed in Taobao search. In an online A/B test against the production model, it improves CTR by 0.8% and GMV by 0.5%.",
+          "published": "2026-11-19T07:40:54Z",
+          "url": "https://arxiv.org/abs/2611.25659",
+          "reason": "直接面向电商搜索CTR精排的深度扩展瓶颈，提出让行为序列随深度演化的注意力结构，并在淘宝搜索上线A/B验证，对精排长期价值建模有明确可迁移性。",
+          "method": "DNA（Dual-stream Nexus Attention）：每层先由请求表示读取行为序列，再由行为token读取更新后的请求表示并更新自身，使下一层读取被当前请求重塑的序列；更新每请求一次、候选共享，读写均对序列长度线性；与cross-attention堆叠在同等前向FLOPs下比较AUC。",
+          "application": "可推测用于电商搜索/推荐精排中长用户行为序列的编码器替换，缓解加深cross-attention带来的收益饱和，在同等算力下提升CTR与GMV。",
+          "limitations": "摘要未说明多目标（如转化、GMV与CTR联合）建模细节、序列长度上限与线上延迟分布；A/B仅给出CTR与GMV相对提升，未说明统计显著性与实验周期。",
+          "tags": [
+            "精排",
+            "CTR",
+            "长行为序列",
+            "工业实践"
+          ]
+        },
+        {
+          "id": "2611.25527",
+          "title": "Learning Generative Ranking Policies for Whole-Page Optimization",
+          "abstract": "A recommendation page is consumed as a whole: the items on it compete for attention and complement one another, so the best page is not simply the individually best items placed side by side. We study whole-page optimization, which selects and orders the items on a page jointly to maximize the score of the page. The number of possible pages grows combinatorially, so good pages must be generated rather than enumerated. Some generative re-ranking methods use the same page-level training signal for every choice in a sampled page. Others imitate target pages built before training, which remain largely fixed as the generator improves. We address both limitations with one local page-level objective, which repeatedly moves the current generator toward pages with higher score. This objective splits exactly into one training target per position, and each target compares candidates at the same partial page by the scores of the complete pages they lead to. Every position therefore learns to choose the item that is better for the whole page, rather than the item that looks best on its own. We call this procedure whole-page policy improvement. On two public datasets, KuaiRand-1K and RL4RS-SeqSlate, which cover multi-objective item selection and constrained ordering, and on an industrial dataset of logged pages, our method outperforms the evaluated generative re-ranking baselines. On a synthetic benchmark with a known optimal page, it also comes closest to the optimum, showing that its improvements come from better whole-page decisions.",
+          "published": "2026-11-19T05:27:22Z",
+          "url": "https://arxiv.org/abs/2611.25527",
+          "reason": "聚焦整页/列表级优化，用生成式重排直接生成整页而非逐项打分，且训练目标按位置精确分解为整页级信号，与生成式重排、列表级优化方向高度契合。",
+          "method": "提出whole-page policy improvement：以单一局部页级目标反复将当前生成器推向更高分页面，该目标可精确拆分为每个位置一个训练目标，每个目标在同一部分页条件下按完整页得分比较候选；在KuaiRand-1K、RL4RS-SeqSlate及工业日志页数据上与生成式重排基线比较。",
+          "application": "可推测用于电商推荐页/搜索结果的整页生成式重排，联合决定选品与排序，以页面级多目标得分为优化对象。",
+          "limitations": "摘要未说明多目标得分的具体构成与权重、线上A/B结果、以及页长与候选规模对生成质量的影响；工业数据仅称优于基线，未给出指标数值。",
+          "tags": [
+            "生成式重排",
+            "列表级优化",
+            "整页优化"
+          ]
+        },
+        {
+          "id": "2611.26096",
+          "title": "From Sessions to Serving: Integrating LLM-Based Embeddings into Retrieval for Production Content Recommendation",
+          "abstract": "Personalized content recommendation on large marketplace websites must reconcile heterogeneous candidate content (e.g., customer stories, product pages, industry pages, and learning content) with sparse, fast-changing user behavior, placing increasing demands on the retrieval stage to represent user interest well, not just the downstream ranking stage. We present LSER (LLM Session Embedding Retrieval), a production content recommendation system for autodesk.com that derives session- and history-level embeddings from a pretrained large language model (LLM) and adds them as auxiliary user-side features in the retrieval-stage user tower alongside existing learned sequence encoders. To keep user-side embeddings fresh under real-time behavior, we build a nearline serving path that asynchronously refreshes sequential and LLM-derived user vectors for our main content recommendation server. We validate the incremental value of the LLM features through an ablation study across our full multi-content-type catalog. Our results indicate that integrating LLM-derived embeddings as additional retrieval signals, together with production-grade nearline serving, is technically feasible and can improve model performances.",
+          "published": "2026-11-19T13:31:04Z",
+          "url": "https://arxiv.org/abs/2611.26096",
+          "reason": "生产级内容推荐检索系统，将LLM会话/历史嵌入作为检索阶段用户塔的辅助特征，并配套近线服务刷新，对搜索与推荐检索阶段的用户兴趣表示有明确工程可迁移价值。",
+          "method": "LSER：用预训练LLM导出会话级与历史级嵌入，作为辅助用户侧特征加入检索阶段用户塔，与已有序列编码器并存；构建近线服务路径异步刷新序列向量与LLM派生用户向量；在全内容类型目录上做消融验证增量价值。",
+          "application": "可推测用于电商推荐/搜索召回阶段的用户兴趣表示增强，尤其适合行为稀疏、候选内容异构的场景，并可作为精排用户特征的补充信号。",
+          "limitations": "摘要未说明具体离线/线上指标数值、延迟与刷新频率开销、以及LLM嵌入相对序列编码器的增益幅度；未说明是否影响下游精排效果。",
+          "tags": [
+            "检索",
+            "LLM嵌入",
+            "工业实践",
+            "用户表示"
+          ]
+        }
+      ]
+    }
+  ]
+}
