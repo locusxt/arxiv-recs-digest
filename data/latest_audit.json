@@ -271,10 +271,8 @@
       "title": "Finetuning VLAs for Dexterous Manipulation: The Right Checkpoint Is All You Need",
       "abstract": "Vision-Language-Action models have demonstrated strong manipulation capabilities. A limitation of VLA models is that most manipulation datasets focus on parallel-jaw gripper systems, making transfer to multi-finger hands challenging, particularly as teleoperation datasets are harder to collect with multi-fingered robots. In this work, we study how to best adapt VLAs to dexterous hands by pairing supervised fine-tuning (SFT) with diffusion-steering reinforcement learning (DSRL). Using $π_{0.5}$ and a LEAP hand, we evaluate five fine-tuning recipes across two simulation tasks using only a handful of demonstrations. Our empirical analysis yields three key insights: (1) SFT success is poorly correlated with post-DSRL success, meaning the best SFT checkpoint is rarely the most effective to steer; (2) freezing the vision-language model (VLM) and tuning only the action expert produces the most steerable policy for both training and out-of-distribution placements; and (3) low-rank adaptation (LoRA) is the least steerable approach. Consequently, we recommend an adaptation recipe that freezes the VLM, fully trains the action expert, and eschews SFT rollout success as a checkpoint selection metric.",
       "published": "2026-11-18T01:04:46Z",
-      "keyword_score": 4,
-      "topics": [
-        "ranking"
-      ]
+      "keyword_score": 0,
+      "topics": []
     },
     {
       "id": "2611.23615",
@@ -679,7 +677,7 @@
       "title": "Active Feature Acquisition by Distilling an Oracle Teacher",
       "abstract": "Acquiring every feature of an instance is often costly: a measurement can carry a monetary price, a time delay, or a privacy cost. Active Feature Acquisition (AFA) addresses this by learning a policy that decides, per instance, which features to acquire under a budget. Existing AFA methods train this policy by optimizing a self-constructed utility target rather than distilling an explicit teacher. We construct this teacher explicitly. At training time the label and the unobserved feature values are available, and together they determine the teacher in closed form: an oracle that ranks every candidate by its effect on the downstream predictor's error. OracleImitator distills this ranking into a deployable policy by soft-target imitation. Across multimodal medical diagnosis and the AFABench benchmark, OracleImitator matches or outperforms existing AFA methods across the budget range, recovering 90% of the attainable accuracy gain at under a quarter of the acquisition cost. Because the teacher is an explicit algorithmic object rather than an implicit optimization target, we can also measure directly how much of its ranking is recoverable by a policy restricted to what is visible at deployment.",
       "published": "2026-11-19T18:52:57Z",
-      "keyword_score": 4,
+      "keyword_score": 0,
       "topics": [
         "ranking"
       ]
@@ -731,7 +729,7 @@
       "title": "DeepQuest: From Knowledge Gaps to Scientific Discovery in Alzheimer's Disease",
       "abstract": "Automating experiments does not necessarily advance scientific understanding. Research agents must identify meaningful knowledge gaps, determine what available data can resolve, and assess whether their findings advance existing knowledge. We introduce DeepQuest, a knowledge-gap-driven AI scientist framework for Alzheimer's disease research. DeepQuest transforms unresolved questions from domain reviews into traceable, testable hypotheses and prioritizes them through data feasibility screening and groupwise Elo ranking. It couples iterative experimentation with two-level auditing that separates experimental reliability from knowledge contribution relative to two frozen literature corpora. On OASIS-3, DeepQuest produces 42 feasible hypotheses and outperforms the strongest baselines in 14 of 15 evaluator-dimension comparisons across three language-model reviewers. The full framework achieves an audit-assessed scientific finding rate of 95.24%, outperforming both general-purpose executors and domain-specific research agents. This scientific finding rate remains stable across literature corpora and evaluator model families. Representative findings concern neuropsychiatric symptoms and dementia risk, longitudinal amyloid spatial stability, and neocortical tau-associated clinical impairment, with key associations supported in independent ADNI and AIBL cohorts. These results show how aligning knowledge gaps, data feasibility, and evidence auditing can turn automated research into traceable, evidence-supported scientific discovery. Our source code is available at https://anonymous.4open.science/r/DeepQuest-3066/",
       "published": "2026-11-19T16:18:26Z",
-      "keyword_score": 4,
+      "keyword_score": 0,
       "topics": [
         "ranking"
       ]
@@ -782,7 +780,7 @@
       "title": "Complete-SVD: A Functional Norm Approach to Low-Rank LLM Compression",
       "abstract": "Post-training low-rank compression of neural networks must not only approximate the original weights but also preserve the model's input-output behavior. Recent output-aware methods measure the compression error beyond the compressed layer, at the model output, weighting logit changes by the observed next token or by the model's predicted probabilities. We propose Complete-SVD, a method for large language models that minimizes the $L_2$ distance between the logits of the original and compressed models, weighting all logit changes equally. Linearizing the network around the original weights, together with a Kronecker-factored approximation, reduces this objective to a weighted SVD with a closed-form solution. Its output-side factor is intractable to compute; we estimate it without bias from random probes, at a cost of $K$ backward passes per sequence, independent of vocabulary size and sequence length. At matched settings with uniform ranks and WikiText-2 calibration, Complete-SVD achieves the lowest C4 and PTB perplexity in every setting, and at ratio 0.7 under LEMS rank allocation. Replacing the $L_2$ distance by the Kullback-Leibler divergence (KL-SVD), with the same estimation framework, lowers calibration perplexity in most settings and raises downstream accuracy, but raises cross-corpus perplexity. Complete-SVD also improves IFEval instruction-following accuracy over the strongest prior output-aware methods throughout.",
       "published": "2026-11-19T13:04:57Z",
-      "keyword_score": 12,
+      "keyword_score": 4,
       "topics": [
         "ranking"
       ]
@@ -854,10 +852,8 @@
       "title": "Interpretable Prototype-Conditioned Adaptation for Weather Forecasting",
       "abstract": "Data-driven weather forecasting requires distinguishing local states and their temporal evolution. However, learned patterns remain implicit in neural forecasters, making their influence difficult to interpret. Failing to distinguish local evolution can lead to similar forecasts for locations that develop differently, increasing prediction error. This motivates explicit references for distinguishing and interpreting local patterns. Prototypes provide explicit pattern references, but sample- or task-level conditioning leaves open how to adapt to distinct locations and variable groups. To deal with this problem, we design ProtoCast, which uses group-specific prototype banks to adapt local features while accounting for cross-variable dependencies. Specifically, (1) we combine each group's historical features and temporal change with forecast context from cross-variable attention for evolution-aware prototype matching. (2) Sparse mixtures of prototype-specific low-rank operators tailor corrections to each group and location. A gated attention block then exchanges the corrected features across groups before prediction. Each group's correction decomposes into explicit prototype contributions before this fusion. (3) We jointly train the forecasting network and operators from scratch and refit each group's prototypes before every training epoch. Slot tracking preserves prototype-operator associations, making each prototype's contribution to local corrections more interpretable. Experiments on GlobalForecast and TyphoonTracking show improved forecasting accuracy, while prototype deletion links local feature contributions to changes in prediction error. This work advances the development of more accurate and interpretable data-driven weather forecasting models. Project page: https://zhixuanli.github.io/projects/li2026protocast",
       "published": "2026-11-19T10:02:19Z",
-      "keyword_score": 4,
-      "topics": [
-        "ranking"
-      ]
+      "keyword_score": 0,
+      "topics": []
     },
     {
       "id": "2611.25834",
@@ -875,7 +871,7 @@
       "title": "A Sparse Low-Rank Biclique Decomposition for Graphs",
       "abstract": "Low-rank plus sparse decompositions, such as robust PCA, typically model the low-rank component as dense and the sparse component as corruption. This viewpoint is poorly suited to graph adjacency matrices, where sparsity is structural and dense low-rank factors destroy the combinatorial and computational properties of the graph. We propose signed biclique decomposition (SBD), a sparse low-rank decomposition for integer-weighted graphs that represents the structured component as a sum of sparse signed binary rank-one factors, together with a sparse signed residual. The resulting representation remains discrete, interpretable, sparse, and compatible with standard linear algebra. We formulate fixed-rank and greedy SBD objectives and derive a gain-based greedy algorithm with theoretical guarantees. Empirically, SBD recovers block structure in noisy graphs, while its factorized representation enables efficient sparse matrix-matrix multiplication (SpMM). On real graphs with strong shared-neighborhood structure, SBD achieves compression factors above $10$ and SpMM speedups up to $6\\times$ over cuSPARSE, suggesting a practical alternative to dense low-rank decompositions for graphs. Code is available at https://github.com/IAntoineV/sbd.",
       "published": "2026-11-19T09:42:18Z",
-      "keyword_score": 12,
+      "keyword_score": 4,
       "topics": [
         "ranking"
       ]
@@ -961,7 +957,7 @@
       "title": "QUBO-based feature selection for MRI undersampling pattern design",
       "abstract": "We formulate undersampling mask design for Cartesian magnetic resonance imaging (MRI) as a feature subset selection problem. Each sampling line is represented by a binary feature indicating whether it is included in each candidate mask. Using candidate masks and their training-set evaluations, we estimate mutual information (MI) and conditional mutual information (CMI). These estimates and a sampling-count penalty define a quadratic unconstrained binary optimization (QUBO) model. The model is solved using simulated annealing and quantum annealing to determine a feature subset and its corresponding sampling mask. We assess the selected subsets on the test set through zero-filled reconstruction in Fourier undersampling simulations using fastMRI knee magnitude reference images, with patient-disjoint training and test sets. At all six tested target sampling rates from 15% to 40%, the resulting reconstructions have lower mean root mean square error than those obtained with four conventional sampling methods. They also have higher mean structural similarity than those obtained using univariate mutual-information ranking at all tested rates. These results support information-theoretic feature selection as an approach to MRI undersampling mask design under the tested zero-filled simulation settings.",
       "published": "2026-11-19T07:10:59Z",
-      "keyword_score": 4,
+      "keyword_score": 0,
       "topics": [
         "ranking"
       ]
@@ -971,9 +967,8 @@
       "title": "Can an LLM Fix a Language Model Without Training It?",
       "abstract": "Although an external language model can select and test repairs to another model's weights, behavior can also be recovered through fixed numerical edits. We assessed the value of interactive selection in a controlled study of Transformer repair. After inspecting predictions, activation summaries, and weight statistics, the editor selects projection recipes to apply to the target without gradient updates. We analyzed 20 recorded sessions involving five masked and causal language models, comparing the selected edits with fixed projections, scripted and matched-budget black-box search, and low-rank adaptation. Under the core two-layer fault, live selection matches black-box search on SmolLM2 and Qwen2.5. For Pythia, live selection achieves 65.62% completion accuracy, compared with 0% for black-box search and 66.15% for a fixed projection. Under a separate compound fault affecting attention and feed-forward weights, both scripted and LLM-guided selection increase the descriptive five-checkpoint mean from 24.89% to 71.25% using the same operator family. On unmodified checkpoints, scripted projection yields small gains or losses on a separate set of framed questions. The experiments identify cases in which feedback changes an edit decision, operator coverage accounts for recovery, or supervised adaptation performs better. Combined with measurements of parameter restoration and preservation, these comparisons establish the scope of controller-guided repair for the tested faults and completion tasks.",
       "published": "2026-11-19T06:59:01Z",
-      "keyword_score": 7,
+      "keyword_score": 3,
       "topics": [
-        "ranking",
         "search"
       ]
     },
@@ -1015,7 +1010,7 @@
       "title": "Coordinate Basis Linear Bandits with Sublinear Regret over Low-Rank Clusters",
       "abstract": "We study the problem of computational efficiency for linear bandits in high-dimensional settings with a finite arm set. In linear bandits, the increase in the dimension $d$ of the feature vectors leads to growing computational costs of $O(d^2)$ at each round of update. Traditional low-rank approximation methods such as SOFUL reduce computation via fixed-size matrix sketching, yet run the risk of incurring vacuous linear regret when the spectral tail of the data is heavy and the approximation rank is inadequately selected. To guarantee regret convergence and effectively reduce computational costs, we introduce a clustering mechanism and propose the Coordinate Basis Linear Bandit (CBL) algorithm. Our method preserves the full covariance information in each cluster by maintaining an exact orthonormal basis of the cluster's column space together with a low-dimensional coordinate representation, which guarantees robust sublinear regret without spectral-tail vulnerabilities. It performs cluster switching by assigning a sentinel for each cluster, and reduces per-round update computation to $O(\\bar r^2)$ in the cluster's effective dimension $\\bar r=\\min(r,l)$, where $r$ is the intrinsic rank of the data and $l<d$ is a tunable rank bound.",
       "published": "2026-11-19T03:03:52Z",
-      "keyword_score": 18,
+      "keyword_score": 10,
       "topics": [
         "ranking",
         "training"
@@ -1037,7 +1032,7 @@
       "title": "VoxForge: A Unified Foundation Model for Dense 3D Features Across MRI, CT and PET",
       "abstract": "A unified 3D medical foundation model promises reusable, frozen features that serve a wide variety of tasks such as segmentation, classification and registration on MRI, CT and PET as well as specialist models do. Generalist models still need separate backbones for localized and global tasks, specialist models are confined to a single modality, with the concern that spanning modalities under-emphasizes fine anatomy, and both typically rely on end-to-end fine-tuning to be competitive. We present VoxForge, a single encoder that integrates recent advances in 3D architecture, self-distillation and cross-modal curricula to learn transferable features from permissively licensed MRI and CT volumes. We evaluate it strictly frozen, the test a reusable foundation model must pass, against state-of-the-art generalist and specialist models on segmentation, classification and registration across MRI and CT, and on PET, which it never sees. VoxForge has the best or tied-best average rank in every task group, serves localized and global tasks across modalities at the level of state-of-the-art specialists, and is extremely label-efficient, matching top-performing models on TotalSegmentator CT with a tenth of the labels.",
       "published": "2026-11-19T00:09:02Z",
-      "keyword_score": 6,
+      "keyword_score": 0,
       "topics": [
         "ranking",
         "systems"
@@ -1077,7 +1072,7 @@
       "title": "A Neurosymbolic Multimodal Framework for 30-Day Diabetic Readmission Prediction: Integrating Structured EHR Data, Dense Clinical Embeddings, and Knowledge-Grounded Symbolic Extraction",
       "abstract": "Unplanned 30-day readmissions among patients with diabetes mellitus impose a substantial clinical and economic burden, yet most predictive models use only structured electronic health record (EHR) data and ignore free-text clinical notes, which often contain code-mixed Hindi-English (Hinglish) phrasing and negation that general-purpose language models parse unreliably. We propose a neurosymbolic multimodal framework evaluated on the public Diabetes 130-US Hospitals dataset (101,766 encounters; 71,518 patients) with a patient-level grouped 80/20 split. Three streams are fused: engineered structured features; 32 components of Bio_ClinicalBERT note embeddings obtained by truncated singular value decomposition; and symbolic entities extracted by an open-weight clinical language model within a three-stage hybrid retrieval-augmented generation pipeline (dense retrieval, sparse lexical retrieval, and cross-encoder re-ranking) with reflective negation auditing. A cost-sensitive XGBoost classifier with a decision threshold calibrated by Youden's J statistic produces the prediction. On the held-out test cohort (n = 20,153), the structured baseline achieved an area under the receiver operating characteristic curve (AUROC) of 0.6477, sensitivity of 0.5839, and Brier score of 0.1080. The full multimodal model achieved the highest sensitivity (0.6667; +8.28 percentage points), the best F2-score (0.3824), and the lowest Brier score (0.0977), at a slightly lower AUROC (0.6375) and specificity (0.5161). Shapley additive explanations showed that prior utilization dominates risk, with compressed narrative components among the top predictors. On a 500-note code-switched benchmark, grounded retrieval raised Hinglish symptom recall from 4.8% to 40.2% and precision from 3.1% to 45.2%, while reducing entity hallucinations from 1.74 to 0.00 per note.",
       "published": "2026-11-18T22:12:31Z",
-      "keyword_score": 14,
+      "keyword_score": 4,
       "topics": [
         "ranking",
         "retrieval"
@@ -1100,7 +1095,7 @@
       "title": "MADJEPA: Enhanced Multi-Stage Joint-Embedding Predictive Architecture for Medical Anomaly Detection",
       "abstract": "Anomaly detection in medical images is a complex task, requiring the development of a robust model using only healthy patient data. Without access to labeled data, modern approaches typically employ self-supervised learning to obtain a model of normality. Since world models promise to build strong internal representations of their environment, we consider them as suitable candidates for the medical anomaly detection environment, namely medical investigations of healthy patients. To this end, we propose MADJEPA, a medical anomaly detector based on an enhanced multi-stage joint-embedding predictive architecture (JEPA). We design a multi-stage training pipeline to produce a robust detector: (1) image-based JEPA (I-JEPA) training aims to learn a strong representation of normal training data; (2) target encoder distillation aims to modulate over-generalization of I-JEPA representations to abnormal data; (3) pseudo-anomaly classification aims to calibrate anomaly predictions by learning a tight boundary around the normal data manifold. To demonstrate our design, we carry out comprehensive experiments on six datasets covering various medical image domains (e.g.~MRI, OCT, X-ray, histopathology), comparing our MADJEPA with numerous state-of-the-art methods. The results show that our carefully designed world model, MADJEPA, attains competitive results, ranking first on three datasets. Our ablation studies further confirm the utility of each training stage, indicating that I-JEPA alone is not sufficient to obtain competitive results in medical anomaly detection. We publicly release our code at https://github.com/Sabina085/madjepa.",
       "published": "2026-11-18T21:15:01Z",
-      "keyword_score": 6,
+      "keyword_score": 0,
       "topics": [
         "ranking",
         "systems"
@@ -1111,17 +1106,15 @@
       "title": "Before the Choice: An Evidential Framework for Studying Prospective Representations in Language Models",
       "abstract": "An observable decision reveals the selected action but does not determine which alternatives were internally represented. Drawing on prospection research and hippocampal forward-sweep observations, we develop Before the Choice, an evidence-oriented framework distinguishing future-directed content, prospective computation, and causal guidance. The framework organizes four experimental contrasts and makes their alternative explanations explicit. Its first test case concerns unchosen trajectories in deterministic symbolic environments. A preregistered low-rank probe evaluated once on a sealed TEST did not meet its criterion (paired accuracy 0.020 versus 0.195 for a text-and-observed-choice baseline; 293 admissible pairs). Exploratory H1b exposed a reconstruction-by-elimination problem: identifying the chosen candidate can determine the unchosen target. In H1c, matched worlds varied an unchosen continuation while keeping candidate keys bitwise invariant. With specified positive controls passed, decoding in the late-key condition remained at 0.521 (p = 0.18; 141 contributing families). These observations do not identify prospective simulation or establish an absence of prospective representations. They illustrate why identifiability, sensitivity, and a dependence-aware null model must constrain inferences from decodability. PREM is proposed as an organizational framework and is not validated by these results. We offer it as a methodological contribution to empirical AI welfare research, which will require such evidential distinctions. Code and protocol records: https://github.com/besionisrael/before-choice",
       "published": "2026-11-18T20:51:27Z",
-      "keyword_score": 4,
-      "topics": [
-        "ranking"
-      ]
+      "keyword_score": 0,
+      "topics": []
     },
     {
       "id": "2611.25065",
       "title": "Empirical Variational Bayes Factorization for Longitudinal Matrix Data",
       "abstract": "Collecting high-dimensional data over time for multiple individuals is increasingly common in biomedical research, particularly in studies of disease progression or molecular time-course experiments. Often data are missing or the timepoints are irregularly spaced across individuals. There is a lack of flexible methodology to explore latent patterns of change over time and account for missing data. We propose an empirical variational Bayes (EVB) approach to factorize high-dimensional longitudinal data, in which the underlying factors have temporal correlation over time. The EVB approach is computationally efficient and accommodates flexible covariance structures over time with automatic determination of all hyper-parameters (including the underlying rank, i.e., number of factors). Simulations demonstrate that the approach captures the underlying signal more precisely than other strategies, and performs well with respect to missing data imputation under different scenarios. An application to a gene time-course data for multiple sclerosis treatment provides a factorization with interpretable components over time and improved imputation accuracy for missing data.",
       "published": "2026-11-18T19:09:41Z",
-      "keyword_score": 4,
+      "keyword_score": 0,
       "topics": [
         "ranking"
       ]
@@ -1185,7 +1178,7 @@
       "title": "Prognosis Without Prediction: The Intrinsic Geometry of Survival",
       "abstract": "Modeling systemic failure in high-dimensional environments is fundamentally limited by supervised algorithms that attempt to predict sparse, noisy or censored endpoints. To break this reliance on explicit outcome regression, we engineered the Self-Organizing Survival Manifolds (SOSM) framework, a deep learning architecture that decouples unsupervised representation learning from survival labels and treats time-to-event progression as an emergent geometric property. The system projects heterogeneous multi-omics arrays into a unified latent space governed by a pseudotime-weighted, curvature-minimizing graph Laplacian, organizing patient trajectories along low-dissipation geodesic flows. To validate the framework, we applied this architecture to a 184-patient clear cell renal cell carcinoma multi-omics cohort. Across a deterministic 5-fold cross-validation pipeline, SOSM achieved a mean Concordance Index of $0.768 \\pm 0.068$, while out-of-fold risk stratification yielded significant survival divergence (log-rank $p < 0.001$) accompanied by a 14.7% increase in local manifold dissipation among high-risk patients. Furthermore, interrogating the network's encoder weights confirmed that the model autonomously recovered canonical metabolic and microenvironmental drivers of disease progression without supervised feature selection. By demonstrating that systemic failure can be mapped as a geometric phase transition, SOSM establishes a generalizable computational engine for prognostic modeling across biological, industrial and financial complex systems.",
       "published": "2026-11-18T17:42:23Z",
-      "keyword_score": 4,
+      "keyword_score": 0,
       "topics": [
         "ranking"
       ]
@@ -1274,10 +1267,8 @@
       "title": "VAFL: A Vertical Analytic Federated Learning Mechanism for Efficient Crowdsourced Services via Closed-Form Solutions",
       "abstract": "Intelligent services often rely on complementary information held by different organizations, motivating Vertical Federated Learning without centralized raw-data pooling. We propose VAFL, a Vertical Analytic Federated Learning framework that fits classification and regression heads on fixed local representations through regularized least squares. An agent-assisted protected-computation workflow supports two-party and multi-party collaboration. To reduce fitting overhead, we develop a full-dimensional equivalent solve that applies block factors directly to the target matrix, avoiding construction of the full inverse. We further study two width-reduction strategies: local spectral projection with coefficient lifting, and full-dimensional local fitting with low-rank cross-party correction. The first compresses the prediction space, whereas the second retains local components outside the collaboration subspace. We establish their algebraic properties and analyze their computational scope. Experiments on five benchmarks show the accuracy--cost tradeoffs of these strategies and compatibility with diverse frozen backbones. Predictive performance and training time identify useful operating points and the limits of compression.",
       "published": "2026-11-18T13:00:45Z",
-      "keyword_score": 4,
-      "topics": [
-        "ranking"
-      ]
+      "keyword_score": 0,
+      "topics": []
     },
     {
       "id": "2611.24353",
@@ -1349,10 +1340,8 @@
       "title": "A Rank-One Bypass of Fixed Linear Erasure",
       "abstract": "Linear concept erasure can make a target unreadable to a specified family of linear classifiers applied to a model's current internal features. In an open-weight release, however, an attacker can modify the layers that produce those features. We study a fixed affine erasure layer whose upstream model is allowed to change. If the layer transmits even one direction visible to an allowed downstream classifier, the attacker can write a target score into that direction and carry it through the layer. We show that this condition is also necessary, and that for a nonconstant linear target score the required change is a rank-one affine update. Across six CIFAR-10 class-pair tasks, the route restores nearly all pre-erasure target performance and can leave a deployed benign linear head's scores unchanged to numerical tolerance. We then price the attack: with eight target labels and 2,000 unlabelled calibration examples, a 10% mean relative feature edit yields 79.8% test accuracy, which is 91.2% of the fitted score's gain over chance; tighter edit limits sharply reduce success. Linear guardedness therefore remains a valid guarantee about the current representation, but it is not by itself a tamper-resistance guarantee for an editable open-weight model.",
       "published": "2026-11-18T05:32:45Z",
-      "keyword_score": 12,
-      "topics": [
-        "ranking"
-      ]
+      "keyword_score": 0,
+      "topics": []
     },
     {
       "id": "2611.23858",
@@ -1517,9 +1506,8 @@
       "title": "LusoClin: A Synthetic Clinical Note Dataset for Medical Information Retrieval in European Portuguese",
       "abstract": "Access to large-scale clinical text collections is crucial for advancing medical information retrieval research, including clinical note search, patient cohort identification, and domain-adapted retrieval models. However, real clinical notes are rarely available due to privacy regulations, which particularly limits progress for low-resource languages such as European Portuguese. We present LusoClin, a publicly released dataset of synthetic clinical notes in European Portuguese, created to support privacy-preserving research on clinical text retrieval. LusoClin was generated by pre-processing real clinical data, fine-tuning the open-source Llama 3.2 (3B) instruction-tuned model using Quantized Low-Rank Adaptation, and applying prompt-based clinical note generation. To facilitate semantic indexing and clinical search, the notes are automatically annotated with clinical entities using a BERT-based model. We evaluate LusoClin in terms of utility, fidelity, diversity, and privacy using automatic metrics and human evaluation. Results indicate that the dataset captures clinically relevant language patterns and can support downstream IR applications such as clinical document retrieval and domain-specific model adaptation, although annotators can often distinguish synthetic from real notes and some medical inconsistencies persist.",
       "published": "2026-11-17T20:03:13Z",
-      "keyword_score": 27,
+      "keyword_score": 13,
       "topics": [
-        "ranking",
         "retrieval",
         "search",
         "systems"
@@ -1540,10 +1528,8 @@
       "title": "Fine-Tuning Gemma 4 Edge Models for MATLAB Signal-Processing Code with SFT and QLoRA on a Laptop iGPU",
       "abstract": "Small language models that run on a laptop are attractive for writing signal-processing code offline, but they make systematic errors on digital signal processing (DSP) conventions. We apply supervised fine-tuning (SFT) to the Gemma 4 edge models E2B and E4B with 66 checked examples covering 11 signal-processing MATLAB subtasks, using low-rank adaptation (LoRA) and quantized LoRA (QLoRA) on the integrated GPU (iGPU) of a laptop, and deploy the 8-bit integer (int8) models with the adapters through OpenVINO. On held-out variants scored by deterministic checkers, the pass rate rises from 18/66 to 37/66 (LoRA) and 37/66 (QLoRA) for E2B and from 32/66 to 47/66 for E4B (QLoRA). Reading all 159 failing programs shows that the adapters remove most errors of convention, such as the sign of a lag, units and array shapes, but few errors in building signals and noise. Applied at run time, the adapter costs 17-19% of the generation speed.",
       "published": "2026-11-17T18:47:37Z",
-      "keyword_score": 4,
-      "topics": [
-        "ranking"
-      ]
+      "keyword_score": 0,
+      "topics": []
     },
     {
       "id": "2611.23158",
@@ -1774,7 +1760,7 @@
       "title": "Leveraging Segmentation Representations for Efficient Classification: A Self-Configuring Framework Based on nnU-Net",
       "abstract": "We propose a self-configuring framework that extends the nnU-Net workflow to both segmentation and classification in 3D medical imaging. Building on nnU-Net's self-configuring method, the framework reuses representations learned by a segmentation model for image-level classification. Its encoder features and predicted segmentation probabilities are used by a lightweight classifier. Two information-sharing strategies are investigated. In the frozen-backbone branch, features are augmented with region-of-interest information, predicted foreground volume, and segmentation confidence. In the adaptation branch, the final encoder stage is partially fine-tuned for classification, with an auxiliary segmentation loss to preserve segmentation-related information. Additional five-fold experiments showed that more complex configurations did not consistently improve classification performance. On the public validation leaderboard, our selected framework achieved an Overall score of 0.8056. In the official FLARE 2026 Task 2 final evaluation, our framework ranked first overall, achieving the highest DSC, NSD, and AUROC across all four testing tasks, including two hidden testing tasks. Local inference measurements also remained below the challenge limits of $60 \\mathrm{s}$ per case and $4 \\mathrm{GB}$ GPU memory. These results demonstrate the practical value of reusing segmentation representations for classification while maintaining a simple and efficient framework.",
       "published": "2026-11-17T08:31:18Z",
-      "keyword_score": 4,
+      "keyword_score": 0,
       "topics": [
         "ranking"
       ]
@@ -1816,7 +1802,7 @@
       "title": "BQ-LoRA: Binary-Quantized Low-Rank Adapters as Implicit Regularizers for Parameter-Efficient Fine-Tuning",
       "abstract": "Parameter-efficient fine-tuning of quantized large language models is dominated by QLoRA, which combines 4-bit weight quantization with FP16 low-rank adapters. We ask whether the FP16 adapter precision is necessary. Replacing it with a single binary bit per adapter parameter, combined with a learned per-layer scale $s$ and a Scaled Straight-Through Estimator, reduces adapter storage by 13-16x. We introduce two variants -- NormScale, which binarizes under a norm-preserving scale with a clipped STE, and LearnThresh, which makes the binarization threshold learnable -- unified under a framework we call BQ-LoRA. Our main theoretical contribution is a tight characterization of the BQ-LoRA hypothesis class: it has bounded entrywise norm, a typical-set spectral norm bound that is $Θ(r)$ times sharper than the worst case, a full-rank, near-isotropic update, and consequently a Rademacher complexity that yields an explicit $\\tilde{O}(s_{\\max}α\\sqrt{d_{out}/(rn)})$ generalization bound. FP16 LoRA has no comparable a priori norm or isotropy control. On Qwen2.5 (1.5B-72B), BQ-LoRA exceeds QLoRA's benchmark averages at every scale by 0.8-3.5 points; on LLaMA-2 (7B/70B) it remains competitive at the same storage reduction but does not uniformly lead the strongest FP16-adapter baselines (LoftQ at 7B, QLoRA at 70B). On Qwen2.5-7B the binary adapter preserves the 4-bit base WikiText-2 PPL within 0.06 (9.86 vs. 9.80) while QLoRA worsens it by 0.59. The reduction applies to inference-time adapter storage and serving; training memory matches QLoRA and step time rises by under 4%. We translate the storage saving into a deployment study, BQ-SGMV, by extending Punica's SGMV kernel with a binary inner-product primitive: the same A100-80GB holds 15.6x more adapters in HBM, and our research prototype eliminates cache misses under a skewed synthetic workload.",
       "published": "2026-11-17T07:33:56Z",
-      "keyword_score": 12,
+      "keyword_score": 4,
       "topics": [
         "ranking"
       ]
@@ -1837,10 +1823,8 @@
       "title": "Spatially local mini-batching for implicit neural representations",
       "abstract": "Neural surrogates based on implicit neural representations (INRs) are typically trained on mini-batches spread over the whole domain, since a generic INR loses accuracy when every point of a batch lies in one small region. We show that low-rank neural representations (LRNRs), INRs whose weight matrices are products of shared bases with coefficients emitted by a small hypernetwork, can be trained with spatially local mini-batches. Each step uses the points of one time snapshot of an adaptive-mesh numerical solution inside one small cell, with snapshots and cells drawn according to the refinement of the mesh. We posit that such training is enabled by the structural property of LRNRs, as a local step reaches the shared bases only through the $r$ coefficients of each layer, and keeps one cell from rewriting the network. By a Kolmogorov-width argument, we show that when restricted to a small cell, the hidden states of LRNRs lie close to a low-dimensional subspace, which suggests the local steps only affect low-rank subspaces of the shared bases. On six hyperbolic-conservation-law problems with solutions computed using adaptive mesh refinement, one local training recipe reaches 1.1-2.3% relative $L^2$ error with a tenth of the parameters of a dense network of the same width. Finally, we provide a comparison by training a hypernetwork-SIREN, a DeepONet, and a Fourier neural operator (FNO) of the same size with the same local batches and training budget. We observe that these baselines reach 16-78% where the LRNR reaches 4.9%. Interestingly, we also observe that local training has a significant effect on the per-cell low-dimensional structure even in a wide generic hypernetwork-SIREN.",
       "published": "2026-11-17T05:37:50Z",
-      "keyword_score": 4,
-      "topics": [
-        "ranking"
-      ]
+      "keyword_score": 0,
+      "topics": []
     },
     {
       "id": "2611.22234",
@@ -2040,7 +2024,7 @@
       "title": "Variational Monte Carlo for Quantum Excited States via Nested Low-Rank Approximation",
       "abstract": "The electronic Schrödinger equation encodes a molecule's electronic structure and quantum properties, but solving it scales exponentially with the number of electrons. Solving this equation with neural-network variational Monte Carlo (VMC) has reached chemical accuracy on the ground state of small molecules; extending this success to excited states is constrained by two existing paradigms. Penalty-based methods need $K$ Laplacians per step but require tuning the overlap-penalty weights against the energy gaps they aim to compute. Natural excited states VMC (NES-VMC) is penalty-free, but it combines the $K$ ansatzes into one determinant, whose local energy requires $K^2$ Laplacians per step. We resolve this trade-off via low-rank approximation (LoRA) reparameterization of the rank-$K$ variational objective. The reparameterized objective admits a VMC-compatible stochastic gradient estimator via MCMC sampling from the per-state Born densities, and a sequential nesting scheme recovers the lowest $K$ eigenstates in eigenvalue order. The resulting algorithm, NestedLoRA-VMC, inherits a global optimality guarantee from the LoRA principle. On the first-row atoms Li through Ne at $K=10$, its accuracy is comparable to that of NES-VMC and of a state-of-the-art penalty-based method.",
       "published": "2026-11-16T17:22:03Z",
-      "keyword_score": 12,
+      "keyword_score": 4,
       "topics": [
         "ranking"
       ]
@@ -2050,10 +2034,8 @@
       "title": "Just sort it! A note on the LP behind rank-one anti-loop edits",
       "abstract": "Weight-space programming removes the thinking loops of a small reasoning model by a rank-one edit W' = W + u v^T of an MLP output matrix, where u is a loop direction and v is the solution of a sparse Linear Program (LP) over the neuron activations. We investigate whether the LP is needed. We replace it by a sort: we take the 8 neurons whose activation has the smallest coefficient of variation, and give them equal shares of the push that the LP solution realizes. On Qwen3.5-0.8B the sorted edit scores 67.0% on 1000 problems (MATH-500 and GSM8K) against 67.4% for the LP edit and 9.5% for the unedited model; the paired difference is -0.4 points, with 95% confidence interval [-2.9, +2.1], inside a non-inferiority margin of 5 points declared before the runs. On three further sampling seeds the difference is -0.6 points, interval [-2.0, +0.8], and -0.8 points, interval [-2.3, +0.6], when the dose is set without the LP. The sort does not solve the LP, but the neurons it shares with the LP solution carry most of its mean push. The outcome is that, on this model, the edit acts as a nearly constant bias along u.",
       "published": "2026-11-16T17:21:35Z",
-      "keyword_score": 12,
-      "topics": [
-        "ranking"
-      ]
+      "keyword_score": 0,
+      "topics": []
     },
     {
       "id": "2611.21707",
@@ -2070,10 +2052,8 @@
       "title": "TEMPO: Regime-Aware Operator Learning with Locally Adapted POD Bases",
       "abstract": "Operator learning approximates the solution map of a parametric partial differential equation from data, enabling fast prediction at new parameter values without repeated simulation. The dominant approach fits a single global low-rank basis, typically a proper orthogonal decomposition (POD), to all solution snapshots. This fails when the snapshots span qualitatively different solution shapes, from smooth diffusive profiles to near-discontinuous shocks. We propose TEMPO (Trajectory Expectation-Maximization Mixture of POD Operators), a two-phase framework for regime-aware operator learning. In the offline phase, TEMPO recovers latent regimes via expectation-maximization, fitting a dedicated linear or nonlinear basis to each discovered regime. In the online phase, a gating network and per-regime branch networks are trained jointly, routing new inputs to the regimes at inference. We test TEMPO on Burgers' flow, Sod shock tubes, Coanda flow, Darcy flow, Navier-Stokes flow and the heterogeneous Helmholtz equation. With 64 total POD modes, TEMPO gives 18.61% test error on Burgers', compared with 19.61% for global POD. It also gives lower errors on Coanda and Helmholtz.",
       "published": "2026-11-16T16:24:13Z",
-      "keyword_score": 4,
-      "topics": [
-        "ranking"
-      ]
+      "keyword_score": 0,
+      "topics": []
     },
     {
       "id": "2611.21315",
@@ -2090,10 +2070,8 @@
       "title": "Programmable Semantic Interventions: Learning Causal Carriers from Behavioral Programs",
       "abstract": "Causal abstraction explains a frozen network by aligning its activations with the variables of a simpler, interpretable model, and checking that interventions on the two agree. Finding such an alignment currently requires a counterfactual dataset: for every pair of prompts, the answer the network ought to give once the variable has been changed. In practice, those labels are produced by an executable algorithm for the behavior, written before studying the model supposed to implement it. However, the criterion these methods optimize only leverages the answer an intervention should produce. Here, we develop an approach that lets the investigator define that relationship directly: the answers the variable can produce, and which of them an intervention should yield. We call this interface a semantic program and introduce Programmable Semantic Interventions (PSI): a low-rank activation subspace learned so that interchanging it changes the model's answer as the program declares, with the expected answers read from the frozen model itself. On the MIB benchmark PSI performs on par with supervised alignment at matched data and training budget, without curated pairs, and it needs no ground-truth labels; while on natural science questions with gold labels withheld, it tracks the model's own answers better than a subspace trained on gold labels. The declaration also fixes a coordinate system with known semantics, enabling donor-free steering: jointly training PSI for both localization and control realizes 94.8% of held-out requests for answers the investigator chooses, without the need for donor prompts.",
       "published": "2026-11-16T16:05:53Z",
-      "keyword_score": 4,
-      "topics": [
-        "ranking"
-      ]
+      "keyword_score": 0,
+      "topics": []
     },
     {
       "id": "2611.21291",
@@ -2108,10 +2086,8 @@
       "title": "Watermark Evidence under Open-Weight LLM Modification: Exact Bounds for Low-Rank Output Watermarks",
       "abstract": "Open-weight language models can continue generating after their released weights are modified, while a watermark verifier still scores outputs against the original base and marked models. We study how such modifications change the evidence available to an OpenStamp-style verifier. At each shared prefix, we represent the modification as a residual in the next-token logits. We derive an exact finite-vocabulary lower bound on the expected log-likelihood-ratio evidence under a residual-span constraint, along with a sharp span-only deviation bound. We also characterize the first-order evidence shift through a covariance term with an explicit second-order remainder, and determine the residual span needed to reach a target evidence level. For sequence-level detection, we derive an exact conditional exponential-moment bound and combine it with a supermartingale argument and a distribution-free order-statistic tolerance bound. This yields a high-confidence upper bound on miss probability after attack selection on calibration data and evaluation on independent certification continuations. In experiments with OpenStamp on Llama-2-7B and Mistral-7B-v0.3, INT8 quantization and 30% pruning retain test true-positive rates of 85.6-94.8%, while 500-step LoRA fine-tuning lowers them to 28.8% and 11.6%. The covariance prediction tracks the measured mean LoRA evidence drift on both models, with no remainder-bound violations across 160,000 test prefixes. Additionally, we observe zero false positives among 500 base-model continuations per model. Through these theoretical and empirical results, the current research provides a better understanding of watermark robustness to model-editing/tuning attacks.",
       "published": "2026-11-16T15:52:38Z",
-      "keyword_score": 8,
-      "topics": [
-        "ranking"
-      ]
+      "keyword_score": 0,
+      "topics": []
     },
     {
       "id": "2611.21267",
@@ -2140,7 +2116,7 @@
       "title": "InclusionMed: Benchmarking AI for Inclusive Healthcare",
       "abstract": "Advancing medical AI for inclusive healthcare requires evaluation across diverse healthcare roles, tasks, and care settings, but benchmark coverage remains uneven. We introduce InclusionMed, an open medical AI evaluation initiative for inclusive healthcare. The InclusionMed Atlas organizes benchmarks across three healthcare roles and three AI capabilities. For the first release, we selected four public benchmarks from 388 candidates through structured audits and independent reproduction. With InclusionMed-DxFiles, our private diagnostic reasoning benchmark, the Atlas contains five benchmarks covering three of its nine role--capability cells. We evaluated frontier large language models on the Atlas and aggregated their results into the InclusionMed Index, with overall scores ranging from 17.5 to 49.1 out of 100. The Index also reports scores by healthcare role and AI capability, showing that a model's rank varied with the role or capability considered. A within-benchmark analysis using task-level tags showed that the ten highest-ranked models in the Index all scored higher on patient communication than on clinical decision-making. Models with similar Index scores also differed substantially in estimated inference cost. These findings highlight the need for evaluation covering more diverse healthcare needs and for context-specific model selection. Through open collaboration and community contributions, InclusionMed seeks to ensure that diverse healthcare needs worldwide shape how medical AI progress is defined and measured.",
       "published": "2026-11-16T15:08:25Z",
-      "keyword_score": 4,
+      "keyword_score": 0,
       "topics": [
         "ranking"
       ]
@@ -2324,7 +2300,7 @@
       "title": "Who Benefits from Telemonitoring? Uplift Modelling of a Nationwide Home Blood Pressure Monitoring Programme",
       "abstract": "Home blood pressure (BP) telemonitoring programmes are being deployed at national scale, yet enrolment resources are finite and the benefit of telemonitoring is unlikely to be uniform across patients. We study the Primary Technology-Enhanced Care for Hypertension (PTEC-HT) programme, a nationwide telemonitoring programme for hypertensive patients in Singapore. Using retrospective data on 16,694 patients registered between August 2020 and May 2024, we first estimate the average treatment effect of the programme on 6-month BP control against a propensity-score-matched non-participant cohort, finding an absolute improvement of 5 percentage points in the rate of BP control (74% vs. 69%, $p = 3\\times10^{-12}$), rising to 12 percentage points (63% vs. 50%, $p = 1\\times10^{-15}$) among patients with uncontrolled BP at baseline. We then move beyond the average effect and apply uplift modelling to estimate individual treatment effects. Across five uplift learners evaluated with 5-fold cross-validation and Qini curves, an uplift random forest performed best on the full cohort and an S-learner on the uncontrolled-baseline subcohort, although performance bands overlapped across learners. On held-out patients, realised uplift was largest in the top predicted-uplift groups and declined across the ranking. These patients had higher baseline BP grade, more recent hypertension diagnosis and lower medication and diagnosis burden, a profile we offer as hypothesis-generating for targeted enrolment. A handcrafted rule built from these features was competitive with the learned models, outperforming all of them on the uncontrolled-baseline cohort, suggesting that uplift models are useful for discovering heterogeneity that can be distilled into simple enrolment criteria for directing limited care team capacity.",
       "published": "2026-11-16T09:01:44Z",
-      "keyword_score": 14,
+      "keyword_score": 4,
       "topics": [
         "ranking",
         "systems",
@@ -2364,7 +2340,7 @@
       "title": "Safety-Preserving Medical LLM Fine-Tuning via Bilevel Data Selection",
       "abstract": "As general large language models (LLMs) are increasingly adapted for patient-facing medical applications, improving medical capability while controlling patient-facing risks remains a critical challenge. Large-scale medical instruction data are essential for acquiring domain knowledge through supervised fine-tuning (SFT), but unsafe responses can undermine existing safety alignment. To address this problem, we propose Scalable Bilevel Data Selection (S-BDS) for safety-preserving medical SFT. By controlling selection-weight concentration, S-BDS enables reliable sample ranking over large candidate pools and identifies training examples that improve medical capability while controlling patient-facing risks. We combine clinician-validated safe data and selected data with unscreened medical instruction data for SFT, and jointly evaluate medical capability and patient-facing safety on HealthBench and PatientSafetyBench, respectively. Experiments across Llama and Qwen models show that S-BDS achieves the highest safe rates among all compared methods, outperforming the strongest baselines by 4.64 and 3.00 percentage points, respectively, while maintaining competitive medical capability. Further experiments show that varying the safety-oriented weight during SFT controls the trade-off between medical capability and patient-facing safety.",
       "published": "2026-11-16T07:03:59Z",
-      "keyword_score": 6,
+      "keyword_score": 0,
       "topics": [
         "ranking",
         "systems"
@@ -2375,7 +2351,7 @@
       "title": "Contrastive Activation-Guided Zeroth-Order Preference Optimisation for Memory-Efficient LLM Alignment",
       "abstract": "Direct Preference Optimisation (DPO) simplifies reinforcement learning from human feedback, but still relies on traditional backpropagation and its associated activation-memory cost. Zeroth-order (ZO) optimisation avoids backpropagation, yet isotropic perturbations can produce noisy updates for preference objectives defined by differences between chosen and rejected responses. We introduce Contrastive Activation-guided Zeroth-Order Direct Preference Optimisation (CA-ZODPO), which constructs a low-rank search subspace from the activation discrepancy between the chosen and rejected responses in each preference pair. Perturbations are restricted to this subspace, while momentum is maintained in low-rank coordinates to preserve the memory advantages of ZO training. On Qwen2.5-1.5B with Anthropic HH-RLHF, CA-ZODPO outperforms common ZO baselines and remains competitive with first-order DPO in pairwise preference evaluation. It also reduces peak GPU memory by about 59\\% at a sequence length of 2048 while retaining the sequence-length scaling behaviour of zeroth-order training.",
       "published": "2026-11-16T06:55:27Z",
-      "keyword_score": 11,
+      "keyword_score": 7,
       "topics": [
         "ranking",
         "search"
@@ -2479,7 +2455,7 @@
       "title": "How did data sharing evolve in the decade since the FAIR Principles?",
       "abstract": "A decade after the publication of the FAIR Guiding Principles, what have we learned about data sharing, and what do data availability statements (DAS) and other materials accrued over that period tell us about how data-sharing practices, attitudes, and infrastructures evolved? Here, we present a large-scale longitudinal analysis of over 6.8 million biomedical articles from the PMC Open Access Subset, spanning 2011 to 2025. Using an automated pipeline, we extracted and classified DAS, repository links, accession numbers, and supplementary materials, assigning each article a data-sharing score and independently FAIR-assessing a subset of cited dataset URLs. We find that explicit DAS adoption rose from ~2% in 2011 to 68% in 2025, while \"available on request\" statements grew in parallel from near zero to over 19%. The corpus growth amplifies both patterns: articles with a DAS containing an explicit repository mention rose from 132 in 2011 to 94,697 in 2025, while \"available on request\" articles rose from 77 to 173,474 over this span. Structural biology and genomics consistently achieved the highest data-sharing scores, while clinical research and public health ranked lowest. Gold Open Access journals showed a small advantage over subscription journals, while Diamond Open Access journals outperformed both. Internationally collaborative articles scored higher than domestic ones. A gender gap emerged: female first-authored articles' scores declined more than male first-authored ones. The analysis further covered additional dimensions, from compliance with funder/journal mandates and JATS XML tagging standards to computational reproducibility signals and the co-occurrence of DAS with ethics statements. A decade on, the gap between declaring data availability and actually sharing machine-readable, reusable data persists across fields, infrastructures and demographics.",
       "published": "2026-11-15T23:29:17Z",
-      "keyword_score": 6,
+      "keyword_score": 0,
       "topics": [
         "ranking",
         "systems"
@@ -2490,10 +2466,8 @@
       "title": "Protecting Safety during Reasoning Training with Low-Rank Fisher Regularisation",
       "abstract": "Large language models are trained to have safety guardrails, but these can be compromised while fine-tuning for new capabilities, such as reasoning. One way to mitigate this degradation is to modify the fine-tuning objective to preserve safety behaviour, but doing so effectively and efficiently remains challenging. We revisit Elastic Weight Consolidation (EWC), which penalises parameter updates based on sensitivity estimates from the diagonal of the Fisher information matrix (FIM). While EWC provides some protection, the diagonal approximation ignores interactions between parameters. We address this limitation by exploiting recent findings that safety-relevant behaviour is located in a low-rank subspace within models. Our method, Subspace-Projected Elastic Weight Consolidation (SP-EWC), projects gradients onto this subspace to capture non-diagonal curvature efficiently. We investigate three different ways of identifying the safety subspace: through safety fine-tuning updates (LoRA), safety-related activations (ActSVD), and contrastive representations of safety and utility data (cPCA). We find that this choice substantially affects performance, with SP-EWC using cPCA comparing favourably against existing methods by better maintaining safety guardrails without introducing excessive over-refusal.",
       "published": "2026-11-15T22:34:46Z",
-      "keyword_score": 12,
-      "topics": [
-        "ranking"
-      ]
+      "keyword_score": 0,
+      "topics": []
     },
     {
       "id": "2611.23324",
@@ -2948,6 +2922,14 @@
         "ranking",
         "search"
       ]
+    },
+    {
+      "id": "2611.23072",
+      "title": "Amortizing Tempered Sampling with Corrected Self-Training",
+      "abstract": "Learning a neural sampler can reduce the cost of repeated sampling from an un-normalized distribution, but obtaining good training data remains difficult. We develop a corrected self-training scheme across a sequence of tempered targets, making use of importance sampling and Markov chain Monte Carlo to correct the samples and replay buffers to store them. We introduce Sequential Score Sampler (SSS) as a particular case. In SSS, the proposal is a score-based diffusion trained by regression on energy gradients; and the samples are corrected by importance weights on the path space. After training, samples can be collected directly from the model, from its importance-corrected proposals, or from the final-temperature buffer. The method amortizes repeated sampling by encoding the global structure of the target in the model. SSS achieves competitive sampling accuracy across the benchmarks and, on several targets, uses shorter runtimes with fewer energy evaluations than competing samplers.",
+      "published": "2026-11-17T16:59:07Z",
+      "keyword_score": 0,
+      "topics": []
     }
   ],
   "prefilter": [
@@ -2967,7 +2949,6 @@
     "2611.24283",
     "2611.21441",
     "2611.23969",
-    "2611.23454",
     "2611.22595",
     "2611.20758",
     "2611.23710",
@@ -2991,7 +2972,6 @@
     "2611.20837",
     "2611.19655",
     "2611.25845",
-    "2611.25424",
     "2611.24849",
     "2611.20388",
     "2611.26531",
@@ -3010,56 +2990,108 @@
     "2611.25288",
     "2611.23742",
     "2611.21920",
-    "2611.20979"
+    "2611.20979",
+    "2611.19974",
+    "2611.25705"
   ],
   "reviews": [
     {
       "id": "2611.25527",
       "status": "recommended",
       "score": 82,
-      "reason": "对做生成式重排和整页优化的工程师有直接参考价值：给出可落地的逐位置整页监督目标和训练流程，并在离线工业日志上验证；但收益来自离线裁判打分，未做线上A/B，且依赖固定评估器，迁移时需自行验证线上收益。"
+      "reason": "对做生成式重排与整页优化的工程师有直接参考价值：给出可落地的逐位置整页监督目标和训练流程，并在工业日志上离线验证；关键限制是收益全部来自离线评估器与仿真，未上线验证，且依赖固定页面评估器。"
     },
     {
       "id": "2611.25659",
       "status": "recommended",
       "score": 88,
-      "reason": "对做精排长序列建模的工程师价值明确：给出可落地的请求级序列更新机制、深度扩展证据和请求级算力摊销分析，并有线上A/B结果；但离线收益来自淘宝单场景，线上增益未拆分到各模块，跨场景迁移需自行验证。"
+      "reason": "对做精排长序列建模的工程师价值明确：给出可落地的请求级序列更新机制，兼顾深度扩展与候选共享的低服务成本，并有淘宝线上A/B证据；但线上收益是整体模型对线上基线的对比，未单独归因于更新模块，离线结论也仅限淘宝搜索单数据集。"
     },
     {
       "id": "2611.24006",
       "status": "recommended",
       "score": 88,
-      "reason": "对做精排/重排与推荐系统全链路优化的工程师有直接参考价值：给出LLM驱动跨阶段编排的完整工程范式（近线生成+缓存+双端校验+回退+三阶段后训练），并诚实标注了A/B点估计、回放保真度与归因边界等关键限制。"
-    },
-    {
-      "id": "2611.22595",
-      "status": "recommended",
-      "score": 82,
-      "reason": "对做多阶段排序/拍卖的电商推荐工程师有直接价值：给出可落地的边界级校准诊断与轻量后验重校准方案，并有线上A/B证据；但结论基于广告相关性标签与广告拍卖场景，迁移到推荐CTR/转化目标需重新验证，且线上收益未逐模块归因。"
+      "reason": "对做精排/重排与推荐系统全链路优化的工程师有直接参考价值：给出LLM驱动跨阶段编排的完整工程范式（近线生成+缓存+双端校验+回退+三阶段后训练），并附线上A/B与消融；关键限制是收益为端到端点估计、未隔离各阶段贡献，回放与奖励模型存在近似偏差，且动作空间受限。"
     },
     {
       "id": "2611.24757",
       "status": "recommended",
       "score": 78,
-      "reason": "为精排/推荐A/B测试提供可落地的动作级流量分配与方差缩减思路，直接对应小效应检测的样本效率痛点；但证据仅限合成仿真，且需平台支持按上下文逐动作采样，落地前需线上验证。"
+      "reason": "为精排/推荐A/B测试提供可落地的动作级流量分配与方差缩减设计，直接对应小效应检测的样本效率痛点；但证据仅限合成仿真，且需平台支持按上下文逐动作采样而非仅整体分流，上线前需自行验证。"
     },
     {
-      "id": "2611.21920",
+      "id": "2611.24283",
       "status": "recommended",
       "score": 82,
-      "reason": "对做LLM精排/记忆增强推荐的工程师有直接价值：给出了可复用KV替代画像文本重算的完整训练与调度方案，并诚实报告了离线质量持平、吞吐提升及跨域writer不迁移、存储开销大等限制，但尚无线上A/B验证。"
+      "reason": "对做精排长序列建模与线上成本权衡的工程师有直接参考价值：给出了可复用历史token+候选cross-attention+教师蒸馏的完整工业方案及A/B与资源开销数据；但机构未披露、离线增益较小，且线上收益未拆分各模块贡献，需谨慎归因。"
+    },
+    {
+      "id": "2611.22595",
+      "status": "recommended",
+      "score": 82,
+      "reason": "对做精排价值建模和漏斗多阶段校准的工程师很实用：它给出可落地的边界诊断与后校准方法，并有线上A/B证据，但收益主要来自相关性标签校准而非CTR，且FAR只是事后单调映射、需周期重拟合，不能直接迁移为端到端排序收益。"
+    },
+    {
+      "id": "2611.26531",
+      "status": "recommended",
+      "score": 82,
+      "reason": "对做精排特征工程与成本约束优化的工程师有直接参考价值：给出可落地的LLM智能体搜索循环、Pareto多任务特征混合和共享流水线成本裁剪机制，并区分离线NE、仿真资源与线上A/B；限制是线上0.20%收益未拆分到各模块，混合权重调优尚无实验。"
+    },
+    {
+      "id": "2611.22597",
+      "status": "recommended",
+      "score": 72,
+      "reason": "对做精排CVR与促销期分布漂移的工程师有直接参考价值：训练期重加权与推理期免重训分数校正的分离设计、ABA对TEN同样有效的对照、以及新品类召回下降和serving成本的明确权衡都值得借鉴；但线上增益仅对比HDR且无置信区间，ABA贡献无法与CPC/RW完全解耦，复现细节（历史构造、权重归一、召回截断）缺失。"
+    }
+  ],
+  "abstract_candidates": [
+    {
+      "id": "2611.25527",
+      "score": 92
+    },
+    {
+      "id": "2611.25659",
+      "score": 90
+    },
+    {
+      "id": "2611.24006",
+      "score": 88
+    },
+    {
+      "id": "2611.24283",
+      "score": 84
+    },
+    {
+      "id": "2611.22595",
+      "score": 82
+    },
+    {
+      "id": "2611.22597",
+      "score": 78
+    },
+    {
+      "id": "2611.23606",
+      "score": 68
+    },
+    {
+      "id": "2611.25606",
+      "score": 72
+    },
+    {
+      "id": "2611.24757",
+      "score": 88
+    },
+    {
+      "id": "2611.26531",
+      "score": 82
     },
     {
       "id": "2611.25288",
-      "status": "recommended",
-      "score": 78,
-      "reason": "对做大规模推荐系统内存/训练成本优化的工程师有直接参考价值：给出可落地的按特征重要性分配表级剪枝比例方案及FI开销与收益的量化边界；但仅报告离线NE与训练吞吐，未做线上A/B，且收益主要来自训练资源而非线上指标。"
+      "score": 76
     },
     {
-      "id": "2611.22352",
-      "status": "rejected",
-      "score": null,
-      "reason": null
+      "id": "2611.21920",
+      "score": 78
     }
   ],
   "shortlist": [
@@ -3076,24 +3108,24 @@
       "score": 88
     },
     {
-      "id": "2611.22595",
-      "score": 85
-    },
-    {
       "id": "2611.24757",
+      "score": 88
+    },
+    {
+      "id": "2611.24283",
+      "score": 84
+    },
+    {
+      "id": "2611.22595",
       "score": 82
     },
     {
-      "id": "2611.21920",
+      "id": "2611.26531",
       "score": 82
     },
     {
-      "id": "2611.25288",
+      "id": "2611.22597",
       "score": 78
-    },
-    {
-      "id": "2611.22352",
-      "score": 66
     }
   ],
   "selected": [
