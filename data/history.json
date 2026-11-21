@@ -227,5 +227,21 @@
       },
       "usage_incomplete": true
     }
+  ],
+  "recommended_ids": [
+    "2611.20448",
+    "2611.22838",
+    "2611.24006",
+    "2611.25527",
+    "2611.25659",
+    "2611.26096"
+  ],
+  "recommended_titles": [
+    "betterrankersworseretrieversthehiddencostofrlposttrainingingenerativerecommendation",
+    "dnaunlockingdepthscalinginctrmodels",
+    "fromsessionstoservingintegratingllmbasedembeddingsintoretrievalforproductioncontentrecommendation",
+    "learninggenerativerankingpoliciesforwholepageoptimization",
+    "marstechnicalreport",
+    "mmintentflowanintentdrivenrealtimemultimodalsearchsystemwithimagetextqueriesatxiaohongshu"
   ]
 }
