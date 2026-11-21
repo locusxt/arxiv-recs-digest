@@ -1,6 +1,67 @@
 {
-  "date": "2026-11-21",
+  "date": "2026-11-22",
   "candidates": [
+    {
+      "id": "2611.25403",
+      "title": "Antom 3-in-1 Transformer: A Payment Foundation Model",
+      "abstract": "We report the development of Antom 3-in-1 Transformer, a payment foundation model that integrates sequence, tabular, and graph representations for payment risk detection. The model contains approximately 7B parameters, with approximately 1.7B activated per task route. Antom 3-in-1 Transformer is pretrained to learn reusable behavioral and relational representations, primarily on Ant International's internal payment data. In a cross-business transfer experiment, pretraining improves the target business metric by 34.5% over the same architecture trained from scratch. With only 25% of the training labels, the pretrained model outperforms the full-label scratch baseline in Average Precision (AP) and Recall@0.5% on different merchant domains. In a four-month online experiment on Ant International's billion-scale payment platform, the model reduced the overall loss rate by 37.88% relative to XGB-Online.",
+      "published": "2026-11-19T02:47:14Z",
+      "keyword_score": 7,
+      "topics": [
+        "causal",
+        "retrieval"
+      ]
+    },
+    {
+      "id": "2611.24869",
+      "title": "WorldRuler: Interactive World Modeling under Configurable Rules",
+      "abstract": "Rules govern how player actions change interactive worlds. Different rules create distinct gameplay experiences within similar scenes and action spaces. For customizable gameplay, generative world models must follow user-defined rules beyond real-world behaviors. However, realizing user-defined rules presents two challenges: Rule-State Persistence and Rule-to-Visual Realization. The former requires preserving rule definitions, dependencies, and world states across saving and loading, so that restored worlds follow the established rules. The latter requires accurately realizing rule-induced changes on designated objects and attributes, particularly when affected objects are unseen. In this paper, we propose WorldRuler, which organizes rule definitions, dependencies, and object states in an executable 3D rule graph and connects rule execution, video generation, and perceptual feedback in a closed loop. The graph supports joint saving and restoration of rules and world states, while dynamic object binding grounds rule-specified entities in visual instances and uses stored states to constrain generation from their first appearance. We further introduce object attribute state replacement and counterfactual reconstruction training, enabling accurate attribute control and compatible appearance and motion changes while limiting interference with unrelated content. We develop an automated data collection and annotation pipeline using GTA-V and Habitat to construct RuleVerse, a dataset of rule-driven interactions with detailed state and event annotations, including cases where rules take effect before affected objects become visible. Extensive experiments demonstrate the effectiveness of WorldRuler in preserving rule-state consistency across saving and loading and accurately realizing rule outcomes on designated objects and attributes.",
+      "published": "2026-11-18T18:20:39Z",
+      "keyword_score": 4,
+      "topics": [
+        "causal"
+      ]
+    },
+    {
+      "id": "2611.24757",
+      "title": "Variance-Optimal Counterfactual Policy Design for Sample-Efficient Online A/B Testing",
+      "abstract": "Online A/B testing is the standard approach for evaluating changes to user-facing systems, such as a new recommendation or ranking policy, before deployment. While the difference-in-means estimator of a standard A/B test is unbiased, it often suffers from high variance. When the treatment and production policies choose the same actions with similar probabilities, the resulting observations can add noise while providing little information about the difference between the policies. Consequently, A/B tests can require large amounts of traffic and long durations to detect small treatment effects. Existing variance-reduction methods mainly improve the estimator after the data-collection scheme has been fixed, and recent overlap-aware designs only optimize a single traffic split between the two policies; thereby, they cannot direct traffic to the actions on which the policies disagree. In this paper, we jointly optimize how actions are sampled and how the resulting observations are used to estimate the treatment effect. Our contributions are two-fold. First, building on pairwise off-policy evaluation, we derive the variance-optimal action-level logging policy for estimating the average treatment effect between two policies, which has a closed-form solution for any fixed control variate. Second, we use historical logs to jointly optimize the logging policy and a control variate to further reduce variance. Our experimental results in simulated policy A/B tests show that our designs estimate the average treatment effect more accurately than existing variance reduction methods on every evaluated setting, while generally improving statistical power and reducing how often the worse policy is selected. As a result, our designs enable practitioners to reach reliable deployment decisions with considerably less online traffic.",
+      "published": "2026-11-18T17:11:57Z",
+      "keyword_score": 31,
+      "topics": [
+        "causal",
+        "ranking",
+        "recommendation",
+        "training"
+      ]
+    },
+    {
+      "id": "2611.22597",
+      "title": "COTTI: Contrastive Training and Time-Aware Inference for Robust Industrial Recommendation under Promotional Drift",
+      "abstract": "Promotional events shift traffic composition, purchase behavior, and the scale of conversion probabilities on different time horizons. We present \\textbf{COTTI} (\\textbf{CO}ntrastive \\textbf{T}raining and \\textbf{T}ime-aware \\textbf{I}nference), an industrial recommendation framework that separates historical representation learning from event-time score adjustment. Cross-Period Contrastive Alignment (CPC) regularizes paired histories of the same user with adaptive consistency weights. Active Re-weighting (RW) controls the influence of promotional examples through historical-interest distance. Adaptive Boundary Alignment (ABA) combines stochastic prediction variability with a temporal event kernel to adjust logits while keeping predictor parameters fixed. We analyze the weighted objective and bound ABA-induced probability and ranking changes. On Fliggy data, COTTI attains an offline AUC of 0.8127, compared with 0.8101 for TEN and 0.8123 for TEN with ABA. Cross-category analysis reveals improved discrimination alongside declines in paid-item recall for novel categories. End-to-end measurements give a p99 latency of 38.9\\,ms and throughput of 14,700 requests/s; enabling ABA adds 2.2\\,ms to p99. A ten-day online experiment against the serving HDR model yields relative gains of 3.14\\% in conversion rate and 2.68\\% in revenue per mille. Together, these results characterize the trade-off between aggregate prediction, novel-category discovery, and serving cost in promotional recommendation.",
+      "published": "2026-11-17T11:18:28Z",
+      "keyword_score": 27,
+      "topics": [
+        "causal",
+        "ranking",
+        "recommendation",
+        "retrieval",
+        "systems",
+        "value"
+      ]
+    },
+    {
+      "id": "2611.20180",
+      "title": "UrbanROI: Causal Modeling for Regional ROI Forecasting under POI Entry",
+      "abstract": "As urban commercial environments continue to evolve rapidly, accurately modeling the economic impact of point of interest (POI) entry is essential for supporting data-driven advertising allocation, merchant onboarding, and regional business decision-making. Existing return on investment (ROI) prediction methods mainly focus on individual ads or merchants, overlooking the interaction effects among POIs and failing to capture the causal influence of structural changes in urban commercial ecosystems. In this paper, we introduce a novel research problem -- regional ROI forecasting under POI entry, which aims to predict the future ROI trajectory of a commercial region after the introduction of a new POI by modeling temporal ROI evolution and competition-driven interactions among surrounding POIs. To address these challenges, we propose UrbanROI, an intervention-aware causal forecasting framework for region-level economic outcome prediction. UrbanROI leverages an Interaction-aware Regional Graph Module to explicitly model competitive relationships among POIs based on user request contexts, spatial proximity, and request-level commercial signals, and constructs structurally aligned treatment and control graphs to simulate factual and counterfactual regional states. Extensive experiments on large-scale real-world POI and advertising datasets demonstrate that UrbanROI consistently outperforms strong baselines in post-entry regional ROI forecasting. The results demonstrate its effectiveness in temporal economic modeling, inter-POI interaction representation, and intervention-aware forecasting, providing support for regional economic analysis and business decision-making in dynamic urban commercial systems.",
+      "published": "2026-11-15T18:35:51Z",
+      "keyword_score": 10,
+      "topics": [
+        "causal",
+        "systems",
+        "training"
+      ]
+    },
     {
       "id": "2611.26564",
       "title": "GEOHunter: Mapping a Generative Engine Optimization Network in the Wild",
@@ -102,19 +163,6 @@
       ]
     },
     {
-      "id": "2611.25527",
-      "title": "Learning Generative Ranking Policies for Whole-Page Optimization",
-      "abstract": "A recommendation page is consumed as a whole: the items on it compete for attention and complement one another, so the best page is not simply the individually best items placed side by side. We study whole-page optimization, which selects and orders the items on a page jointly to maximize the score of the page. The number of possible pages grows combinatorially, so good pages must be generated rather than enumerated. Some generative re-ranking methods use the same page-level training signal for every choice in a sampled page. Others imitate target pages built before training, which remain largely fixed as the generator improves. We address both limitations with one local page-level objective, which repeatedly moves the current generator toward pages with higher score. This objective splits exactly into one training target per position, and each target compares candidates at the same partial page by the scores of the complete pages they lead to. Every position therefore learns to choose the item that is better for the whole page, rather than the item that looks best on its own. We call this procedure whole-page policy improvement. On two public datasets, KuaiRand-1K and RL4RS-SeqSlate, which cover multi-objective item selection and constrained ordering, and on an industrial dataset of logged pages, our method outperforms the evaluated generative re-ranking baselines. On a synthetic benchmark with a known optimal page, it also comes closest to the optimum, showing that its improvements come from better whole-page decisions.",
-      "published": "2026-11-19T05:27:22Z",
-      "keyword_score": 44,
-      "topics": [
-        "llm4rec",
-        "ranking",
-        "recommendation",
-        "value"
-      ]
-    },
-    {
       "id": "2611.25288",
       "title": "Intelligent Embedding Pruning for Large-Scale Recommendation Models",
       "abstract": "Modern recommendation systems face substantial memory pressure, largely from the sparse embedding layer that maps high-cardinality categorical features into dense vectors. In-training embedding pruning (ITEP) removes less important embedding rows during training, yielding end-to-end memory savings but sometimes degrading accuracy because per-table pruning ratios are set by size-based heuristics. We use feature importance (FI) to guide these ratios (FI-ITEP), assigning higher pruning to tables tied to less important features. Across three large-scale recommendation models, FI-ITEP achieves 20--40% total memory reduction while matching or improving accuracy relative to percentile-based ITEP. Because the feature-importance signal requires minimal resources to compute, these memory savings translate into concrete systems benefits: the same models train on fewer GPU trainers (e.g., 112 to 80) with higher per-GPU throughput, saving 1,000+ GPU-hours per model launch. We reproduce these trends on the open-source DLRM (Criteo 1TB) and quantify the end-to-end training-time and GPU-cost tradeoff---including the burden of computing FI---offering practical guidance for embedding pruning in real-world systems.",
@@ -160,18 +208,6 @@
       ]
     },
     {
-      "id": "2611.24757",
-      "title": "Variance-Optimal Counterfactual Policy Design for Sample-Efficient Online A/B Testing",
-      "abstract": "Online A/B testing is the standard approach for evaluating changes to user-facing systems, such as a new recommendation or ranking policy, before deployment. While the difference-in-means estimator of a standard A/B test is unbiased, it often suffers from high variance. When the treatment and production policies choose the same actions with similar probabilities, the resulting observations can add noise while providing little information about the difference between the policies. Consequently, A/B tests can require large amounts of traffic and long durations to detect small treatment effects. Existing variance-reduction methods mainly improve the estimator after the data-collection scheme has been fixed, and recent overlap-aware designs only optimize a single traffic split between the two policies; thereby, they cannot direct traffic to the actions on which the policies disagree. In this paper, we jointly optimize how actions are sampled and how the resulting observations are used to estimate the treatment effect. Our contributions are two-fold. First, building on pairwise off-policy evaluation, we derive the variance-optimal action-level logging policy for estimating the average treatment effect between two policies, which has a closed-form solution for any fixed control variate. Second, we use historical logs to jointly optimize the logging policy and a control variate to further reduce variance. Our experimental results in simulated policy A/B tests show that our designs estimate the average treatment effect more accurately than existing variance reduction methods on every evaluated setting, while generally improving statistical power and reducing how often the worse policy is selected. As a result, our designs enable practitioners to reach reliable deployment decisions with considerably less online traffic.",
-      "published": "2026-11-18T17:11:57Z",
-      "keyword_score": 19,
-      "topics": [
-        "ranking",
-        "recommendation",
-        "training"
-      ]
-    },
-    {
       "id": "2611.24994",
       "title": "What the model knows but does not say: monitoring medical LLMs through verbalized thoughts",
       "abstract": "Efforts to keep clinical language models safe have concentrated on what enters and leaves the model, but a manipulated model can return an answer that looks entirely ordinary. Here we show that the model's own internal state, rendered in plain language, exposes manipulations the output conceals. Using a natural-language autoencoder, we translate the activations of a multimodal LLM (Gemma-3-27B) into text and let an input-blind judge read this verbalized internal state (the thoughts channel) and the model's answer separately. Across two clinical attack objectives (omitting a pathology, covertly recommending a drug), two input modalities, and two delivery mechanisms, the thoughts channel caught the injection significantly more often than the answer in all eight injected conditions (p<0.05), while both channels held near-zero false-positive rates on clean inputs; the omission result carried over to Llama-3.3-70B. The thoughts channel also registered unsafe clinical requests as harmful while the model was still reading them, before it decided whether to refuse. None of this requires retraining: an off-the-shelf verbalizer and a general-purpose judge are enough.",
@@ -202,25 +238,11 @@
       ]
     },
     {
-      "id": "2611.24006",
-      "title": "MARS Technical Report",
-      "abstract": "Modern industrial recommender systems use multi-stage cascades--retrieval, pre-ranking, ranking, and re-ranking--to narrow millions of candidates to a personalized list. While each stage deploys sophisticated models, pipeline-level decisions on channel activation, quotas, model selection, and score fusion remain engineer-tuned and user-agnostic within each scenario. This report presents MARS (Multi-stage Agentic Recommendation System), extending personalization from individual-stage predictions to full pipeline orchestration. A near-line agent built on fine-tuned Qwen3-0.6B generates per-user configurations--a seven-dimensional action covering pipeline mode, retrieval quotas, model selection, fusion weights, and reranker settings--from a constrained action space. Configurations are validated, cached, and consumed asynchronously; the cascade never waits for LLM inference. Schema checks, fallbacks, and a kill switch ensure serving safety. The policy is trained in three stages: Confidence-aware SFT distills schema-valid generation from a teacher model; Format-Anchored Preference Optimization (FAPO) learns action preferences via ActionMask with posterior weighting; Group Relative Policy Optimization (GRPO) refines the policy through Sandbox replay with a frozen reward model, without exposing exploratory actions to live traffic. Two-week A/B tests across five Taobao scenarios with over ten million daily users show positive gains on all key metrics. The largest reach +5.22% V2P and +7.34% GMV, with positive CTR lifts on both click surfaces. About 20% of requests use a lightweight Minimal mode, and deployment shows 12 ms lower mean serving latency versus production.",
-      "published": "2026-11-18T07:56:58Z",
-      "keyword_score": 30,
-      "topics": [
-        "ranking",
-        "recommendation",
-        "retrieval",
-        "systems",
-        "value"
-      ]
-    },
-    {
       "id": "2611.23969",
       "title": "ReflectRec: Cycle-Consistency Preference Verification for LLM-based Recommendation",
       "abstract": "CoT-style LLM recommenders generate a natural-language preference note as a chain-of-thought prefix to ranking, but the note is trusted without verification, and the ranker never consults behaviorally similar users. We propose ReflectRec, organized around a preference-to-history round-trip verifier whose recall score serves as an operational signal of preference-to-history recoverability, enabling conditional regeneration for low-recoverability preferences and selection among regeneration attempts. Around this verifier, we wire a semantic Stage-1 prompt, conditional regeneration, and Forward-Look retrieval that injects future watches of behaviorally similar users as a collaborative hint. On MovieLens-100K and MovieLens-1M, the full pipeline outperforms CoT4Rec-ICL by +16.25 / +4.46 pp Hit@10, with positive gains across all ValScore buckets and three LLM backbones (Qwen3-30B, Qwen2.5-72B, and Llama-3.3-70B). We also observe a similar verifier-guided regeneration pattern on Amazon Electronics.",
       "published": "2026-11-18T07:10:39Z",
-      "keyword_score": 27,
+      "keyword_score": 31,
       "topics": [
         "llm4rec",
         "ranking",
@@ -233,8 +255,9 @@
       "title": "MLE Agents: Autonomous ML Engineering in Large-scale Recommendation Systems",
       "abstract": "The typical workflow for improving large-scale ranking and recommendation models is slow and tedious: an engineer forms a hypothesis, implements it as a code change, trains a model, and evaluates it both offline and online, often relying on their own intuition and experience along the way. Autonomous LLM agents promise to speed this up by running the loop on their own, but it is still unclear whether they can do this in industry-scale systems rather than on benchmarks or small proxy tasks. We build human-on-the-loop machine learning engineer (MLE) agents that propose, implement, train, and evaluate model changes on large-scale search rankers. Engineers retain control over objective design, search direction, and final-model review. We identify three obstacles that make this industry setting challenging: feedback takes hours per experiment, offline metrics do not always predict online impact, and improvements saturate after the early wins. We address these with parallel training runs, an objective calibrated to match online impact, and careful context engineering. In one campaign, the system ran 1,097 completed candidate experiments and accepted 325, a 29.6\\% acceptance rate compared with 15.6\\% in the earlier campaign under a different objective and search constraint. Its best model increases search volume by 0.23\\% in an A/B test of large scale. Several improvements were architectural changes the team had never tried, drawn from the broader industry and literature, suggesting that MLE agents can explore regions of the design space that human intuition overlooks. We find that the design of the harness around the model matters: intuition suggests that a stronger underlying model is enough, but in our experience, the design of the loop around it is just as critical. More broadly, our work shows that autonomous agents can do real machine-learning engineering in industry-scale systems.",
       "published": "2026-11-18T06:00:43Z",
-      "keyword_score": 24,
+      "keyword_score": 28,
       "topics": [
+        "causal",
         "ranking",
         "recommendation",
         "search",
@@ -257,8 +280,9 @@
       "title": "CONCORD-Rec: Catalog-Conditioned Modality Utility for Semantic-ID Diffusion Recommendation",
       "abstract": "Multimodal generative recommendation with discrete semantic identifiers (SIDs) requires distinguishing historical modalities that merely alter token predictions from those that genuinely reduce catalog-level ambiguity. When audiovisual, visual, or textual streams are missing, degraded, or semantically conflicting, uniform fusion and unconstrained token gates can propagate misleading content across iterative denoising steps. We propose CONCORD-Rec, a reliability-conditioned discrete diffusion recommender supervised by counterfactual catalog-partition utility. Given a fixed tokenizer and a partially masked SID state, CONCORD-Rec evaluates out-of-fold teacher coalitions over the exact feasible catalog support and aggregates item posteriors across the target code partition at each unresolved position. Rather than distilling raw token probabilities directly, the resulting counterfactual loss differences supervise an availability-masked tokenwise gate that allocates bounded modality residuals around a behavioral denoiser while retaining an exact behavioral fallback slot. We establish theoretical fixed-support ranking stability bounds under gate perturbations and evaluate position-level and code-conditional allocation across audiovisual and image-text recommendation benchmarks under controlled missingness, signal degradation, and semantic conflict. Across 20 source-compatible protocol-dataset rows, CONCORD-Rec improves NDCG by 4%; under matched 30% conflict it improves NDCG by 14.63%. The full-vs-uniform-T=16 sweep improves quality by 2.00-3.58% while reducing p95 latency by up to 86.89%.",
       "published": "2026-11-18T02:09:51Z",
-      "keyword_score": 25,
+      "keyword_score": 29,
       "topics": [
+        "causal",
         "llm4rec",
         "ranking",
         "recommendation",
@@ -373,20 +397,6 @@
       "keyword_score": 9,
       "topics": [
         "search"
-      ]
-    },
-    {
-      "id": "2611.22597",
-      "title": "COTTI: Contrastive Training and Time-Aware Inference for Robust Industrial Recommendation under Promotional Drift",
-      "abstract": "Promotional events shift traffic composition, purchase behavior, and the scale of conversion probabilities on different time horizons. We present \\textbf{COTTI} (\\textbf{CO}ntrastive \\textbf{T}raining and \\textbf{T}ime-aware \\textbf{I}nference), an industrial recommendation framework that separates historical representation learning from event-time score adjustment. Cross-Period Contrastive Alignment (CPC) regularizes paired histories of the same user with adaptive consistency weights. Active Re-weighting (RW) controls the influence of promotional examples through historical-interest distance. Adaptive Boundary Alignment (ABA) combines stochastic prediction variability with a temporal event kernel to adjust logits while keeping predictor parameters fixed. We analyze the weighted objective and bound ABA-induced probability and ranking changes. On Fliggy data, COTTI attains an offline AUC of 0.8127, compared with 0.8101 for TEN and 0.8123 for TEN with ABA. Cross-category analysis reveals improved discrimination alongside declines in paid-item recall for novel categories. End-to-end measurements give a p99 latency of 38.9\\,ms and throughput of 14,700 requests/s; enabling ABA adds 2.2\\,ms to p99. A ten-day online experiment against the serving HDR model yields relative gains of 3.14\\% in conversion rate and 2.68\\% in revenue per mille. Together, these results characterize the trade-off between aggregate prediction, novel-category discovery, and serving cost in promotional recommendation.",
-      "published": "2026-11-17T11:18:28Z",
-      "keyword_score": 23,
-      "topics": [
-        "ranking",
-        "recommendation",
-        "retrieval",
-        "systems",
-        "value"
       ]
     },
     {
@@ -513,8 +523,9 @@
       "title": "KVUse: Reusable-KV User Memory for Efficient LLM Recommenders",
       "abstract": "Memory-augmented recommenders built on large language models (LLMs) maintain a natural-language profile of each user. These profiles are updated by a user profile update path that revises the profile as new interactions arrive and are consumed by downstream task paths like ranking. Because these user profiles are stored as text in the user memory, every ranking LLM call that consumes them must splice them in the prompt and calculate the KV cache of them during the prefill phase. Given these ranking LLM calls are prefill heavy (long prompt but short decoded output) and repeatedly called, these repeated prefill of user profile text dominates the serving. Prefix caching cannot remove it, because these user profiles are preceded by different text in different calls. We present KVUse, which stores the user profiles as reusable key-value (KV) caches instead of text. KVUse trains lightweight LoRA writers by self-distillation, so that the user profile update call produces the reusable KV of the user profile while decoding it, and the LLM can read these reusable KV at new positions and behind new context without recomputation. KVUse also has a customized KV scheduler that uploads the stored reusable KV of the next batch while the current batch is computed, hiding the KV transfer from host memory behind GPU computation. On four InstructRec datasets with Llama-3.1-8B-Instruct, KVUse shows no statistically significant difference in ranking quality from full prefill over continuous memory update rounds. Under saturated load, KVUse raises the throughput of the downstream scoring path by 4.0x-4.5x and of the profile update path by 1.4x-1.9x.",
       "published": "2026-11-16T21:32:01Z",
-      "keyword_score": 15,
+      "keyword_score": 23,
       "topics": [
+        "llm4rec",
         "ranking",
         "recommendation",
         "systems"
@@ -695,8 +706,9 @@
       "title": "Cost-Aware Agentic Feature Optimization System for Fleet-Scale Ranking Models",
       "abstract": "Large Web platforms operate large fleets of ranking models, each selecting features from a shared pool of tens of thousands. We present an end-to-end agentic system that optimizes features across the fleet under resource constraints shared across models and those set per model, such as feature pipeline cost and serving throughput (QPS), respectively. In this system, LLM agents propose hypotheses, and deterministic tools execute experiments and verify them. For each model, an LLM generates and shortlists cross features from a combinatorial candidate space, and all features are then ranked by several importance methods. Feature blending mixes these rankings into a single selection, using Pareto fronts across tasks for multi-task models. An LLM Researcher agent then tunes the feature selection in 10--25 asynchronous trials under resource caps, and a trimming step keeps the pipeline cost within budget. Across production models, the system improves normalized entropy by 0.31% on average within each model's budget, and the trimming step cuts pipeline cost by 2.3% with no regression beyond measurement noise. The optimized models were launched, and in online A/B tests they improved a primary online metric by 0.20%.",
       "published": "2026-11-19T18:12:04Z",
-      "keyword_score": 17,
+      "keyword_score": 21,
       "topics": [
+        "causal",
         "ranking",
         "value"
       ]
@@ -926,20 +938,6 @@
       "topics": [
         "ranking",
         "search"
-      ]
-    },
-    {
-      "id": "2611.25659",
-      "title": "DNA: Unlocking Depth Scaling in CTR Models",
-      "abstract": "Long user behavior sequences are among the strongest signals for click-through rate (CTR) prediction. Cross-attention makes these sequences practical for industrial ranking by keeping compute linear in sequence length. Yet the gains from stacking cross-attention layers taper off: on Taobao search, growing a cross-attention stack from 16 to 28 layers adds only 0.02 percentage points (pt) of AUC. We argue that the key-value side is the bottleneck. Each layer projects the same behavior sequence into keys and values, so adding depth gives the model more reads of a fixed sequence. We propose DNA (Dual-stream Nexus Attention), which lets the sequence itself evolve with depth. At each layer, the request representation (the search query, user features and scene) first reads the sequence. Each behavior token then attends to the updated request representation and uses what it reads to update itself, so the next layer reads a sequence shaped by the current request. The update runs once per request, all candidates share the resulting sequence, and both the reads and the update keep linear complexity in sequence length. At comparable forward FLOPs, DNA improves AUC over cross-attention stacks by 0.08 to 0.26 pt and keeps improving in the depth range where those stacks level off. DNA-4 is deployed in Taobao search. In an online A/B test against the production model, it improves CTR by 0.8% and GMV by 0.5%.",
-      "published": "2026-11-19T07:40:54Z",
-      "keyword_score": 36,
-      "topics": [
-        "ranking",
-        "recommendation",
-        "search",
-        "training",
-        "value"
       ]
     },
     {
@@ -1239,8 +1237,9 @@
       "title": "Mitigating fix reversal: Counterfactual constraints for function-level vulnerability detection",
       "abstract": "Function-level vulnerability detectors often exhibit fix reversal, assigning a higher vulnerability probability to a fixed version than to its vulnerable counterpart. Fixes usually lengthen functions, and larger length increases are associated with more severe reversal. Code-transformation experiments indicate that fix reversal mainly stems from a length shortcut: vulnerability probability increases with function length when content is fixed. We propose CFVul to address this problem. Sliding-window encoding covers complete functions, retaining fix information beyond the truncation boundary. During training, a content constraint encourages the vulnerable version to receive a higher vulnerability probability under a common length input. During inference, a length constraint averages vulnerability probabilities over fixed reference lengths, reducing the influence of actual length changes. On PrimeVul, CFVul achieves a fix-pair ranking metric, PairRank, of 59.4\\%, exceeding the existing methods compared. For fixes that increase function length by more than 15\\%, PairRank rises from CodeBERT's 25.8\\% to 48.4\\%. PairRank also improves in experiments with four additional models and three additional datasets. By weakening the length shortcut, CFVul reduces cases in which fixed versions receive higher vulnerability probabilities than vulnerable versions. It requires only existing fix pairs and applies to multiple pretrained code models, facilitating adoption in existing detectors.",
       "published": "2026-11-18T14:21:12Z",
-      "keyword_score": 4,
+      "keyword_score": 12,
       "topics": [
+        "causal",
         "ranking"
       ]
     },
@@ -1296,8 +1295,9 @@
       "title": "X-split Argus: Learning Reusable History Tokens for Efficient CTR Prediction",
       "abstract": "Accurate click-through rate (CTR) prediction depends on user representations that capture both persistent preferences and recent intent, yet processing extensive behavioral histories for every ranking request is costly under production compute and latency constraints. We present X-split ARGUS, a framework for ad ranking whose history compressor and online ranker are trained end to end. The compressor encodes past interactions into a compact set of tokens that are computed offline and reused across candidates, while the online ranker scores ads through cross-attention to these tokens and representations of recent events. Training combines an autoregressive loss for click feedback with distillation of candidate-specific click logits from a larger teacher that scores each candidate using the uncompressed history. The number of compressed history tokens and the length of recent history can be adjusted to fit serving compute and latency budgets. Offline evaluation shows a 0.81% relative reduction in normalized entropy (NE) compared with the production baseline. Deployment in a large-scale real-time bidding system increases online inference cost by 15% relative to the production baseline. An online A/B test against this baseline yields relative gains of 4.65% in a business metric reflecting the monetary value of conversions generated for advertisers and 2.96% in clicks.",
       "published": "2026-11-18T11:58:37Z",
-      "keyword_score": 28,
+      "keyword_score": 32,
       "topics": [
+        "causal",
         "ranking",
         "systems",
         "training"
@@ -1676,8 +1676,9 @@
       "title": "Lost in the Funnel: Selection-Induced Miscalibration in Ranking and Decision Systems",
       "abstract": "Modern ranking and decision systems combine components with divergent objectives, and scores calibrated at the model boundary are used as calibrated probabilities throughout the funnel, across filtering, reranking, business-rule enforcement, and auctions. Yet calibration is typically validated only where the score is produced, so its breakdown where the score is used is routinely overlooked. We ask when calibration survives this selection, how inherited error differs from selection effects, and what can fail for a perfectly calibrated score at a component boundary. We study these questions through a boundary-wise diagnostic framework of residual identities. We target rubric-judged relevance rather than presentation-dependent metrics such as CTR, so calibration is measurable at every funnel layer of interest. We first present an industry-wide case study that applies our diagnosis to settings where calibration deteriorates at decision time, tracing the degradation to selection rather than model error. This diagnosis motivates Funnel-Aware Recalibration (FAR): post-hoc, selection-policy-aware recalibration at the boundary where scores drive decisions. In a live two-region production A/B test, FAR cuts decision-time expected calibration error (ECE) by 60-80% and improves auction efficiency. We further adapt two public datasets to simulate industry settings, providing additional evidence for the mechanism. We plan to release the adapted datasets and their generation pipeline to support further research. Finally, we distill these findings into practical operating principles for calibrating multi-stage scoring systems.",
       "published": "2026-11-17T11:16:13Z",
-      "keyword_score": 27,
+      "keyword_score": 31,
       "topics": [
+        "causal",
         "ranking",
         "search",
         "systems",
@@ -2277,8 +2278,9 @@
       "title": "Regularizing Treatment Leakage for LLM-based Uplift Estimation",
       "abstract": "Large language models (LLMs) provide semantic features for uplift estimation, but treatment-revealing text can induce prediction shortcuts that do not transfer to deployment. We propose LLM-based Uplift Leakage Regularization (LULR) to address this risk. With the LLM encoder frozen, LULR penalizes dependence between the causal head's trainable shared representation and treatment while retaining separate outcome heads. The penalty uses a variational approximation to the contrastive log-ratio upper bound (CLUB) of mutual information, targeting treatment dependence rather than generic parameter shrinkage. Controlled proxy experiments provide exploratory evidence of improved ranking scores under injected treatment information relative to no regularization and the tested weight-decay setting. Structured-only benchmarks show modest, dataset-dependent effects. On an industrial pricing randomized controlled trial, mean offline lift@0.3 is 0.258 for LULR, compared with 0.106 for the same-backbone baseline. A separate one-week online A/B test of the complete deployed pricing policy records 5.45% higher sales volume and 1.91% higher gross merchandise value than the control arm. These short-term policy-level gains do not isolate the regularizer's effect.",
       "published": "2026-11-16T09:42:24Z",
-      "keyword_score": 6,
+      "keyword_score": 18,
       "topics": [
+        "causal",
         "ranking",
         "training"
       ]
@@ -2300,8 +2302,9 @@
       "title": "Who Benefits from Telemonitoring? Uplift Modelling of a Nationwide Home Blood Pressure Monitoring Programme",
       "abstract": "Home blood pressure (BP) telemonitoring programmes are being deployed at national scale, yet enrolment resources are finite and the benefit of telemonitoring is unlikely to be uniform across patients. We study the Primary Technology-Enhanced Care for Hypertension (PTEC-HT) programme, a nationwide telemonitoring programme for hypertensive patients in Singapore. Using retrospective data on 16,694 patients registered between August 2020 and May 2024, we first estimate the average treatment effect of the programme on 6-month BP control against a propensity-score-matched non-participant cohort, finding an absolute improvement of 5 percentage points in the rate of BP control (74% vs. 69%, $p = 3\\times10^{-12}$), rising to 12 percentage points (63% vs. 50%, $p = 1\\times10^{-15}$) among patients with uncontrolled BP at baseline. We then move beyond the average effect and apply uplift modelling to estimate individual treatment effects. Across five uplift learners evaluated with 5-fold cross-validation and Qini curves, an uplift random forest performed best on the full cohort and an S-learner on the uncontrolled-baseline subcohort, although performance bands overlapped across learners. On held-out patients, realised uplift was largest in the top predicted-uplift groups and declined across the ranking. These patients had higher baseline BP grade, more recent hypertension diagnosis and lower medication and diagnosis burden, a profile we offer as hypothesis-generating for targeted enrolment. A handcrafted rule built from these features was competitive with the learned models, outperforming all of them on the uncontrolled-baseline cohort, suggesting that uplift models are useful for discovering heterogeneity that can be distilled into simple enrolment criteria for directing limited care team capacity.",
       "published": "2026-11-16T09:01:44Z",
-      "keyword_score": 4,
+      "keyword_score": 16,
       "topics": [
+        "causal",
         "ranking",
         "systems",
         "training"
@@ -2935,32 +2938,32 @@
   "prefilter": [
     "2611.22788",
     "2611.20721",
-    "2611.25527",
     "2611.25256",
-    "2611.25659",
     "2611.22392",
     "2611.22503",
+    "2611.24283",
     "2611.23339",
     "2611.22163",
     "2611.25738",
-    "2611.24006",
-    "2611.22410",
-    "2611.26514",
-    "2611.24283",
-    "2611.21441",
+    "2611.24757",
     "2611.23969",
     "2611.22595",
-    "2611.20758",
+    "2611.22410",
     "2611.23710",
+    "2611.26514",
+    "2611.23910",
+    "2611.21441",
+    "2611.22597",
+    "2611.20758",
     "2611.22509",
     "2611.19742",
-    "2611.23910",
     "2611.23858",
     "2611.25691",
     "2611.23005",
-    "2611.22597",
+    "2611.21920",
     "2611.19847",
     "2611.22353",
+    "2611.26531",
     "2611.25557",
     "2611.19967",
     "2611.25531",
@@ -2968,13 +2971,12 @@
     "2611.22079",
     "2611.26609",
     "2611.25606",
-    "2611.24757",
     "2611.20837",
     "2611.19655",
     "2611.25845",
     "2611.24849",
+    "2611.20794",
     "2611.20388",
-    "2611.26531",
     "2611.25670",
     "2611.25229",
     "2611.22828",
@@ -2985,152 +2987,232 @@
     "2611.22352",
     "2611.22030",
     "2611.21461",
+    "2611.20752",
     "2611.19752",
     "2611.25834",
     "2611.25288",
     "2611.23742",
-    "2611.21920",
     "2611.20979",
+    "2611.20926",
     "2611.19974",
-    "2611.25705"
+    "2611.20726"
   ],
   "reviews": [
     {
-      "id": "2611.25527",
-      "status": "recommended",
-      "score": 82,
-      "reason": "对做生成式重排与整页优化的工程师有直接参考价值：给出可落地的逐位置整页监督目标和训练流程，并在工业日志上离线验证；关键限制是收益全部来自离线评估器与仿真，未上线验证，且依赖固定页面评估器。"
-    },
-    {
-      "id": "2611.25659",
-      "status": "recommended",
-      "score": 88,
-      "reason": "对做精排长序列建模的工程师价值明确：给出可落地的请求级序列更新机制，兼顾深度扩展与候选共享的低服务成本，并有淘宝线上A/B证据；但线上收益是整体模型对线上基线的对比，未单独归因于更新模块，离线结论也仅限淘宝搜索单数据集。"
-    },
-    {
-      "id": "2611.24006",
-      "status": "recommended",
-      "score": 88,
-      "reason": "对做精排/重排与推荐系统全链路优化的工程师有直接参考价值：给出LLM驱动跨阶段编排的完整工程范式（近线生成+缓存+双端校验+回退+三阶段后训练），并附线上A/B与消融；关键限制是收益为端到端点估计、未隔离各阶段贡献，回放与奖励模型存在近似偏差，且动作空间受限。"
-    },
-    {
-      "id": "2611.24757",
-      "status": "recommended",
-      "score": 78,
-      "reason": "为精排/推荐A/B测试提供可落地的动作级流量分配与方差缩减设计，直接对应小效应检测的样本效率痛点；但证据仅限合成仿真，且需平台支持按上下文逐动作采样而非仅整体分流，上线前需自行验证。"
-    },
-    {
       "id": "2611.24283",
-      "status": "recommended",
-      "score": 82,
-      "reason": "对做精排长序列建模与线上成本权衡的工程师有直接参考价值：给出了可复用历史token+候选cross-attention+教师蒸馏的完整工业方案及A/B与资源开销数据；但机构未披露、离线增益较小，且线上收益未拆分各模块贡献，需谨慎归因。"
+      "cached": false,
+      "status": "eligible",
+      "score": 88,
+      "reason": "对做精排长序列建模与在线成本权衡的工程师有直接参考价值：给出“离线可复用历史token+在线近期行为+教师蒸馏”的完整工业方案及线上A/B证据，但需注意收益来自整体方案而非单模块，且机构与数据集归属原文未说明。"
+    },
+    {
+      "id": "2611.20794",
+      "cached": false,
+      "status": "eligible",
+      "score": 66,
+      "reason": "对做精排价值建模和因果增益的工程师有直接参考价值：它给出一个可插拔的表示-处理依赖惩罚，并诚实区分代理实验、离线不显著结果与未归因的线上策略收益；但语义泄漏是否被真正去除、正则项是否带来线上增益均未被验证。"
     },
     {
       "id": "2611.22595",
-      "status": "recommended",
-      "score": 82,
-      "reason": "对做精排价值建模和漏斗多阶段校准的工程师很实用：它给出可落地的边界诊断与后校准方法，并有线上A/B证据，但收益主要来自相关性标签校准而非CTR，且FAR只是事后单调映射、需周期重拟合，不能直接迁移为端到端排序收益。"
+      "cached": false,
+      "status": "eligible",
+      "score": 80,
+      "reason": "对做精排价值建模和漏斗多阶段打分的工程师，它给出可落地的“在决策边界而非模型输出处校准”诊断与修正方法，并有线上A/B支撑；但线上只验证了广告相关性标签与拍卖场景，迁移到电商推荐需自行验证。"
     },
     {
-      "id": "2611.26531",
-      "status": "recommended",
-      "score": 82,
-      "reason": "对做精排特征工程与成本约束优化的工程师有直接参考价值：给出可落地的LLM智能体搜索循环、Pareto多任务特征混合和共享流水线成本裁剪机制，并区分离线NE、仿真资源与线上A/B；限制是线上0.20%收益未拆分到各模块，混合权重调优尚无实验。"
+      "id": "2611.24757",
+      "cached": false,
+      "status": "eligible",
+      "score": 66,
+      "reason": "为推荐/搜索A/B测试提供可落地的动作级流量分配思路，能显著降低检测小策略差异所需流量；但只有合成仿真证据，且日志策略需在实验前冻结，迁移到真实系统需自行验证。"
     },
     {
-      "id": "2611.22597",
-      "status": "recommended",
-      "score": 72,
-      "reason": "对做精排CVR与促销期分布漂移的工程师有直接参考价值：训练期重加权与推理期免重训分数校正的分离设计、ABA对TEN同样有效的对照、以及新品类召回下降和serving成本的明确权衡都值得借鉴；但线上增益仅对比HDR且无置信区间，ABA贡献无法与CPC/RW完全解耦，复现细节（历史构造、权重归一、召回截断）缺失。"
+      "id": "2611.25288",
+      "cached": false,
+      "status": "eligible",
+      "score": 73,
+      "reason": "对做大规模稀疏嵌入训练与系统成本的推荐工程师有直接参考价值：给出可落地的按特征重要性分配剪枝比例方案及FI计算开销与漂移证据，但收益限于训练内存/GPU成本，未验证线上服务指标。"
+    },
+    {
+      "id": "2611.25738",
+      "status": "error",
+      "error": "Review failed after retry: Evidence excerpt absent from cited page"
+    },
+    {
+      "id": "2611.20726",
+      "cached": false,
+      "status": "eligible",
+      "score": 80,
+      "reason": "对做精排价值建模和表征学习的推荐工程师有直接参考价值：给出可复现的层级+拒绝事件对比正则方案、同骨干消融和线上用户级bootstrap证据；但需注意取消率护栏未达标、层级与权重需按业务调参。"
+    },
+    {
+      "id": "2611.20721",
+      "cached": false,
+      "status": "eligible",
+      "score": 73,
+      "reason": "对做生成式检索/语义ID的推荐工程师有直接参考价值：给出可增量编码的文档侧SID量化器设计、无需训练生成器的SID级评测协议，以及“嵌入质量比量化器更决定召回”的实证；但需注意其收益是重建视图离线指标、CARE-LR未大规模验证、且重建视图用到不属于整数SID的连续系数。"
     }
   ],
   "abstract_candidates": [
     {
-      "id": "2611.25527",
-      "score": 92
+      "id": "2611.20721",
+      "score": 76
     },
     {
-      "id": "2611.25659",
-      "score": 90
-    },
-    {
-      "id": "2611.24006",
-      "score": 88
+      "id": "2611.22503",
+      "score": 74
     },
     {
       "id": "2611.24283",
-      "score": 84
+      "score": 88
     },
     {
-      "id": "2611.22595",
-      "score": 82
-    },
-    {
-      "id": "2611.22597",
+      "id": "2611.25738",
       "score": 78
     },
     {
-      "id": "2611.23606",
-      "score": 68
+      "id": "2611.24757",
+      "score": 82
+    },
+    {
+      "id": "2611.22595",
+      "score": 85
     },
     {
       "id": "2611.25606",
       "score": 72
     },
     {
-      "id": "2611.24757",
+      "id": "2611.20794",
       "score": 88
     },
     {
-      "id": "2611.26531",
-      "score": 82
+      "id": "2611.22274",
+      "score": 65
+    },
+    {
+      "id": "2611.20752",
+      "score": 62
     },
     {
       "id": "2611.25288",
-      "score": 76
+      "score": 80
     },
     {
-      "id": "2611.21920",
+      "id": "2611.20726",
       "score": 78
     }
   ],
   "shortlist": [
     {
-      "id": "2611.25527",
-      "score": 92
-    },
-    {
-      "id": "2611.25659",
-      "score": 90
-    },
-    {
-      "id": "2611.24006",
-      "score": 88
-    },
-    {
-      "id": "2611.24757",
-      "score": 88
-    },
-    {
       "id": "2611.24283",
-      "score": 84
+      "score": 88
+    },
+    {
+      "id": "2611.20794",
+      "score": 88
     },
     {
       "id": "2611.22595",
+      "score": 85
+    },
+    {
+      "id": "2611.24757",
       "score": 82
     },
     {
-      "id": "2611.26531",
-      "score": 82
+      "id": "2611.25288",
+      "score": 80
     },
     {
-      "id": "2611.22597",
+      "id": "2611.25738",
       "score": 78
+    },
+    {
+      "id": "2611.20726",
+      "score": 78
+    },
+    {
+      "id": "2611.20721",
+      "score": 76
     }
   ],
+  "eligible": [
+    {
+      "id": "2611.24283",
+      "rubric": {
+        "fit": 5,
+        "evidence": 4,
+        "action": 4
+      },
+      "primary_topic": "ranking",
+      "score": 88
+    },
+    {
+      "id": "2611.20794",
+      "rubric": {
+        "fit": 4,
+        "evidence": 2,
+        "action": 4
+      },
+      "primary_topic": "causal",
+      "score": 66
+    },
+    {
+      "id": "2611.22595",
+      "rubric": {
+        "fit": 4,
+        "evidence": 4,
+        "action": 4
+      },
+      "primary_topic": "ranking",
+      "score": 80
+    },
+    {
+      "id": "2611.24757",
+      "rubric": {
+        "fit": 4,
+        "evidence": 2,
+        "action": 4
+      },
+      "primary_topic": "causal",
+      "score": 66
+    },
+    {
+      "id": "2611.25288",
+      "rubric": {
+        "fit": 4,
+        "evidence": 3,
+        "action": 4
+      },
+      "primary_topic": "training",
+      "score": 73
+    },
+    {
+      "id": "2611.20726",
+      "rubric": {
+        "fit": 4,
+        "evidence": 4,
+        "action": 4
+      },
+      "primary_topic": "ranking",
+      "score": 80
+    },
+    {
+      "id": "2611.20721",
+      "rubric": {
+        "fit": 4,
+        "evidence": 3,
+        "action": 4
+      },
+      "primary_topic": "retrieval",
+      "score": 73
+    }
+  ],
+  "recent_topics": [],
   "selected": [
-    "2611.25659",
-    "2611.24006",
-    "2611.25527"
+    "2611.24283",
+    "2611.22595",
+    "2611.20726"
   ]
 }

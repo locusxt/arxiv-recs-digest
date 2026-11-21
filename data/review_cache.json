@@ -1,0 +1,344 @@
+{
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.24283v1": {
+    "id": "2611.24283",
+    "title": "X-split Argus: Learning Reusable History Tokens for Efficient CTR Prediction",
+    "abstract": "Accurate click-through rate (CTR) prediction depends on user representations that capture both persistent preferences and recent intent, yet processing extensive behavioral histories for every ranking request is costly under production compute and latency constraints. We present X-split ARGUS, a framework for ad ranking whose history compressor and online ranker are trained end to end. The compressor encodes past interactions into a compact set of tokens that are computed offline and reused across candidates, while the online ranker scores ads through cross-attention to these tokens and representations of recent events. Training combines an autoregressive loss for click feedback with distillation of candidate-specific click logits from a larger teacher that scores each candidate using the uncompressed history. The number of compressed history tokens and the length of recent history can be adjusted to fit serving compute and latency budgets. Offline evaluation shows a 0.81% relative reduction in normalized entropy (NE) compared with the production baseline. Deployment in a large-scale real-time bidding system increases online inference cost by 15% relative to the production baseline. An online A/B test against this baseline yields relative gains of 4.65% in a business metric reflecting the monetary value of conversions generated for advertisers and 2.96% in clicks.",
+    "authors": [
+      "Alexander Ploshkin",
+      "Nikita Stepanov",
+      "Alexey Pismenny",
+      "Viacheslav Ovchinnikov",
+      "Nikolay Savushkin"
+    ],
+    "published": "2026-11-18T11:58:37Z",
+    "url": "https://arxiv.org/abs/2611.24283v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.24283v1",
+    "explanation": {
+      "problem": "每次排序请求都重新编码用户很长的行为历史太贵，想在有限算力和延迟内既用上长历史又保留候选相关的打分能力。",
+      "method": "先用一个因果Transformer把用户历史压成少量与候选无关的摘要token，离线算好缓存复用；线上只对最近若干条原始事件做一次编码，所有候选共享；候选广告经编码后作为查询，对摘要token和近期状态做交叉注意力得到点击预测；训练时同时用真实点击和更大教师模型（用未压缩全历史）的点击logit做蒸馏，让压缩器学会保留有用信息。",
+      "application": "推测：电商精排可把用户长期行为离线压缩成少量token缓存，线上只编码最近行为并对候选做交叉注意力，同时用全历史大模型蒸馏小模型，以在延迟预算内扩展历史长度。",
+      "caveat": "线上收益来自整体方案，未单独验证压缩器、蒸馏、平滑等各模块的贡献；离线仅单一内部数据集，且机构与数据集归属原文未说明。"
+    },
+    "title_zh": "X-split Argus：学习可复用的历史Token以实现高效CTR预测",
+    "summary": "提出X-split ARGUS：历史压缩器离线把用户长行为序列编码为K个与候选无关的可复用历史token，在线排序器通过交叉注意力结合这些token与最近M个事件的表示对候选广告打分，压缩器与排序器端到端联合训练，并用处理未压缩历史的更大教师模型做点击logit蒸馏。离线NE相对Context-aware ARGUS基线降低0.81%（保留教师改进的71.6%），线上A/B（7天、各组6%流量）ACV提升4.65%、点击数提升2.96%，但线上推理需多用15%同型号GPU。",
+    "reason": "对做精排长序列建模与在线成本权衡的工程师有直接参考价值：给出“离线可复用历史token+在线近期行为+教师蒸馏”的完整工业方案及线上A/B证据，但需注意收益来自整体方案而非单模块，且机构与数据集归属原文未说明。",
+    "score": 88,
+    "rubric": {
+      "fit": 5,
+      "evidence": 4,
+      "action": 4
+    },
+    "primary_topic": "ranking",
+    "evidence": {
+      "page": 13,
+      "finding": "线上A/B为7天、实验组与对照组各占该广告面6%流量，相对生产基线ACV提升4.65%、点击数提升2.96%，且需多用15%同型号在线GPU。"
+    },
+    "tags": [
+      "CTR预测",
+      "长序列压缩",
+      "知识蒸馏",
+      "交叉注意力",
+      "在线A/B"
+    ],
+    "institutions": [
+      "原文未说明"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 20
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.20794v3": {
+    "id": "2611.20794",
+    "title": "Regularizing Treatment Leakage for LLM-based Uplift Estimation",
+    "abstract": "Large language models (LLMs) provide semantic features for uplift estimation, but treatment-revealing text can induce prediction shortcuts that do not transfer to deployment. We propose LLM-based Uplift Leakage Regularization (LULR) to address this risk. With the LLM encoder frozen, LULR penalizes dependence between the causal head's trainable shared representation and treatment while retaining separate outcome heads. The penalty uses a variational approximation to the contrastive log-ratio upper bound (CLUB) of mutual information, targeting treatment dependence rather than generic parameter shrinkage. Controlled proxy experiments provide exploratory evidence of improved ranking scores under injected treatment information relative to no regularization and the tested weight-decay setting. Structured-only benchmarks show modest, dataset-dependent effects. On an industrial pricing randomized controlled trial, mean offline lift@0.3 is 0.258 for LULR, compared with 0.106 for the same-backbone baseline. A separate one-week online A/B test of the complete deployed pricing policy records 5.45% higher sales volume and 1.91% higher gross merchandise value than the control arm. These short-term policy-level gains do not isolate the regularizer's effect.",
+    "authors": [
+      "Bojing Feng",
+      "Jinqiu Deng",
+      "Zihan Hong",
+      "Yuan Xue",
+      "Wenqi Xiang",
+      "Shuhan Wang",
+      "Feng Xiao",
+      "Shiwei Wang",
+      "Zijiang Liu",
+      "Shaomin Li",
+      "Yongzhi Qi"
+    ],
+    "published": "2026-11-16T09:42:24Z",
+    "url": "https://arxiv.org/abs/2611.20794v3",
+    "pdf_url": "https://arxiv.org/pdf/2611.20794v3",
+    "explanation": {
+      "problem": "商品文本里可能混入了折扣决策之后才产生的信息（如“清仓”），模型会靠这些线索走捷径，而不是学习真正决定用户是否响应干预的需求语义。",
+      "method": "先用冻结的LLM把商品文本编码，再与结构化特征融合，送入共享表示和两个分别对应处理组与对照组的输出头。训练时额外加一个轻量分类器，用对比式互信息上界估计共享表示中还残留多少处理信息，并惩罚这部分依赖；分类器先拟合、主网络再最小化，与事实损失和倾向损失联合优化。输出仍是两组预测之差，用于排序谁更该被干预。",
+      "application": "推测：电商推荐可在精排增益/价值模型中，对由商品标题、文案等冻结文本编码得到的共享表示加同类处理依赖惩罚，并用注入伪泄漏的离线实验先验证方向，再以独立A/B隔离该模块。",
+      "caveat": "受控实验用的是标量代理而非真实语义泄漏，工业离线差异不显著，线上A/B评估的是完整定价策略、无法归因于正则项。"
+    },
+    "title_zh": "面向LLM增益估计的治疗泄漏正则化",
+    "summary": "针对冻结LLM编码的商品文本可能携带干预信息、导致增益模型走捷径的问题，作者在DragonNet式因果头中，对可训练共享表示与处理变量之间的互信息施加CLUB上界惩罚（LULR）。在注入代理特征的受控实验中，该惩罚使排序分数相对无正则和权重衰减有所提升；工业离线lift@0.3从0.106升至0.258，但差异不显著、策略价值几乎持平；一周线上A/B显示整体定价策略销量+5.45%、GMV+1.91%，但未单独隔离正则项贡献。",
+    "reason": "对做精排价值建模和因果增益的工程师有直接参考价值：它给出一个可插拔的表示-处理依赖惩罚，并诚实区分代理实验、离线不显著结果与未归因的线上策略收益；但语义泄漏是否被真正去除、正则项是否带来线上增益均未被验证。",
+    "score": 66,
+    "rubric": {
+      "fit": 4,
+      "evidence": 2,
+      "action": 4
+    },
+    "primary_topic": "causal",
+    "evidence": {
+      "page": 5,
+      "finding": "工业离线lift@0.3均值从0.106升至0.258，但5个种子中1个为负、差异不显著，估计策略价值几乎持平（7.10对7.15），说明离线排序提升未确立决策价值改善。"
+    },
+    "tags": [
+      "增益建模",
+      "治疗泄漏",
+      "互信息正则",
+      "LLM文本特征",
+      "因果推断"
+    ],
+    "institutions": [
+      "京东供应链技术团队Y（JD.com）"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 7
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.22595v1": {
+    "id": "2611.22595",
+    "title": "Lost in the Funnel: Selection-Induced Miscalibration in Ranking and Decision Systems",
+    "abstract": "Modern ranking and decision systems combine components with divergent objectives, and scores calibrated at the model boundary are used as calibrated probabilities throughout the funnel, across filtering, reranking, business-rule enforcement, and auctions. Yet calibration is typically validated only where the score is produced, so its breakdown where the score is used is routinely overlooked. We ask when calibration survives this selection, how inherited error differs from selection effects, and what can fail for a perfectly calibrated score at a component boundary. We study these questions through a boundary-wise diagnostic framework of residual identities. We target rubric-judged relevance rather than presentation-dependent metrics such as CTR, so calibration is measurable at every funnel layer of interest. We first present an industry-wide case study that applies our diagnosis to settings where calibration deteriorates at decision time, tracing the degradation to selection rather than model error. This diagnosis motivates Funnel-Aware Recalibration (FAR): post-hoc, selection-policy-aware recalibration at the boundary where scores drive decisions. In a live two-region production A/B test, FAR cuts decision-time expected calibration error (ECE) by 60-80% and improves auction efficiency. We further adapt two public datasets to simulate industry settings, providing additional evidence for the mechanism. We plan to release the adapted datasets and their generation pipeline to support further research. Finally, we distill these findings into practical operating principles for calibrating multi-stage scoring systems.",
+    "authors": [
+      "Aditya Somani",
+      "Rahul Ragesh",
+      "Vikas Joshi",
+      "Amit Singh"
+    ],
+    "published": "2026-11-17T11:16:13Z",
+    "url": "https://arxiv.org/abs/2611.22595v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.22595v1",
+    "explanation": {
+      "problem": "模型输出时校准良好的分数，经过过滤、重排、竞价等层层筛选后，在真正做决策的地方可能已经系统性偏了。",
+      "method": "把每个筛选边界前后的带标签样本按分数分箱，用残差恒等式把幸存者偏差拆成三部分：上游带来的继承误差、各分数箱占比变化造成的构成偏移、以及箱内被筛选者结果系统性偏离箱均值造成的残差偏移。诊断显示偏差主要来自第三项后，就在分数进入下游决策的那个边界上，用该策略实际保留下来的样本重新拟合一个单调校准映射，模型和服务规则都不动，并定期重拟合。",
+      "application": "推测：电商推荐可在粗排到精排、精排到重排/混排、以及业务规则过滤后的每个边界做同样诊断，用曝光前的人工或规则相关性标签在幸存者上重校准分数，再用于阈值和排序融合。",
+      "caveat": "线上证据仅来自微软广告一个平台的两地区A/B，标签是广告相关性判定而非点击或转化，公开数据部分为仿真重放而非真实线上验证。"
+    },
+    "title_zh": "迷失在漏斗中：排序与决策系统中的选择诱导校准偏差",
+    "summary": "论文提出按边界分解残差的诊断框架，把幸存者偏差拆成继承误差、构成偏移和残差偏移，并据此在分数真正被使用的边界上做选择策略感知的事后重校准（FAR）。线上两地区A/B中，决策时ECE从784/809bp降到314/234bp（降60–71%），曝光层降63/80%，广告覆盖下降3.1/9.2%、CTR升1.0/2.0%、RPM无显著变化；两个公开数据集的重放仅提供机制层面的仿真证据。",
+    "reason": "对做精排价值建模和漏斗多阶段打分的工程师，它给出可落地的“在决策边界而非模型输出处校准”诊断与修正方法，并有线上A/B支撑；但线上只验证了广告相关性标签与拍卖场景，迁移到电商推荐需自行验证。",
+    "score": 80,
+    "rubric": {
+      "fit": 4,
+      "evidence": 4,
+      "action": 4
+    },
+    "primary_topic": "ranking",
+    "evidence": {
+      "page": 3,
+      "finding": "线上两地区A/B显示FAR把决策时ECE降低60–71%，同时广告覆盖下降、CTR上升、RPM无显著变化，属于线上对照实验证据。"
+    },
+    "tags": [
+      "校准偏差",
+      "选择偏差",
+      "多阶段漏斗",
+      "事后重校准",
+      "广告拍卖"
+    ],
+    "institutions": [
+      "Microsoft Ads"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 6
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.24757v2": {
+    "id": "2611.24757",
+    "title": "Variance-Optimal Counterfactual Policy Design for Sample-Efficient Online A/B Testing",
+    "abstract": "Online A/B testing is the standard approach for evaluating changes to user-facing systems, such as a new recommendation or ranking policy, before deployment. While the difference-in-means estimator of a standard A/B test is unbiased, it often suffers from high variance. When the treatment and production policies choose the same actions with similar probabilities, the resulting observations can add noise while providing little information about the difference between the policies. Consequently, A/B tests can require large amounts of traffic and long durations to detect small treatment effects. Existing variance-reduction methods mainly improve the estimator after the data-collection scheme has been fixed, and recent overlap-aware designs only optimize a single traffic split between the two policies; thereby, they cannot direct traffic to the actions on which the policies disagree. In this paper, we jointly optimize how actions are sampled and how the resulting observations are used to estimate the treatment effect. Our contributions are two-fold. First, building on pairwise off-policy evaluation, we derive the variance-optimal action-level logging policy for estimating the average treatment effect between two policies, which has a closed-form solution for any fixed control variate. Second, we use historical logs to jointly optimize the logging policy and a control variate to further reduce variance. Our experimental results in simulated policy A/B tests show that our designs estimate the average treatment effect more accurately than existing variance reduction methods on every evaluated setting, while generally improving statistical power and reducing how often the worse policy is selected. As a result, our designs enable practitioners to reach reliable deployment decisions with considerably less online traffic.",
+    "authors": [
+      "Shashank Gupta",
+      "Subhadeep Maji"
+    ],
+    "published": "2026-11-18T17:11:57Z",
+    "url": "https://arxiv.org/abs/2611.24757v2",
+    "pdf_url": "https://arxiv.org/pdf/2611.24757v2",
+    "explanation": {
+      "problem": "两个推荐策略差异很小、又经常推荐相同物品时，常规A/B测试需要大量流量才能判断哪个更好。",
+      "method": "先假设一个预测奖励的基准模型（控制变量），把每个动作的采样概率设成与两策略概率差乘以剩余奖励不确定度成正比，这个比例有闭式解；再用历史日志只优化基准模型本身，让整体估计方差最小，并加少量均匀采样兜底；最后用冻结的采样策略收集新数据，按概率差加权估计两策略效果之差。",
+      "application": "推测：电商推荐可把候选重排策略与线上策略的概率差作为分配依据，把实验流量集中到两策略分歧大的物品上，并用历史点击日志拟合基准模型；需先确认线上系统能按请求逐动作设定采样概率。",
+      "caveat": "全部结论来自合成仿真，没有真实线上A/B或离线真实日志验证，且标准误未计入历史模型的不确定性。"
+    },
+    "title_zh": "方差最优的反事实策略设计：面向样本高效的在线A/B测试",
+    "summary": "论文把两个随机策略之间的A/B测试写成成对离策略估计，推导出给定控制变量下方差最优的按上下文、按动作的日志策略闭式解，再联合优化标量或模型型控制变量。在合成仿真中（25/50/75个动作、1万/3万历史日志、1000至1万评估样本、每设置500次重复），其MSE在所有设置下低于平衡A/B和优化流量混合基线，模型型设计达到平衡A/B同等MSE只需39%至51%的评估流量；但全部证据来自仿真，没有真实线上A/B。",
+    "reason": "为推荐/搜索A/B测试提供可落地的动作级流量分配思路，能显著降低检测小策略差异所需流量；但只有合成仿真证据，且日志策略需在实验前冻结，迁移到真实系统需自行验证。",
+    "score": 66,
+    "rubric": {
+      "fit": 4,
+      "evidence": 2,
+      "action": 4
+    },
+    "primary_topic": "causal",
+    "evidence": {
+      "page": 8,
+      "finding": "仿真结果显示模型型设计在1万评估样本时统计功效约为平衡A/B的1.5至2.1倍，错误选择更差策略的比例降低42%至63%，但均为合成环境结果。"
+    },
+    "tags": [
+      "A/B测试",
+      "反事实估计",
+      "方差最优设计",
+      "策略重叠",
+      "控制变量"
+    ],
+    "institutions": [
+      "Microsoft, India",
+      "DeepL, UK"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 10
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.25288v1": {
+    "id": "2611.25288",
+    "title": "Intelligent Embedding Pruning for Large-Scale Recommendation Models",
+    "abstract": "Modern recommendation systems face substantial memory pressure, largely from the sparse embedding layer that maps high-cardinality categorical features into dense vectors. In-training embedding pruning (ITEP) removes less important embedding rows during training, yielding end-to-end memory savings but sometimes degrading accuracy because per-table pruning ratios are set by size-based heuristics. We use feature importance (FI) to guide these ratios (FI-ITEP), assigning higher pruning to tables tied to less important features. Across three large-scale recommendation models, FI-ITEP achieves 20--40% total memory reduction while matching or improving accuracy relative to percentile-based ITEP. Because the feature-importance signal requires minimal resources to compute, these memory savings translate into concrete systems benefits: the same models train on fewer GPU trainers (e.g., 112 to 80) with higher per-GPU throughput, saving 1,000+ GPU-hours per model launch. We reproduce these trends on the open-source DLRM (Criteo 1TB) and quantify the end-to-end training-time and GPU-cost tradeoff---including the burden of computing FI---offering practical guidance for embedding pruning in real-world systems.",
+    "authors": [
+      "Anish Khazane",
+      "Alex Saad-Falcon",
+      "Guanchu Wu",
+      "Marcio Porto",
+      "Jasper Shan",
+      "Fei Yu",
+      "Eugene Shulga",
+      "Intaik Park",
+      "Yongzhe Zhang",
+      "Xiaoyu Deng",
+      "Sheng Luo",
+      "Xiaoya Wang"
+    ],
+    "published": "2026-11-18T23:26:49Z",
+    "url": "https://arxiv.org/abs/2611.25288v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.25288v1",
+    "explanation": {
+      "problem": "大规模推荐模型的稀疏嵌入表太占显存，现有按表大小决定剪枝力度的做法没有考虑特征本身对效果的重要性。",
+      "method": "先在小批量数据上对每个特征做打乱或Shapley采样，观察模型损失变化得到重要性分数；再按分数高低为每张嵌入表分配剪枝比例，越不重要的表剪得越多；训练中沿用原有机制把低重要ID哈希到共享行；最后在多个工业模型和开源数据上对比内存节省与NE。",
+      "application": "推测：电商推荐可把该重要性信号用于稀疏特征表的分级剪枝与训练资源规划，先离线验证NE与内存权衡再考虑上线。",
+      "caveat": "主要证据为离线NE与训练资源对比，缺少线上A/B和线上服务指标验证。"
+    },
+    "title_zh": "面向大规模推荐模型的智能嵌入剪枝",
+    "summary": "用置换/Shapley采样得到的特征重要性为每张稀疏嵌入表设定训练中剪枝比例（FI-ITEP），在三个工业级DLRM上相比按表大小分档的百分位基线取得20–40%总内存节省且评估NE持平或更优，并在开源DLRM+Criteo 1TB上复现趋势；线上收益仅体现为训练侧GPU数量与吞吐的仿真/配置对比，未做线上A/B。",
+    "reason": "对做大规模稀疏嵌入训练与系统成本的推荐工程师有直接参考价值：给出可落地的按特征重要性分配剪枝比例方案及FI计算开销与漂移证据，但收益限于训练内存/GPU成本，未验证线上服务指标。",
+    "score": 73,
+    "rubric": {
+      "fit": 4,
+      "evidence": 3,
+      "action": 4
+    },
+    "primary_topic": "training",
+    "evidence": {
+      "page": 3,
+      "finding": "该页给出开源DLRM+Criteo 1TB的离线复现实验，FI-ITEP在相同内存削减下AUROC持平或更优，但仅为离线评估。"
+    },
+    "tags": [
+      "嵌入剪枝",
+      "特征重要性",
+      "稀疏嵌入",
+      "训练内存优化",
+      "推荐系统"
+    ],
+    "institutions": [
+      "Meta"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 11
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.20726v1": {
+    "id": "2611.20726",
+    "title": "PEETS: Preference-aware Embeddings with Explicit Tree Structure for Auxiliary Product Bundling",
+    "abstract": "Auxiliary products such as flight protection and flexible-change services are recommended alongside primary travel purchases. This setting creates a granularity ambiguity: SKUs within one product type share semantics but differ in price and coverage, while rejecting one offer does not imply disinterest in the entire type. We present \\textbf{PEETS} (\\textbf{P}reference-aware \\textbf{E}mbeddings with \\textbf{E}xplicit \\textbf{T}ree \\textbf{S}tructure), a training-time framework for auxiliary product bundling. PEETS regularizes an existing click--conversion predictor through two conditional comparisons. Hierarchical Contrastive Loss uses the pair's common ancestor as a reference; Negative Contrastive Loss conditions structural sampling and comparison shifts on logged rejection events. Both act on shared SKU representations during training. This separates catalog relatedness from individual preference supervision and leaves the predictive serving path intact. PEETS achieves 78.20\\% AUC, exceeding TWIN V2 by 0.90 percentage points and the matched base model by 1.15 points. In a 14-day online evaluation, gross auxiliary GMV per exposed user-day improves by 8.20\\% over Policies, 3.06\\% over Base, and 0.84\\% over TWIN V2, with all three user-bootstrap 95\\% intervals above zero. Bundling rate is 0.51 points below Policies. The cancellation interval's upper limit exceeds the prespecified margin. PEETS adds no auxiliary-loss computation to serving and records 42.1~ms p95 latency, compared with 42.0~ms for Base.",
+    "authors": [
+      "Maolei Huang",
+      "Jing Tian",
+      "Dexuan Duan",
+      "Yan Chen",
+      "Huawei Cao",
+      "Shuhan Song"
+    ],
+    "published": "2026-11-16T08:32:09Z",
+    "url": "https://arxiv.org/abs/2611.20726v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.20726v1",
+    "explanation": {
+      "problem": "同一类辅助产品下不同SKU价格和保障范围差异大，用户拒绝某个报价不等于不喜欢整类产品，模型需要区分“目录相关”和“个人偏好”。",
+      "method": "先把SKU按品类和价格分位挂到一棵树上，每个节点有可训练嵌入。训练时做两类对比：同类同祖先的SKU互为正样本、跨类为负样本；对用户显式拒绝的SKU，用同层其他桶作参照，把被拒桶的统计量作为平移量加到比较双方上。两个辅助损失只更新共享SKU嵌入，线上仍用原来的点击和购买双头打分。",
+      "application": "推测可迁移到电商搭售、加购推荐和保险等辅助品精排：用类目-价格树构造对比正负样本，并把“删除/替换”等显式拒绝日志作为条件信号；需先确认自身日志有可区分的拒绝事件和稳定的类目价格层级。",
+      "caveat": "线上收益来自整体模型对比，未单独验证层级树与拒绝条件各自的线上贡献；取消率非劣性未通过，且数据仅来自单一旅行场景。"
+    },
+    "title_zh": "PEETS：面向辅助产品搭售的偏好感知嵌入与显式树结构",
+    "summary": "提出训练期框架PEETS，用显式SKU层级树构造祖先条件对比损失和基于用户显式拒绝事件的负对比损失，正则化共享SKU嵌入，不改变线上打分路径。离线AUC 78.20%，比TWIN V2高0.90个百分点、比同骨干Base高1.15个百分点；14天线上实验每曝光用户日辅助GMV比Policies高8.20%、比Base高3.06%、比TWIN V2高0.84%，但搭售率低于Policies，且取消率非劣性检验未通过。",
+    "reason": "对做精排价值建模和表征学习的推荐工程师有直接参考价值：给出可复现的层级+拒绝事件对比正则方案、同骨干消融和线上用户级bootstrap证据；但需注意取消率护栏未达标、层级与权重需按业务调参。",
+    "score": 80,
+    "rubric": {
+      "fit": 4,
+      "evidence": 4,
+      "action": 4
+    },
+    "primary_topic": "ranking",
+    "evidence": {
+      "page": 7,
+      "finding": "该页报告14天用户级随机线上实验：PEETS每曝光用户日GMV比Policies高8.20%、比Base高3.06%、比TWIN V2高0.84%，三个用户bootstrap区间均不含零，但取消率区间上限超过预设边际。"
+    },
+    "tags": [
+      "对比学习",
+      "层级树结构",
+      "辅助产品搭售",
+      "精排价值建模",
+      "线上A/B"
+    ],
+    "institutions": [
+      "Fliggy, Alibaba Group",
+      "University of Chinese Academy of Sciences"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 9
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.20721v1": {
+    "id": "2611.20721",
+    "title": "CARE: Contrastive-Anchored Residual Encoding with Listwise Reconstruction for Retrieval-Oriented Semantic IDs",
+    "abstract": "Generative retrieval replaces nearest-neighbor search with the generation of a document's semantic ID (SID), so the SID tokenizer bounds what the retriever can recall. Common SID constructions (residual k-means, RQ-VAE, finite scalar quantization, capacity balancing) optimize criteria defined on document embeddings alone and do not control whether a query can still find its relevant documents after quantization. We propose two retrieval-oriented SID tokenizers. CARE-SID (Contrastive-Anchored Residual Encoding for Semantic IDs) quantizes in a retrieval-aligned space: a zero-initialized residual alignment network is trained with a query-document contrastive loss before quantization, an anchor loss and a reconstruction target fixed to the original embedding prevent drift and collapse, and reference-vector rating residual quantization assigns the codes. CARE-LR (CARE with Listwise Reconstruction) then distills, for each training query, the similarity distribution that the original embeddings induce over a candidate list into the SID reconstructions, through a function-preserving layer-resolved head. Both keep a document-only encoding interface. We judge SIDs without training a generator, by row-budget recall in a bucketing view (the partition) and a reconstruction view (the SID with its reconstruction). In offline evaluation on industrial video search data, both tokenizers achieve higher reconstruction-view recall than residual k-means, and CARE-LR improves further on CARE-SID, mainly through the listwise distillation. A comparison of two document embeddings shows that contrastive alignment helps most when the embedding has not been trained on search data, and that the embedding affects SID recall far more than the quantizer. CARE-SID is deployed in the generative retrieval stage of an industrial video search system.",
+    "authors": [
+      "Yuan Xu",
+      "Dawei Chen",
+      "Xiaoguang Lin",
+      "Xin Chen",
+      "Yulong Ou",
+      "Haijun Wu"
+    ],
+    "published": "2026-11-16T08:27:21Z",
+    "url": "https://arxiv.org/abs/2611.20721v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.20721v1",
+    "explanation": {
+      "problem": "生成式检索靠生成文档的语义ID来找回内容，但现有ID量化方法只关心文档自身能否被还原，不关心量化后查询还能不能把相关文档排到前面。",
+      "method": "先按残差k-means和R3-VAE分阶段热启动码本；再在量化器前加一个输出层初始为零的残差对齐网络，用查询-文档对比损失把查询和相关文档拉近，同时用锚定损失和以原始嵌入为目标的重建损失防止空间漂移或坍缩；最后在CARE-SID基础上，对每个训练查询把原始嵌入在候选列表上的相似度分布蒸馏到SID重建分布，并用逐层重建头保持起始函数不变。文档始终只由自身嵌入编码，查询只参与训练。",
+      "application": "推测：电商推荐可把该思路用于生成式召回的商品语义ID构建，在已有召回嵌入上冻结主干、加残差对齐并用查询-商品对比与列表蒸馏优化ID；同时可借用其行预算召回协议在训练生成器前快速筛选ID方案。",
+      "caveat": "证据限于单一工业视频搜索数据的离线SID级指标，CARE-LR仅小规模试点，端到端生成式检索收益未验证。"
+    },
+    "title_zh": "CARE：面向检索的语义ID的对比锚定残差编码与列表级重建",
+    "summary": "针对生成式检索中语义ID（SID）量化器只优化文档侧目标、不控制查询-文档检索损失的问题，提出CARE-SID（在量化前用零初始化残差对齐网络做查询-文档对比学习，并用锚定损失和固定重建目标防止漂移）与CARE-LR（把原始嵌入对候选列表的相似度分布蒸馏进SID重建）。在工业视频搜索离线数据上，重建视图Recall@10从RQ-KMeans的62.75%提升到CARE-SID的65.23%、CARE-LR的66.09%（配对95% CI [+2.30,+4.36]），增益主要来自列表级蒸馏；但全部为SID级离线指标，CARE-LR仅小规模试点，端到端GR结果未给出。",
+    "reason": "对做生成式检索/语义ID的推荐工程师有直接参考价值：给出可增量编码的文档侧SID量化器设计、无需训练生成器的SID级评测协议，以及“嵌入质量比量化器更决定召回”的实证；但需注意其收益是重建视图离线指标、CARE-LR未大规模验证、且重建视图用到不属于整数SID的连续系数。",
+    "score": 73,
+    "rubric": {
+      "fit": 4,
+      "evidence": 3,
+      "action": 4
+    },
+    "primary_topic": "retrieval",
+    "evidence": {
+      "page": 12,
+      "finding": "该页给出主结果表：CARE-SID与CARE-LR在重建视图Recall@10上高于RQ-KMeans，CARE-LR相对RQ-KMeans的配对差为+3.34点且95%置信区间不含零，但均为离线SID级指标。"
+    },
+    "tags": [
+      "语义ID",
+      "生成式检索",
+      "残差量化",
+      "列表蒸馏",
+      "对比学习"
+    ],
+    "institutions": [
+      "Tencent"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 18
+  }
+}
