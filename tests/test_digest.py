@@ -26,7 +26,7 @@ class DigestTests(unittest.TestCase):
     def test_evidence_must_match_actual_page(self):
         quotes = [f'This is valid quotation number {i} copied directly from the paper.' for i in range(3)]
         result = dict(worth_reading=True, score=90, reason='r', method='m', evidence_result='e', application='a', limitations='l', experiment='x', tags=[], citations=[{'page': 1, 'quote': quote} for quote in quotes])
-        paper = dict(id='1234.56789', title='paper')
+        paper = dict(id='1234.56789', title='paper', pdf_url='https://arxiv.org/pdf/1234.56789v1')
         with patch.object(research, 'pdf_pages', return_value=[' '.join(quotes), 'another page']), patch.object(research, 'ask', return_value=result):
             self.assertEqual(len(research.review(paper)['citations']), 3)
             result['citations'][0]['page'] = 2

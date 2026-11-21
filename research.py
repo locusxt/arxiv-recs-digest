@@ -44,8 +44,8 @@ def shortlist(candidates):
     return sorted((p for p in candidates if p['id'] in scores), key=lambda p: scores[p['id']], reverse=True)[:12]
 
 
-def pdf_pages(paper_id):
-    raw = digest.request('https://arxiv.org/pdf/' + paper_id)
+def pdf_pages(pdf_url):
+    raw = digest.request(pdf_url)
     if len(raw) > 25 * 1024 * 1024:
         raise ValueError('PDF exceeds 25 MB')
     pdf = PdfReader(io.BytesIO(raw))
@@ -62,7 +62,7 @@ def normalized(text):
 
 
 def review(paper):
-    pages = pdf_pages(paper['id'])
+    pages = pdf_pages(paper['pdf_url'])
     fulltext = '\n\n'.join(f'--- PDF PAGE {i} ---\n{text}' for i, text in enumerate(pages, 1))
     content = f"标题：{paper['title']}\narXiv ID：{paper['id']}\n以下为论文PDF原文：\n{fulltext}"
     error = None

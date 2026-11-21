@@ -51,15 +51,16 @@ def fetch_candidates(seen, now):
         root = ET.fromstring(request('https://export.arxiv.org/api/query?' + params))
         for entry in root.findall('a:entry', NS):
             url = entry.findtext('a:id', '', NS)
-            paper_id = re.sub(r'v\d+$', '', url.rsplit('/', 1)[-1])
-            if not re.fullmatch(r'\d{4}\.\d{4,5}', paper_id) or paper_id in seen or paper_id in collected:
+            versioned_id = url.rsplit('/', 1)[-1]
+            paper_id = re.sub(r'v\d+$', '', versioned_id)
+            if not re.fullmatch(r'\d{4}\.\d{4,5}v\d+', versioned_id) or paper_id in seen or paper_id in collected:
                 continue
             title = ' '.join(entry.findtext('a:title', '', NS).split())
             abstract = ' '.join(entry.findtext('a:summary', '', NS).split())
             if not title or not abstract:
                 continue
             collected.add(paper_id)
-            found.append({'id': paper_id, 'title': title, 'abstract': abstract, 'published': entry.findtext('a:published', '', NS), 'url': 'https://arxiv.org/abs/' + paper_id})
+            found.append({'id': paper_id, 'title': title, 'abstract': abstract, 'published': entry.findtext('a:published', '', NS), 'url': 'https://arxiv.org/abs/' + versioned_id, 'pdf_url': 'https://arxiv.org/pdf/' + versioned_id})
     return found
 
 
@@ -77,7 +78,7 @@ def render(history):
             tags = ''.join(f'<span class="tag">{esc(t)}</span>' for t in p['tags'])
             fields = [('推荐理由','reason'),('论文方法','method'),('实验与证据','evidence_result'),('业务启发 · 假设','application'),('局限与风险','limitations'),('最小验证方案','experiment')]
             blocks = ''.join(f'<div><h4>{label}</h4><p>{esc(p[key])}</p></div>' for label, key in fields if p.get(key))
-            citations = ''.join(f'<li><a href="https://arxiv.org/pdf/{esc(p["id"])}#page={int(c["page"])}" target="_blank" rel="noopener noreferrer">PDF 第 {int(c["page"])} 页</a>：{esc(c["quote"])}</li>' for c in p.get('citations', []))
+            citations = ''.join(f'<li><a href="{esc(p.get("pdf_url", "https://arxiv.org/pdf/" + p["id"]))}#page={int(c["page"])}" target="_blank" rel="noopener noreferrer">PDF 第 {int(c["page"])} 页</a>：{esc(c["quote"])}</li>' for c in p.get('citations', []))
             evidence = f'<details><summary>查看原文证据</summary><ul>{citations}</ul></details>' if citations else '<p>历史结果：仅基于摘要，未经全文复核。</p>'
             cards.append(f'''<article><div class="meta">{tags}<span>{esc(p['id'])}</span></div><h3><a href="{esc(p['url'])}" target="_blank" rel="noopener noreferrer">{esc(p['title'])}</a></h3><div class="details">{blocks}</div>{evidence}<details><summary>查看原始摘要</summary><p lang="en">{esc(p['abstract'])}</p></details></article>''')
         content = ''.join(cards) or '<div class="empty">当天没有达到筛选标准的新论文。</div>'
