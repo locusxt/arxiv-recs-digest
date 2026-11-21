@@ -15,6 +15,15 @@ class DigestTests(unittest.TestCase):
             self.assertNotIn('<script>alert(1)</script>', result)
             self.assertIn('&lt;script&gt;', result)
 
+    def test_explanation_is_expandable_and_escaped(self):
+        with tempfile.TemporaryDirectory() as d, patch.object(digest, 'SITE', Path(d) / 'index.html'):
+            paper = dict(id='1234.56789', title='T', title_zh='中文', url='https://arxiv.org/abs/1234.56789', tags=[], explanation=dict(problem='<script>bad</script>', method='方法', application='推测', caveat='限制'))
+            digest.render({'days': [{'date': '2026-01-01', 'papers': [paper]}]})
+            page = digest.SITE.read_text()
+            self.assertIn('<details class="analysis">', page)
+            self.assertIn('展开文章解析', page)
+            self.assertNotIn('<script>bad</script>', page)
+
     def test_same_day_is_idempotent(self):
         with tempfile.TemporaryDirectory() as d, patch.object(digest, 'DATA', Path(d) / 'history.json'), patch.object(digest, 'SITE', Path(d) / 'index.html'), patch.object(digest, 'fetch_candidates') as fetch:
             today = digest.dt.datetime.now(digest.ZoneInfo('Asia/Shanghai')).date().isoformat()
@@ -23,7 +32,7 @@ class DigestTests(unittest.TestCase):
             fetch.assert_not_called()
 
     def test_fulltext_review_does_not_require_exact_quotes(self):
-        result = dict(worth_reading=True, score=90, title_zh='译文', summary='方法', reason='价值', tags=[], institutions=['公司'])
+        result = dict(worth_reading=True, score=90, title_zh='译文', summary='方法', reason='价值', tags=[], institutions=['公司'], explanation=dict(problem='问题', method='方法', application='应用', caveat='限制'))
         paper = dict(id='1234.56789', title='paper', pdf_url='https://arxiv.org/pdf/1234.56789v1')
         with patch.object(research, 'pdf_pages', return_value=['full paper']), patch.object(research, 'ask', return_value=result):
             self.assertEqual(research.review(paper)['source_type'], 'pdf_fulltext')
