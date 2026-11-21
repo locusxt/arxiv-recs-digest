@@ -38,6 +38,22 @@ class DigestTests(unittest.TestCase):
         self.assertIn('retrieval', [p['id'] for p in research.keyword_prefilter(ranking + [retrieval], limit=8, reserve=2)])
         self.assertGreater(research.keyword_score(ranking[0])[0], research.keyword_score(dict(title='A generic paper', abstract='about graphs'))[0])
 
+    def test_industry_keyword_variants_and_word_boundaries(self):
+        examples = {
+            'Learning to Rank in Search': 'ranking',
+            'Multi-task conversion rate prediction': 'value',
+            'Counterfactual learning with exposure bias': 'training',
+            'Collaborative filtering with hard negatives': 'retrieval',
+            'Queries and relevance for search': 'search',
+            'Personalization with sequential recommendation': 'recommendation',
+            'Real-time nearline serving': 'systems',
+        }
+        for title, topic in examples.items():
+            with self.subTest(title=title):
+                self.assertIn(topic, research.keyword_score(dict(title=title, abstract=''))[1])
+        self.assertNotIn('ranking', research.keyword_score(dict(title='Frank reads books', abstract=''))[1])
+        self.assertNotIn('value', research.keyword_score(dict(title='A conversation about images', abstract=''))[1])
+
     def test_title_normalization(self):
         self.assertEqual(digest.title_key('Learning-to Rank!'), digest.title_key('Learning to Rank'))
 

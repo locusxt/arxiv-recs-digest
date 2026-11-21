@@ -6,6 +6,12 @@
 
 以不含版本号的 arXiv ID 和规范化后的相同标题对历史入选论文去重，包含被手动重选替换的论文；不保证识别不同标题的相似论文，同一天重复运行不会重新筛选；手动触发时可勾选 `refresh_today` 重新生成当天，保留更早历史和当天已记录的用量。
 
+## 关键词与筛选
+
+本地初筛同时匹配标题和摘要，按主题分组加权，并为价值建模、排序、召回、搜索、推荐、系统及训练等方向保留候选。关键词参考 [Algorithm-Practice-in-Industry 的旧版会议论文筛选](https://github.com/Doragd/Algorithm-Practice-in-Industry/blob/main/legacy/conf.py)，另补充 LTV、延迟反馈和生成式重排等电商场景术语；其当前 arXiv 主线使用大模型粗排和精排。没有把 user、item 等过宽泛的词单独设置为高权重，也没有硬性排除隐私、公平性等可能相关的研究。关键词和权重在 `research.py` 的 `TOPICS` 中。
+
+初筛使用词边界并覆盖部分单复数和连字符变化，仍可能遗漏不同写法。arXiv 检索限制于 cs.IR、cs.LG、cs.AI 和脚本中的查询表达式；通用基础模型论文如未被这些查询召回，提示词不会使其自动进入候选。
+
 ## 配置
 
 1. 在仓库 Actions Secrets 添加 `DEEPSEEK_API_KEY`。
