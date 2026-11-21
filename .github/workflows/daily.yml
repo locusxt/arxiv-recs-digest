@@ -3,6 +3,11 @@ on:
   schedule:
     - cron: '30 0 * * *' # 08:30 Asia/Shanghai
   workflow_dispatch:
+    inputs:
+      refresh_today:
+        description: Re-run selection for today (replaces today only)
+        type: boolean
+        default: false
 permissions:
   contents: write
   pages: write
@@ -18,9 +23,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install PDF parser
+        run: python -m pip install -r requirements.txt
       - name: Fetch, select and render
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          REFRESH_TODAY: ${{ inputs.refresh_today }}
         run: python digest.py
       - name: Save history
         run: |
