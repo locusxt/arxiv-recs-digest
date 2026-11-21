@@ -19,6 +19,7 @@ DATA = ROOT / 'data' / 'history.json'
 SITE = ROOT / 'site' / 'index.html'
 NS = {'a': 'http://www.w3.org/2005/Atom'}
 QUERIES = [
+    '(cat:cs.IR OR cat:cs.LG OR cat:cs.AI OR cat:stat.ML OR cat:stat.ME) AND (all:"counterfactual" OR all:"uplift" OR all:"treatment effect" OR all:"online experiment" OR all:"off-policy evaluation" OR all:"causal inference") AND (all:"user" OR all:"engagement" OR all:"conversion" OR all:"retention" OR all:"advertising" OR all:"online experiment")',
     '(cat:cs.IR OR cat:cs.LG OR cat:cs.AI) AND (all:recommendation OR all:recommender)',
     '(cat:cs.IR OR cat:cs.LG OR cat:cs.AI) AND (all:ranking OR all:reranking OR all:re-ranking)',
     '(cat:cs.IR OR cat:cs.LG OR cat:cs.AI) AND (all:"information retrieval" OR all:"search engine" OR all:"search ranking")',
@@ -76,9 +77,9 @@ def fetch_candidates(seen, now, seen_titles=None):
     return found
 
 
-def select(candidates):
+def select(candidates, cache, recent_topics):
     from research import select as select_research
-    return select_research(candidates)
+    return select_research(candidates, cache, recent_topics)
 
 
 def render(history):
@@ -101,6 +102,10 @@ def render(history):
             explanation = p.get('explanation')
             if isinstance(explanation, dict) and all(explanation.get(k) for k in ('problem', 'method', 'application', 'caveat')):
                 expl_blocks = ''.join(f'<div class="analysis-block"><h4>{label}</h4><p>{esc(explanation[key])}</p></div>' for label, key in [('研究问题', 'problem'), ('方法怎么做', 'method'), ('业务启发 · 推测', 'application'), ('阅读时注意', 'caveat')])
+                evidence = p.get('evidence')
+                if evidence:
+                    href = esc(p['pdf_url']) + '#page=' + str(int(evidence['page']))
+                    expl_blocks += f'<div class="analysis-block"><h4>原文证据</h4><p>{esc(evidence["finding"])} <a href="{href}">PDF 第 {int(evidence["page"])} 页 ↗</a></p></div>'
                 expl_html = f'<details class="analysis"><summary><span class="show-label">点击查看文章解析</span><span class="hide-label">收起文章解析</span></summary><div class="analysis-body">{expl_blocks}<p class="analysis-note">基于论文原文生成，具体细节请结合原文核对。</p></div></details>'
             else:
                 expl_html = '<p class="analysis-unavailable">这篇历史论文暂无详细解析。</p>'
@@ -122,7 +127,7 @@ def render(history):
                         pass
             change = '、'.join(f'{esc(currency)} {esc(value)}' for currency, value in changes.items()) or '无法计算'
             incomplete = '；此前运行未记录，用量不完整' if day.get('usage_incomplete') else ''
-            usage_text = f'<details class="usage-detail"><summary>查看当日用量与余额</summary><p class="usage">当日已记录 {len(runs)} 次运行：{total} tokens（输入 {prompt} / 输出 {completion}）；账户余额减少合计 {change}；最新余额 {amounts}{incomplete}。余额变化可能包含其他调用或充值；失败运行可能未计入。</p></details>'
+            usage_text = f'<details class="usage-detail"><summary>查看当日用量与余额</summary><p class="usage">本任务已记录 {len(runs)} 次运行，共 {total} tokens（输入 {prompt} / 输出 {completion}）；运行期间账户余额净减少 {change}；最新余额 {amounts}{incomplete}。余额变化可能包含其他调用或充值；失败运行可能未计入。</p></details>'
         else:
             usage_text = '<p class="usage">该日期的用量和余额未记录。</p>'
         sections.append(f'<section><div class="date"><h2>{esc(day["date"])}</h2><span>{len(day["papers"])} 篇精选 · {esc(day.get("candidates", 0))} 篇候选</span></div>{usage_text}{content}</section>')
@@ -198,7 +203,12 @@ def main():
                 raise RuntimeError('Existing paper no longer meets review criteria')
             papers.append(result)
     else:
-        papers = select(candidates)
+        cache_path = DATA.parent / 'review_cache.json'
+        cache = json.loads(cache_path.read_text()) if cache_path.exists() else {}
+        recent_topics = [p['primary_topic'] for day in history['days']
+                         if 0 < (dt.date.fromisoformat(today) - dt.date.fromisoformat(day['date'])).days <= 7
+                         for p in day['papers'] if 'primary_topic' in p]
+        papers = select(candidates, cache, recent_topics)
     after = get_balance()
     current = {**USAGE, 'balance_after': after, 'balance_change': balance_changes(before, after)}
     # Preserve completed earlier runs on the same date; old runs were not metered.
@@ -219,7 +229,12 @@ def main():
     DATA.write_text(json.dumps(history, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     render(history)
     if not refresh_existing:
-        (DATA.parent / 'latest_audit.json').write_text(json.dumps({'date': today, **AUDIT}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        cache_path.write_text(json.dumps(cache, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        audit = json.dumps({'date': today, **AUDIT}, ensure_ascii=False, indent=2) + '\n'
+        archive = DATA.parent / 'audits'
+        archive.mkdir(exist_ok=True)
+        (archive / f'{today}.json').write_text(audit, encoding='utf-8')
+        (DATA.parent / 'latest_audit.json').write_text(audit, encoding='utf-8')
     print(f'{today}: {len(candidates)} candidates, {len(papers)} selected')
 
 

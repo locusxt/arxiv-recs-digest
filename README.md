@@ -21,3 +21,5 @@
 每个主题最多检索最近 200 篇，关键词初筛最多保留 60 篇，DeepSeek 摘要筛选后最多阅读全文 8 篇；关键词规则可能遗漏不使用常见术语的论文；无法提取全文的论文会跳过。DeepSeek 按实际用量计费。
 
 本地：`python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`，通过环境变量安全传入 `DEEPSEEK_API_KEY` 后运行 `.venv/bin/python digest.py`。测试：`.venv/bin/python -m unittest discover -s tests`。数据保存在 `data/history.json`，须保留以维持去重。
+
+全文评审按 PDF 版本、评审提示词和模型缓存，通过与否均可复用。临时错误留待再次入围后重试。终选按工作贴合度、证据强度、试验可行性分别占 40%、35%、25% 计算。相差不超过 2/100 时优先覆盖近 7 天和本次已选中较少的主题。新评审的解析附 PDF 页码，程序会检查支持性短句出现在指定页；结论的解释仍由模型完成。因果与在线实验使用独立关键词配额和带业务上下文的查询，额外覆盖 stat.ME 和 stat.ML。每个日期的最后一次选文记录保存在 data/audits/，全文评审缓存保存在 data/review_cache.json。

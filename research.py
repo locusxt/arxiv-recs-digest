@@ -1,4 +1,5 @@
 """Two-stage selection and evidence-grounded reading of original PDFs."""
+import hashlib
 import io
 import json
 import os
@@ -24,7 +25,9 @@ def record_usage(usage):
 
 
 SCREEN_PROMPT = '''你是大型电商推荐和搜索技术负责人，服务一位负责全链路的推荐算法工程师；其直接工作是精排阶段的价值建模、重排生成，也关注因果推断、DAU与留存、LLM4Rec，以及召回、搜索与系统前沿。根据标题和摘要进行初筛，选出最多6篇值得阅读全文的候选，也可选0篇。直接解决长期价值/GMV/CVR、样本选择偏差、多目标优化、精排、生成式列表重排、推荐与增长相关的因果推断、用户活跃留存、LLM4Rec的论文通常优先；有扎实方法或工业经验的召回、检索、特征与实时服务同样欢迎。不要仅因有LLM、工业或数据集名称而高分。评分0-100反映潜在技术价值和关联度，不能把摘要结论当作已验证。输出JSON对象 {"candidates":[{"id":"原始id","score":整数,"reason":"初筛理由"}]}。只用提供的id。'''
-REVIEW_PROMPT = """你是大型电商推荐/搜索资深研究员。读者负责推荐全链路，重点是精排价值建模、生成式重排、因果推断、DAU增长与用户留存、LLM4Rec，也关注召回、检索和系统，以及能明确迁移到这些场景的高效Transformer、MoE和多模态表征。仔细阅读PDF全文后判断是否值得读，可以不推荐。只依据原文，不编造事实或结果；明确核对策略是按用户、会话还是按请求产生，不得混淆配置生成和在线读取的粒度；将线上A/B、离线评估和仿真严格区分；不将端到端收益归因于没有单独验证的模块。机构仅依据原文作者署名页，无法确认写“原文未说明”，不要把数据集所属公司写成作者公司。输出严格JSON：{\"worth_reading\":true或false,\"score\":0到100整数,\"title_zh\":\"标题中文翻译\",\"authors\":[\"原文作者姓名，按原顺序\"],\"institutions\":[\"作者所属公司或机构\"],\"summary\":\"主要内容，中文2句以内，说明方法和最重要的实验结论及证据边界\",\"reason\":\"推荐理由，中文1句，说明对电商推荐工程师的具体价值和关键限制\",\"explanation\":{\"problem\":\"要解决什么问题，用一句大白话说明，避免重复论文标题\",\"method\":\"方法怎么做：用通俗中文写3至4句、总长尽量不超过180字，按输入、关键步骤和输出讲清楚；避免公式、参数名、英文缩写堆砌，必须使用术语时紧跟白话解释；不要罗列工程细节\",\"application\":\"电商推荐可能如何借鉴，明确标记为推测\",\"caveat\":\"一句话说明主要证据限制\"},\"tags\":[\"3到5个中文关键词\"]}。不要输出原文摘录，论文事实与迁移推测分清。对于文本不足以判断的论文设置worth_reading为false。"""
+REVIEW_PROMPT = """你是大型电商推荐/搜索资深研究员。读者负责推荐全链路，重点是精排价值建模、生成式重排、因果推断、DAU增长与用户留存、LLM4Rec，也关注召回、检索和系统，以及能明确迁移到这些场景的高效Transformer、MoE和多模态表征。仔细阅读PDF全文后判断是否值得读，可以不推荐。只依据原文，不编造事实或结果；明确核对策略是按用户、会话还是按请求产生，不得混淆配置生成和在线读取的粒度；将线上A/B、离线评估和仿真严格区分；不将端到端收益归因于没有单独验证的模块。机构仅依据原文作者署名页，无法确认写“原文未说明”，不要把数据集所属公司写成作者公司。输出严格JSON：{\"worth_reading\":true或false,\"title_zh\":\"标题中文翻译\",\"authors\":[\"原文作者姓名，按原顺序\"],\"institutions\":[\"作者所属公司或机构\"],\"summary\":\"主要内容，中文2句以内，说明方法和最重要的实验结论及证据边界\",\"reason\":\"推荐理由，中文1句，说明对电商推荐工程师的具体价值和关键限制\",\"explanation\":{\"problem\":\"要解决什么问题，用一句大白话说明，避免重复论文标题\",\"method\":\"方法怎么做：用通俗中文写3至4句、总长尽量不超过180字，按输入、关键步骤和输出讲清楚；避免公式、参数名、英文缩写堆砌，必须使用术语时紧跟白话解释；不要罗列工程细节\",\"application\":\"电商推荐可能如何借鉴，明确标记为推测\",\"caveat\":\"一句话说明主要证据限制\"},\"tags\":[\"3到5个中文关键词\"]}。不要输出原文摘录，论文事实与迁移推测分清。对于文本不足以判断的论文设置worth_reading为false。"""
+
+REVIEW_PROMPT += """对值得读的论文，另返回 rubric 对象，fit、evidence、action 三项各取整数0至5。fit 从泛相关、可迁移到直接解决读者任务；evidence 从缺乏对照、单一实验到与核心主张匹配且有充分对照的验证；action 从模糊灵感到可指出输入、对照和评价指标的可行试验。另给 primary_topic，取 value/ranking/retrieval/search/recommendation/systems/training/causal/growth/llm4rec 之一。另给 evidence 对象，page 是输入中 PDF PAGE 的整数页码，finding 是一句中文，说明该页支持的实验类型、结论或局限，quote 是该页连续的一小段可核对的原文。只引用你实际看到的文字。"""
 
 
 def ask(system, content, max_tokens=4000):
@@ -57,6 +60,7 @@ TOPICS = {
     'systems': (2, [r'\bonline[ -]serving\b', r'\breal[ -]time\b', r'\blatency\b', r'\bnear[ -]?line\b', r'\bproduction[ -]system\b', r'\blarge[ -]scale\b', r'\bmodel[ -]distillation\b', r'\bdistill(?:ation|ed)?\b']),
     'growth': (3, [r'\bdau\b', r'\bdaily[ -]active[ -]users?\b', r'\buser[ -](?:retention|engagement|growth|reactivation|churn)\b', r'\bchurn[ -]prediction\b', r'\b(?:long[ -]term|daily)[ -]engagement\b']),
     'llm4rec': (4, [r'\bllm4rec\b', r'\bllm[ -](?:recommend(?:ation|er|ers|ations)|ranking|retrieval)\b', r'\bllm[ -](?:based|driven|powered)[ -](?:recommendation|recommender|ranking|retrieval)\b', r'\b(?:generative|language[ -]model)[ -](?:recommendation|recommender|ranking|retrieval)\b', r'\blarge[ -]language[ -]models?[ -]for[ -](?:recommendation|ranking|retrieval)\b']),
+    'causal': (4, [r'\b(?:causal inference|counterfactual|uplift|treatment effects?|off[ -]policy evaluation|online experiments?|a/b test(?:s|ing)?)\b']),
     'training': (2, [r'\b(?:selection|position|exposure|popularity)[ -]bias\b', r'\bcold[ -]start\b', r'\b(?:exploration|exploitation)\b', r'\b(?:bandit|bandits)\b', r'\b(?:uplift|counterfactual|causal)[ -](?:model(?:ing|ling)?|inference|learning|effect(?:s)?)\b', r'\b(?:causal|counterfactual)[ -](?:recommendation|ranking|inference)\b', r'\b(?:treatment[ -]effect|propensity[ -]score|inverse[ -]propensity[ -]scor(?:ing|e))\b', r'\bcontrastive[ -]learning\b', r'\b(?:a/b|ab)[ -]test(?:ing)?\b']),
 }
 
@@ -69,6 +73,8 @@ def keyword_score(paper):
     for topic, (weight, patterns) in TOPICS.items():
         hits = sum(bool(re.search(pattern, abstract)) for pattern in patterns)
         title_hits = sum(bool(re.search(pattern, title)) for pattern in patterns)
+        if topic == 'causal' and not re.search(r'\b(?:users?|recommend\w*|ranking|click\w*|retention|engagement|exposure|conversion|online (?:experiments?|a/b)|advertising)\b', title + ' ' + abstract):
+            continue
         if hits or title_hits:
             groups.add(topic)
             score += weight * (min(hits, 3) + 2 * min(title_hits, 2))
@@ -86,7 +92,7 @@ def keyword_prefilter(candidates, limit=60, reserve=4):
     ranked = sorted(candidates, key=lambda p: (keyword_score(p)[0], p.get('published', '')), reverse=True)
     # Reserve room for different pipeline stages before filling remaining slots.
     chosen, seen = [], set()
-    for topic in ('value', 'ranking', 'retrieval', 'search', 'recommendation', 'systems', 'training', 'growth', 'llm4rec'):
+    for topic in ('value', 'causal', 'ranking', 'retrieval', 'search', 'recommendation', 'systems', 'training', 'growth', 'llm4rec'):
         count = 0
         for paper in ranked:
             if len(chosen) >= limit or count >= reserve:
@@ -157,19 +163,47 @@ def validate_review(paper, pages, result):
     required = ('title_zh', 'summary', 'reason')
     if any(not isinstance(result.get(k), str) or not result[k].strip() for k in required):
         raise ValueError('Review missing required fields')
-    if not isinstance(result.get('score'), (int, float)) or isinstance(result['score'], bool) or not 0 <= result['score'] <= 100:
-        raise ValueError('Invalid score')
     explanation = result.get('explanation')
     if not isinstance(explanation, dict) or any(not isinstance(explanation.get(k), str) or not explanation[k].strip() for k in ('problem', 'method', 'application', 'caveat')):
         raise ValueError('Review missing explanation')
+    rubric = result.get('rubric')
+    weights = {'fit': 8, 'evidence': 7, 'action': 5}
+    if not isinstance(rubric, dict) or any(type(rubric.get(k)) is not int or not 0 <= rubric[k] <= 5 for k in weights):
+        raise ValueError('Invalid review rubric')
+    topic = result.get('primary_topic')
+    if not isinstance(topic, str) or topic not in TOPICS:
+        raise ValueError('Invalid primary topic')
+    evidence = result.get('evidence')
+    if not isinstance(evidence, dict):
+        raise ValueError('Missing PDF evidence')
+    page, quote, finding = (evidence.get(k) for k in ('page', 'quote', 'finding'))
+    if type(page) is not int or not 1 <= page <= len(pages) or not isinstance(finding, str) or not finding.strip():
+        raise ValueError('Invalid evidence page or finding')
+    normalize = lambda text: ''.join(text.casefold().split())
+    if not isinstance(quote, str) or len(normalize(quote)) < 12 or normalize(quote) not in normalize(pages[page - 1]):
+        raise ValueError('Evidence excerpt absent from cited page')
     tags = result.get('tags') if isinstance(result.get('tags'), list) else []
     institutions = result.get('institutions') if isinstance(result.get('institutions'), list) else []
     authors = result.get('authors') if isinstance(result.get('authors'), list) else []
     authors = paper.get('authors') or [x for x in authors if isinstance(x, str)]
-    return {**paper, 'authors': authors, 'explanation': explanation, **{k: result[k] for k in required}, 'score': result['score'], 'tags': [x for x in tags if isinstance(x, str)][:5], 'institutions': [x for x in institutions if isinstance(x, str)][:10], 'source_type': 'pdf_fulltext', 'pdf_pages': len(pages)}
+    return {**paper, 'authors': authors, 'explanation': explanation, **{k: result[k] for k in required}, 'score': sum(weights[k] * rubric[k] for k in weights), 'rubric': rubric, 'primary_topic': topic, 'evidence': {'page': page, 'finding': finding}, 'tags': [x for x in tags if isinstance(x, str)][:5], 'institutions': [x for x in institutions if isinstance(x, str)][:10], 'source_type': 'pdf_fulltext', 'pdf_pages': len(pages)}
 
 
-def select(candidates):
+def finalists(papers, recent_topics):
+    remaining = list(papers)
+    chosen = []
+    topics = list(recent_topics)
+    while remaining and len(chosen) < 3:
+        best = max(p['score'] for p in remaining)
+        near = [p for p in remaining if p['score'] >= best - 2]
+        winner = max(near, key=lambda p: (-topics.count(p['primary_topic']), p['score'], p['rubric']['evidence'], p['rubric']['fit'], p['id']))
+        chosen.append(winner)
+        topics.append(winner['primary_topic'])
+        remaining.remove(winner)
+    return chosen
+
+
+def select(candidates, cache, recent_topics):
     if not candidates:
         AUDIT.update({'candidates': [], 'prefilter': [], 'shortlist': [], 'reviews': []})
         return []
@@ -181,9 +215,14 @@ def select(candidates):
     print(f'Keyword prefilter: {len(candidates)} -> {len(filtered)} candidates')
     for paper in shortlist(filtered):
         try:
-            result = review(paper)
+            signature = hashlib.sha256((REVIEW_PROMPT + os.environ.get('DEEPSEEK_MODEL', 'deepseek-chat')).encode()).hexdigest()
+            key = signature + '/' + paper['pdf_url'].rsplit('/', 1)[-1]
+            cached = key in cache
+            if not cached:
+                cache[key] = review(paper)
+            result = cache[key]
             reviewed += 1
-            AUDIT['reviews'].append({'id': paper['id'], 'status': 'recommended' if result else 'rejected', 'score': result.get('score') if result else None, 'reason': result.get('reason') if result else None})
+            AUDIT['reviews'].append({'id': paper['id'], 'cached': cached, 'status': 'eligible' if result else 'rejected', 'score': result.get('score') if result else None, 'reason': result.get('reason') if result else None})
             if result:
                 selected.append(result)
         except (ValueError, RuntimeError, OSError, PdfReadError) as exc:
@@ -193,6 +232,8 @@ def select(candidates):
         print('Papers skipped (full text/review validation): ' + '; '.join(failures))
     if not reviewed and failures:
         raise RuntimeError('No shortlisted papers could be reviewed; retry the workflow')
-    result = sorted(selected, key=lambda p: p['score'], reverse=True)[:3]
+    result = finalists(selected, recent_topics)
+    AUDIT['eligible'] = [{k: p[k] for k in ('id', 'rubric', 'primary_topic', 'score')} for p in selected]
+    AUDIT['recent_topics'] = recent_topics
     AUDIT['selected'] = [p['id'] for p in result]
     return result

@@ -33,9 +33,9 @@ class DigestTests(unittest.TestCase):
             fetch.assert_not_called()
 
     def test_fulltext_review_does_not_require_exact_quotes(self):
-        result = dict(worth_reading=True, score=90, title_zh='译文', summary='方法', reason='价值', tags=[], institutions=['公司'], explanation=dict(problem='问题', method='方法', application='应用', caveat='限制'))
+        result = dict(worth_reading=True, score=90, rubric=dict(fit=5,evidence=4,action=5), primary_topic='value', evidence=dict(page=1, finding='实验', quote='full paper excerpt'), title_zh='译文', summary='方法', reason='价值', tags=[], institutions=['公司'], explanation=dict(problem='问题', method='方法', application='应用', caveat='限制'))
         paper = dict(id='1234.56789', title='paper', pdf_url='https://arxiv.org/pdf/1234.56789v1')
-        with patch.object(research, 'pdf_pages', return_value=['full paper']), patch.object(research, 'ask', return_value=result):
+        with patch.object(research, 'pdf_pages', return_value=['full paper excerpt']), patch.object(research, 'ask', return_value=result):
             self.assertEqual(research.review(paper)['source_type'], 'pdf_fulltext')
 
     def test_shortlist_cannot_invent_papers(self):
@@ -71,6 +71,20 @@ class DigestTests(unittest.TestCase):
         self.assertNotIn('ranking', research.keyword_score(dict(title='Low-rank approximation for matrices', abstract=''))[1])
         self.assertIn('ranking', research.keyword_score(dict(title='Low-rank features for recommendation ranking', abstract=''))[1])
         self.assertNotIn('value', research.keyword_score(dict(title='A conversation about images', abstract=''))[1])
+
+    def test_cached_rejections_and_successes_survive_reselection(self):
+        papers = [dict(id=i, title=i, abstract='', pdf_url='https://arxiv.org/pdf/'+i+'v1') for i in ('1', '2')]
+        accepted = dict(papers[0], score=85, primary_topic='ranking', rubric=dict(fit=5,evidence=4,action=4), reason='r')
+        cache = {}
+        with patch.object(research, 'shortlist', return_value=papers), patch.object(research, 'review', side_effect=[accepted, None]) as review:
+            for _ in range(2):
+                self.assertEqual(research.select(papers, cache, []), [accepted])
+            self.assertEqual(review.call_count, 2)
+
+    def test_diversity_only_breaks_close_scores(self):
+        papers = [dict(id=str(i), score=s, primary_topic=t, rubric=dict(fit=5,evidence=4))
+                  for i,(s,t) in enumerate([(91,'ranking'), (90,'value'), (85,'causal')])]
+        self.assertEqual([p['id'] for p in research.finalists(papers, ['ranking'])], ['1','0','2'])
 
     def test_title_normalization(self):
         self.assertEqual(digest.title_key('Learning-to Rank!'), digest.title_key('Learning to Rank'))
