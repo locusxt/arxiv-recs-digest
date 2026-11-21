@@ -4,6 +4,7 @@ import json
 import os
 import re
 from pypdf import PdfReader
+from pypdf.errors import PdfReadError
 
 import digest
 
@@ -41,6 +42,52 @@ def ask(system, content, max_tokens=4000):
     if not isinstance(result, dict):
         raise RuntimeError('DeepSeek did not return a JSON object')
     return result
+
+
+# Local ranking is deliberately a broad relevance filter, not the final rating.
+TOPICS = {
+    'value': (5, [r'\blifetime value\b', r'\blong.term value\b', r'\bgmv\b', r'\bconversion rate\b', r'\bcvr\b', r'\bmulti.objective\b']),
+    'ranking': (4, [r'\bre.?rank(?:ing|er)?\b', r'\bslate\b', r'\bwhole.page\b', r'\blistwise\b', r'\bclick.through rate\b', r'\bctr\b', r'\blearning.to.rank\b']),
+    'retrieval': (3, [r'\bretriev(?:al|er|ing)\b', r'\brecall\b', r'\bcandidate generation\b', r'\btwo.tower\b', r'\bsemantic id\b']),
+    'search': (3, [r'\bsearch\b', r'\bquery\b', r'\binformation retrieval\b']),
+    'recommendation': (3, [r'\brecommend(?:ation|er|ers|ations)\b', r'\bpersonaliz(?:ation|ed)\b']),
+    'systems': (2, [r'\bonline serving\b', r'\breal.time\b', r'\blatency\b', r'\bnearline\b', r'\bproduction system\b']),
+}
+
+
+def keyword_score(paper):
+    title = paper.get('title', '').lower()
+    abstract = paper.get('abstract', '').lower()
+    score, groups = 0, set()
+    for topic, (weight, patterns) in TOPICS.items():
+        hits = sum(bool(re.search(pattern, abstract)) for pattern in patterns)
+        title_hits = sum(bool(re.search(pattern, title)) for pattern in patterns)
+        if hits or title_hits:
+            groups.add(topic)
+            score += weight * (min(hits, 3) + 2 * min(title_hits, 2))
+    return score, groups
+
+
+def keyword_prefilter(candidates, limit=120, reserve=12):
+    ranked = sorted(candidates, key=lambda p: (keyword_score(p)[0], p.get('published', '')), reverse=True)
+    # Reserve room for different pipeline stages before filling remaining slots.
+    chosen, seen = [], set()
+    for topic in ('value', 'ranking', 'retrieval', 'search', 'recommendation', 'systems'):
+        count = 0
+        for paper in ranked:
+            if len(chosen) >= limit or count >= reserve:
+                break
+            if paper['id'] not in seen and topic in keyword_score(paper)[1]:
+                chosen.append(paper)
+                seen.add(paper['id'])
+                count += 1
+    for paper in ranked:
+        if len(chosen) >= limit:
+            break
+        if paper['id'] not in seen:
+            chosen.append(paper)
+            seen.add(paper['id'])
+    return sorted(chosen, key=lambda p: (keyword_score(p)[0], p.get('published', '')), reverse=True)
 
 
 def shortlist(candidates):
@@ -106,13 +153,15 @@ def select(candidates):
     if not candidates:
         return []
     selected, failures, reviewed = [], [], 0
-    for paper in shortlist(candidates):
+    filtered = keyword_prefilter(candidates)
+    print(f'Keyword prefilter: {len(candidates)} -> {len(filtered)} candidates')
+    for paper in shortlist(filtered):
         try:
             result = review(paper)
             reviewed += 1
             if result:
                 selected.append(result)
-        except (ValueError, RuntimeError, OSError) as exc:
+        except (ValueError, RuntimeError, OSError, PdfReadError) as exc:
             failures.append(f"{paper['id']}: {exc}")
     if failures:
         print('Papers skipped (full text/review validation): ' + '; '.join(failures))

@@ -11,7 +11,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parent
@@ -39,11 +39,17 @@ def request(url, payload=None, headers=None):
             time.sleep(3 * (attempt + 1))
 
 
-def fetch_candidates(seen, now):
+def title_key(title):
+    return re.sub(r'[^a-z0-9]+', '', title.lower())
+
+
+def fetch_candidates(seen, now, seen_titles=None):
     # A rolling window catches weekends, delayed announcements and transient failures.
     start = (now - dt.timedelta(days=7)).strftime('%Y%m%d%H%M')
     end = now.strftime('%Y%m%d%H%M')
     found, collected = [], set()
+    seen_titles = seen_titles or set()
+    collected_titles = set()
     for index, query in enumerate(QUERIES):
         if index:
             time.sleep(3)  # arXiv API asks clients to pause between requests.
@@ -58,8 +64,10 @@ def fetch_candidates(seen, now):
                 continue
             title = ' '.join(entry.findtext('a:title', '', NS).split())
             abstract = ' '.join(entry.findtext('a:summary', '', NS).split())
-            if not title or not abstract:
+            key = title_key(title)
+            if not title or not abstract or key in seen_titles or key in collected_titles:
                 continue
+            collected_titles.add(key)
             authors = [' '.join(author.findtext('a:name', '', NS).split()) for author in entry.findall('a:author', NS)]
             collected.add(paper_id)
             found.append({'id': paper_id, 'title': title, 'abstract': abstract, 'authors': [name for name in authors if name], 'published': entry.findtext('a:published', '', NS), 'url': 'https://arxiv.org/abs/' + versioned_id, 'pdf_url': 'https://arxiv.org/pdf/' + versioned_id})
@@ -85,8 +93,10 @@ def render(history):
             summary = p.get('summary') or p.get('method', '未记录')
             reason = p.get('reason', '未记录')
             score = p.get('score')
-            score_label = f'<span class="score">推荐评分 {esc(score)} / 100</span>' if isinstance(score, (int, float)) and not isinstance(score, bool) else '<span class="score">暂无评分</span>'
-            cards.append(f'''<article><div class="meta">{score_label}{tags}<span>{esc(p['id'])}</span></div><h3><a href="{esc(p['url'])}" target="_blank" rel="noopener noreferrer">{esc(title_zh)}</a></h3><p class="english">{esc(p['title'])}</p><p class="authors">作者：{esc(authors)}<br>机构：{esc(institutions)}</p><div class="details"><div><h4>主要内容</h4><p>{esc(summary)}</p></div><div><h4>推荐理由</h4><p>{esc(reason)}</p></div></div><p class="paper-link"><a href="{esc(p.get('pdf_url', p['url']))}" target="_blank" rel="noopener noreferrer">阅读论文 PDF</a></p></article>''')
+            rating = (Decimal(str(score)) / 20).quantize(Decimal('0.1'), rounding=ROUND_HALF_UP) if isinstance(score, (int, float)) and not isinstance(score, bool) and 0 <= score <= 100 else None
+            score_label = f'<span class="score">推荐评分 {rating} / 5</span>' if rating is not None else '<span class="score">暂无评分</span>'
+            published = str(p.get('published', ''))[:10] or '未记录'
+            cards.append(f'''<article><div class="meta">{score_label}{tags}<span>{esc(p['id'])}</span></div><h3><a href="{esc(p['url'])}" target="_blank" rel="noopener noreferrer">{esc(title_zh)}</a></h3><p class="english">{esc(p['title'])}</p><p class="authors">作者：{esc(authors)}<br>机构：{esc(institutions)}<br>arXiv 首次提交：{esc(published)}（UTC）</p><div class="details"><div><h4>主要内容</h4><p>{esc(summary)}</p></div><div><h4>推荐理由</h4><p>{esc(reason)}</p></div></div><p class="paper-link"><a href="{esc(p.get('pdf_url', p['url']))}" target="_blank" rel="noopener noreferrer">阅读论文 PDF</a></p></article>''')
         content = ''.join(cards) or '<div class="empty">当天没有达到筛选标准的新论文。</div>'
         runs = day.get('usage_runs', [])
         if runs:
@@ -154,13 +164,22 @@ def main():
         print('Already processed today; regenerating site.')
         render(history)
         return
-    seen = {p['id'] for day in history['days'] for p in day['papers']}
+    seen = set(history.get('recommended_ids', [])) | {p['id'] for day in history['days'] for p in day['papers']}
+    # Same-day manual refresh can re-review its own papers, never older results.
+    if previous_today and not any(day['date'] == today for day in history['days']):
+        previous_ids = {p['id'] for p in previous_today['papers']}
+        older_ids = {p['id'] for day in history['days'] for p in day['papers']}
+        seen -= previous_ids - older_ids
+    seen_titles = set(history.get('recommended_titles', [])) | {title_key(p.get('title', '')) for day in history['days'] for p in day['papers']}
+    if previous_today and not any(day['date'] == today for day in history['days']):
+        older_titles = {title_key(p.get('title', '')) for day in history['days'] for p in day['papers']}
+        seen_titles -= {title_key(p.get('title', '')) for p in previous_today['papers']} - older_titles
     if refresh_existing:
         if not previous_today or not previous_today.get('papers'):
             raise RuntimeError('No existing papers for today to update')
         candidates = previous_today['papers']
     else:
-        candidates = fetch_candidates(seen, now)
+        candidates = fetch_candidates(seen, now, seen_titles)
     from research import USAGE, review
     before = get_balance()
     if refresh_existing:
@@ -178,6 +197,16 @@ def main():
     previous_runs = previous_today.get('usage_runs', []) if previous_today else []
     runs = previous_runs + [current]
     history['days'].append({'date': today, 'candidates': previous_today.get('candidates', len(candidates)) if refresh_existing else len(candidates), 'papers': papers, 'usage_runs': runs, 'usage': current, 'usage_incomplete': bool(previous_today and (previous_today.get('usage_incomplete') or not previous_runs))})
+    ever_recommended = set(history.get('recommended_ids', []))
+    ever_recommended.update(p['id'] for day in history['days'] for p in day['papers'])
+    if previous_today:
+        ever_recommended.update(p['id'] for p in previous_today['papers'])
+    history['recommended_ids'] = sorted(ever_recommended)
+    ever_titles = set(history.get('recommended_titles', []))
+    ever_titles.update(title_key(p.get('title', '')) for day in history['days'] for p in day['papers'])
+    if previous_today:
+        ever_titles.update(title_key(p.get('title', '')) for p in previous_today['papers'])
+    history['recommended_titles'] = sorted(t for t in ever_titles if t)
     DATA.parent.mkdir(parents=True, exist_ok=True)
     DATA.write_text(json.dumps(history, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     render(history)
