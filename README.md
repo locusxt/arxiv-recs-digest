@@ -1,15 +1,17 @@
 # 推荐与搜索 · 论文雷达
 
-每天北京时间 08:30 使用 GitHub Actions 检索 arXiv 近 7 天投稿。论文覆盖推荐、搜索、召回和系统，重点关注电商精排价值建模与生成式重排。先由 DeepSeek 基于标题摘要初筛，再下载候选论文 PDF、提取每页原文，让模型基于全文判断价值、解读方法、实验、局限和可执行的业务验证，最后精选最多 3 篇。网页附可点击的 PDF 页码和逐字校验的英文证据；业务迁移是推测，需自行验证。无法提取全文或无法核对至少 3 条原文证据的论文不会作为全文解读发布。
+每天北京时间 08:30 通过 GitHub Actions 检索 arXiv 近 7 天投稿，覆盖推荐、搜索、召回和系统，重点关注电商精排价值建模与生成式重排。DeepSeek 先按摘要初筛，再阅读候选 PDF 全文，筛选最多 3 篇。页面以中文、英文标题、作者、机构、关键词、主要内容、推荐理由和链接呈现。事实和结论以原文为准，模型可能出错；PDF 提取可能遗漏公式、图表。
 
-按不含版本号的 arXiv ID 对历史入选论文去重。每天重复运行默认只重新生成网页，不重新筛选。手动触发时可勾选 `refresh_today` 重新生成当天，保留更早的历史和去重记录。失败不会记录当天结果，可以在 Actions 页面重试。
+页面公开显示当日已记录运行的 DeepSeek token 用量、运行期间账户余额变化及最新余额。余额变化是账户级数字，可能受其他任务、充值、延迟结算影响，不能等同于精确账单；历史未记录用量、失败或中断的运行不会完整计入。运行前后任一次查询失败时无法计算对应余额变化。请以 DeepSeek 账单为准。公开仓库与网页对任何人可见。
+
+以不含版本号的 arXiv ID 对历史入选论文去重，同一天重复运行不会重新筛选；手动触发时可勾选 `refresh_today` 重新生成当天，保留更早历史和当天已记录的用量。
 
 ## 配置
 
-1. 仓库 Settings → Secrets and variables → Actions 添加 `DEEPSEEK_API_KEY`。
-2. Settings → Pages 将 Source 设为 **GitHub Actions**。
-3. 在 Actions → Daily paper digest 手动执行一次；此后每日自动运行，定时任务可能延迟。
+1. 在仓库 Actions Secrets 添加 `DEEPSEEK_API_KEY`。
+2. 将 GitHub Pages Source 设为 **GitHub Actions**。
+3. 在 Actions → Daily paper digest 手动执行一次，此后每日自动运行。定时任务可能延迟。
 
-公开仓库的论文结果、原文短摘录和个人筛选偏好均为公开。DeepSeek API 按实际用量计费，全文解读会比摘要筛选消耗更多 token。每个主题最多取最近 200 篇，超出时可能遗漏；候选初筛分批进行，最多阅读全文 12 篇。PDF 文字抽取不能完整识别部分公式、图表及扫描版，可能漏选或错读；引用的存在性校验不等于验证模型推理正确，重要结论请查原文。仅接受 2–50 页、文本长度在限定范围内且可成功解析的 PDF。
+每个主题最多检索最近 200 篇，候选初筛分批进行，最多阅读全文 12 篇；无法提取全文的论文会跳过。DeepSeek 按实际用量计费。
 
-本地运行：`python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`，通过环境变量安全传入 `DEEPSEEK_API_KEY` 后运行 `.venv/bin/python digest.py`。`REFRESH_TODAY=true` 可重新生成当天。测试：`.venv/bin/python -m unittest discover -s tests`。数据保存在 `data/history.json`，须保留以维持去重。
+本地：`python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`，通过环境变量安全传入 `DEEPSEEK_API_KEY` 后运行 `.venv/bin/python digest.py`。测试：`.venv/bin/python -m unittest discover -s tests`。数据保存在 `data/history.json`，须保留以维持去重。
