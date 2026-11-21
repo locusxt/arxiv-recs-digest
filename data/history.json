@@ -2,159 +2,12 @@
   "days": [
     {
       "date": "2026-11-21",
-      "candidates": 281,
+      "candidates": 278,
       "papers": [
-        {
-          "id": "2611.24006",
-          "title": "MARS Technical Report",
-          "abstract": "Modern industrial recommender systems use multi-stage cascades--retrieval, pre-ranking, ranking, and re-ranking--to narrow millions of candidates to a personalized list. While each stage deploys sophisticated models, pipeline-level decisions on channel activation, quotas, model selection, and score fusion remain engineer-tuned and user-agnostic within each scenario. This report presents MARS (Multi-stage Agentic Recommendation System), extending personalization from individual-stage predictions to full pipeline orchestration. A near-line agent built on fine-tuned Qwen3-0.6B generates per-user configurations--a seven-dimensional action covering pipeline mode, retrieval quotas, model selection, fusion weights, and reranker settings--from a constrained action space. Configurations are validated, cached, and consumed asynchronously; the cascade never waits for LLM inference. Schema checks, fallbacks, and a kill switch ensure serving safety. The policy is trained in three stages: Confidence-aware SFT distills schema-valid generation from a teacher model; Format-Anchored Preference Optimization (FAPO) learns action preferences via ActionMask with posterior weighting; Group Relative Policy Optimization (GRPO) refines the policy through Sandbox replay with a frozen reward model, without exposing exploratory actions to live traffic. Two-week A/B tests across five Taobao scenarios with over ten million daily users show positive gains on all key metrics. The largest reach +5.22% V2P and +7.34% GMV, with positive CTR lifts on both click surfaces. About 20% of requests use a lightweight Minimal mode, and deployment shows 12 ms lower mean serving latency versus production.",
-          "published": "2026-11-18T07:56:58Z",
-          "url": "https://arxiv.org/abs/2611.24006v1",
-          "pdf_url": "https://arxiv.org/pdf/2611.24006v1",
-          "reason": "对做推荐全链路与生成式重排的工程师有直接参考价值：给出近线LLM编排+缓存+回退的完整工程范式、ActionMask等面向结构化动作的偏好优化技巧，以及LLM与DNN基线对比；关键限制是线上收益为端到端点估计、未做阶段级归因，回放与奖励模型存在近似误差。",
-          "method": "核心机制：使用微调的Qwen3-0.6B模型作为近线代理，根据用户行为特征和场景上下文生成七维编排配置（流水线模式、召回通道子集及配额、CTR/CVR模型选择、融合权重、重排器设置）。配置经过验证后原子写入iGraph缓存，在线服务异步读取，不阻塞请求。训练过程分三阶段：1) 置信度感知SFT：从Qwen3.6-Max教师模型蒸馏结构化生成，并用Wilson下界选择执行证据对齐推荐效率；2) FAPO：通过ActionMask聚焦动作值差异，结合后验V2P加权进行偏好学习；3) GRPO：在沙盒中回放请求快照，使用冻结的学习奖励模型进行在线策略优化。目标函数为最大化业务指标（如V2P、GMV）的期望奖励。",
-          "evidence_result": "线上实验：在淘宝五个营销场景（Baiyibutie、Miaosha、ShangouPostPay、MarketingBlock、Dacu）进行两周在线A/B测试，每个场景5%流量。购买场景V2P提升+2.24%至+5.22%，GMV提升+4.83%至+7.34%；点击场景uCTR和pCTR均有正向提升。最大提升在Baiyibutie：V2P +5.22%，GMV +7.34%。线上服务路径平均延迟降低12ms。约20%请求路由至Minimal模式。训练阶段消融显示GRPO在Baiyibutie上V2P +5.22%、GMV +7.34%，Miaosha上V2P +3.88%、GMV +4.83%。FAPO相比ORPO在Baiyibutie上V2P +3.70%、GMV +0.32%。学习奖励模型相比公式奖励在Baiyibutie上V2P +2.30%、GMV -0.74%。",
-          "application": "业务迁移假设：在电商推荐系统中，可将MARS的个性化编排思路应用于精排和重排阶段，例如根据用户实时意图动态调整召回通道配额、模型选择或融合权重。前提是具备近线LLM推理能力、配置缓存与验证机制、以及可靠的离线回放和奖励模型。最小落点可先针对单一场景（如大促会场）进行离线模拟和影子测试，验证配置生成的有效性和安全性，再逐步上线A/B测试。",
-          "limitations": "1) 动作空间受限，无法选择未定义的能力；2) 沙盒回放是近似重建，无法完全反映真实用户响应；3) 公式奖励是匹配代理而非因果响应，学习奖励模型可能继承噪声和偏差；4) 在线实验评估的是端到端系统，未隔离各服务阶段贡献；5) 近线LLM推理的计算成本未详细量化；6) 偏好对构建中后验V2P估计存在选择偏差；7) 多轮迭代扩展（ReAct）未包含在主在线结果中。",
-          "experiment": "最小离线验证：在历史日志上模拟MARS配置生成，对比固定编排基线，评估V2P、GMV等指标的离线估计。线上验证：选择一个小流量场景（如5%用户）进行两周A/B测试，实验组使用MARS个性化编排，对照组使用现有固定编排，监控核心业务指标（V2P、GMV、CTR）和系统指标（延迟、缓存命中率、回退率）。护栏：设置配置验证和回退机制，确保无效配置不生效；监控延迟和资源消耗；进行统计显著性检验。",
-          "score": 82,
-          "tags": [
-            "多阶段推荐编排",
-            "LLM智能体",
-            "后训练",
-            "偏好优化",
-            "线上A/B"
-          ],
-          "citations": [
-            {
-              "page": 1,
-              "quote": "Two-week A/B tests across five Taobao marketing scenarios with over ten million daily active users report positive point estimates for each scenario’s key metrics under the evaluated production settings."
-            },
-            {
-              "page": 21,
-              "quote": "On the purchase-oriented scenarios, MARS improves V2P by+2.24%to +5.22%and GMV by+4.83%to +7.34%, led by Baiyibutie (Table 5)."
-            },
-            {
-              "page": 29,
-              "quote": "This report does not disclose a minimum per-configuration support-count criterion or the fraction of preference pairs for which both posterior estimates are available."
-            }
-          ],
-          "source_type": "pdf_fulltext",
-          "pdf_pages": 46,
-          "authors": [
-            "Chaoqun Hou",
-            "Cheng Guo",
-            "Fengze Jiang",
-            "Jiaqi Zheng",
-            "Junhong Lou",
-            "Longxiang Xiong",
-            "Lv Shao",
-            "Ping Liu",
-            "Qixin Li",
-            "Tong Liu",
-            "Xiannian Hu",
-            "Xinyuan Qi",
-            "Yong Duan",
-            "Yu Zhu",
-            "Zi Zhuang",
-            "Zixin Zhao",
-            "Zongwei Wang"
-          ],
-          "title_zh": "MARS技术报告",
-          "summary": "MARS用微调的Qwen3-0.6B近线智能体为每个用户生成七维流水线编排配置（流水线模式、召回通道与配额、CTR/CVR模型、融合权重、重排设置），经校验后缓存供在线级联异步读取，并以SFT→FAPO→GRPO三阶段后训练优化策略。淘宝五个营销场景两周A/B给出各场景关键指标正向点估计，最大V2P+5.22%、GMV+7.34%，约20%请求走Minimal模式并伴随12ms平均服务路径延迟下降；但收益为端到端归因，未拆分各编排维度贡献，且回放与奖励模型为近似。",
-          "institutions": [
-            "Taobao"
-          ]
-        },
-        {
-          "id": "2611.25527",
-          "title": "Learning Generative Ranking Policies for Whole-Page Optimization",
-          "abstract": "A recommendation page is consumed as a whole: the items on it compete for attention and complement one another, so the best page is not simply the individually best items placed side by side. We study whole-page optimization, which selects and orders the items on a page jointly to maximize the score of the page. The number of possible pages grows combinatorially, so good pages must be generated rather than enumerated. Some generative re-ranking methods use the same page-level training signal for every choice in a sampled page. Others imitate target pages built before training, which remain largely fixed as the generator improves. We address both limitations with one local page-level objective, which repeatedly moves the current generator toward pages with higher score. This objective splits exactly into one training target per position, and each target compares candidates at the same partial page by the scores of the complete pages they lead to. Every position therefore learns to choose the item that is better for the whole page, rather than the item that looks best on its own. We call this procedure whole-page policy improvement. On two public datasets, KuaiRand-1K and RL4RS-SeqSlate, which cover multi-objective item selection and constrained ordering, and on an industrial dataset of logged pages, our method outperforms the evaluated generative re-ranking baselines. On a synthetic benchmark with a known optimal page, it also comes closest to the optimum, showing that its improvements come from better whole-page decisions.",
-          "published": "2026-11-19T05:27:22Z",
-          "url": "https://arxiv.org/abs/2611.25527v1",
-          "pdf_url": "https://arxiv.org/pdf/2611.25527v1",
-          "reason": "对做生成式重排和整页价值建模的工程师有直接参考价值：逐位置目标由整页补全分数构造、无需服务时评估器查询，并附收敛证明与消融；关键限制是全部为离线评估器或仿真结果，工业数据仅离线日志回放，不能视为线上收益。",
-          "method": "以固定页面评估器r(x)为目标，将整页期望得分J(π)=E[r(x)]作为优化目标；每轮用当前生成器π_k采样页面并收集各位置的部分页s，对每个候选a用π_k补全剩余页面得到Q_{π_k}(s,a)的蒙特卡洛估计，再按q̂_k(a|s)∝π_k(a|s)exp(Q̂/τ)在打分集合内重加权（未打分候选概率保持不变），用交叉熵拟合π_{k+1}；推理时逐位置贪心解码，不调用评估器。",
-          "evidence_result": "离线：KuaiRand-1K三个长度平均相对日志页提升34.35%（最强基线PPO 32.75%），RL4RS-SeqSlate平均7.09%（最强基线GRPO 6.43%），工业日志数据13.92%（最强基线DeGRe 12.75%）；合成基准达到最优页的97.16%（PPO 94.64%）。生成器贪心解码在全部设置上优于prefix-score beam search（宽度1/8/32），且每页生成时间更低、无评估器调用。以上均为离线/日志评估，非线上A/B。",
-          "application": "业务迁移假设：在电商推荐页精排后接生成式重排，用现有页面级价值模型作为固定评估器，训练逐位置生成器做联合选品与排序；前提是已有可信的整页价值模型、候选池与页面约束可形式化、可承担每轮rollout的评估器调用开销。",
-          "limitations": "所有质量指标来自学习到的referee或合成模拟器，原文明确为离线估计而非线上收益；未做线上A/B或线上消融，不能把整体提升归因于某一模块；训练期评估器调用量较大（如KuaiRand-1K L≤54约3.97亿次），依赖评估器质量；部分打分集合与温度需调参。",
-          "experiment": "最小离线验证：在现有精排候选池上固定页面价值模型，对比当前重排策略与本文方法，指标用referee页面分、多样性/熵、约束违规率；最小线上验证：小流量A/B，护栏为点击/转化、页面级收入、延迟P99、赞助间距违规率、生态指标，并做去掉完整页补全打分的消融以确认增益来源。",
-          "score": 82,
-          "tags": [
-            "整页优化",
-            "生成式重排",
-            "策略改进",
-            "逐位置监督",
-            "离线评估"
-          ],
-          "citations": [
-            {
-              "page": 3,
-              "quote": "The solution re-weights the current probabilities by exp(𝑄𝜋𝑘(𝑠,𝑎)/𝜏) , then normalizes the weights across legal candidates."
-            },
-            {
-              "page": 6,
-              "quote": "Across lengths, its mean improvement over logged pages is 34.35% on KuaiRand-1K and 7.09% on RL4RS-SeqSlate, compared with the strongest baseline averages of 32.75% and 6.43%."
-            },
-            {
-              "page": 6,
-              "quote": "These are offline estimates on fixed candidate pools, not expected online benefits."
-            }
-          ],
-          "source_type": "pdf_fulltext",
-          "pdf_pages": 13,
-          "authors": [
-            "Chen Qiu",
-            "Zhigang Hua",
-            "Qi Xu",
-            "Jizhe Zhang",
-            "Sha Hua",
-            "Ren Mao",
-            "Luke Simon"
-          ],
-          "title_zh": "学习用于整页优化的生成式排序策略",
-          "summary": "提出整页策略改进：每轮用当前生成器补全候选后续页面并打分，将整页分数按位置重加权为逐位置目标，再交叉熵拟合生成器，并给出精确更新下期望页面分数单调提升与收敛到最优页面的证明。在两个公开数据集、一个工业日志数据集和已知最优的合成基准上，离线评估均优于GoalRank、DeGRe、GFN4Rec、HAC及PPO、TD3N、GRPO等基线，且贪心解码优于前缀分数束搜索；但所有收益均为离线评估器/仿真估计，未报告线上A/B。",
-          "institutions": [
-            "Meta Platforms, Inc."
-          ]
-        },
         {
           "id": "2611.25659",
           "title": "DNA: Unlocking Depth Scaling in CTR Models",
           "abstract": "Long user behavior sequences are among the strongest signals for click-through rate (CTR) prediction. Cross-attention makes these sequences practical for industrial ranking by keeping compute linear in sequence length. Yet the gains from stacking cross-attention layers taper off: on Taobao search, growing a cross-attention stack from 16 to 28 layers adds only 0.02 percentage points (pt) of AUC. We argue that the key-value side is the bottleneck. Each layer projects the same behavior sequence into keys and values, so adding depth gives the model more reads of a fixed sequence. We propose DNA (Dual-stream Nexus Attention), which lets the sequence itself evolve with depth. At each layer, the request representation (the search query, user features and scene) first reads the sequence. Each behavior token then attends to the updated request representation and uses what it reads to update itself, so the next layer reads a sequence shaped by the current request. The update runs once per request, all candidates share the resulting sequence, and both the reads and the update keep linear complexity in sequence length. At comparable forward FLOPs, DNA improves AUC over cross-attention stacks by 0.08 to 0.26 pt and keeps improving in the depth range where those stacks level off. DNA-4 is deployed in Taobao search. In an online A/B test against the production model, it improves CTR by 0.8% and GMV by 0.5%.",
-          "published": "2026-11-19T07:40:54Z",
-          "url": "https://arxiv.org/abs/2611.25659v1",
-          "pdf_url": "https://arxiv.org/pdf/2611.25659v1",
-          "reason": "对做精排长序列建模和深度扩展的工程师有直接参考价值：给出了可落地的请求级序列更新架构与请求级复用成本分析，并有线上A/B证据；但线上收益是整体模型替换结果，未单独归因于更新模块，且实验仅限淘宝搜索单一场景。",
-          "method": "DNA（Dual-stream Nexus Attention）在每层保留候选/请求对行为序列S的cross-attention读取，并新增反向Update Block：请求表示U先读取S得到U_{l+1}，再由S中每个行为token作为query、U_{l+1}作为key/value更新S，使下一层读取的是被当前请求重塑后的序列。U与S均与候选无关，因此每请求只计算一次并由所有候选共享；每行为保留独立token与分组投影，更新注意力复杂度对序列长度L线性。目标为点击二分类交叉熵；最后一层只读不更新，预测头拼接F_D与U_D后mean-pool经MLP输出。",
-          "evidence_result": "离线：淘宝搜索曝光日志训练、次日日志评估，AUC以pt计。在六个可比前向FLOPs档位（约10–53 GFLOPs/sample）上DNA领先CrossAttn 0.08–0.26 pt；DNA-4在约40% FLOPs下超过CrossAttn-28 0.09 pt；16→28层CrossAttn仅+0.02 pt，而DNA 6→10层+0.13 pt。等深度下DNA-2/4/10分别领先0.35/0.40/0.36 pt。成本：N=5000候选时DNA-4约4.70 TFLOPs，与CrossAttn-4（4.69 T）几乎相同，约为CrossAttn-10的40%；DNA-T-4约78.4 T，约为DNA-4的17倍。线上：DNA-4在淘宝搜索A/B对比生产模型CrossAttn-2，CTR +0.8%、GMV +0.5%（相对百分比）。",
-          "application": "业务迁移假设：在自有电商搜索/推荐精排中，将现有STCA/MixFormer式多层cross-attention的固定行为序列改为“请求特征（query+用户+场景）每层回写序列”的DNA结构，候选侧读取共享的更新后KV。前提：已有请求级特征tokenizer与分组行为序列、候选批量打分框架、可承受每请求一次额外序列更新开销；最小落点是在现有4层cross-attention基线上加1个Update Block（DNA-2）做离线AUC/FLOPs对比，再小流量A/B。",
-          "limitations": "证据主要来自淘宝搜索单一场景与内部日志，未给出跨域或公开数据集结果；线上A/B只报告DNA-4对CrossAttn-2的整体CTR/GMV，未做线上逐组件消融，不能把线上收益单独归因于序列更新模块；DNA-T与DNA-4的参数不对等，作者用降参版本才近似隔离更新输入的影响；DNA每请求新增共享计算，请求数极大时成本需重新评估；深度扩展仅验证到10层，更长序列与生成式重排仅列为未来工作。",
-          "experiment": "离线：在同一精排数据与相同tokenizer/训练配方下，以现有生产cross-attention深度为基线，对比DNA-2/DNA-4在等前向FLOPs与等深度两档的AUC、LogLoss、校准（PCOC）及每请求/每候选FLOPs与P99延迟；做消融：去掉Update Block、把U换成候选特征（DNA-T）、去掉Update内cross-attention只留FFN。线上：小流量A/B，主指标CTR/GMV，护栏为P99延迟、QPS容量、CPU/GPU利用率、曝光多样性及GMV/CTR的置信区间；先验证DNA-2能否以接近基线成本取得正向收益，再决定是否加深。",
-          "score": 88,
-          "tags": [
-            "CTR预估",
-            "长行为序列",
-            "交叉注意力",
-            "深度扩展",
-            "请求级复用"
-          ],
-          "citations": [
-            {
-              "page": 1,
-              "quote": "At comparable forward FLOPs, DNA improves AUC over cross-attention stacks by 0.08 to 0.26 pt and keeps improving in the depth range where those stacks level off."
-            },
-            {
-              "page": 8,
-              "quote": "In the online A/B test, DNA-4 improves CTR by 0.8% and GMV by 0.5%."
-            },
-            {
-              "page": 7,
-              "quote": "The full model has more parameters thanDNA-T-4, so its 0.09 pt lead does not isolate the effect of changing the update input."
-            }
-          ],
-          "source_type": "pdf_fulltext",
-          "pdf_pages": 10,
           "authors": [
             "Caiyuan Li",
             "Wenjie Wu",
@@ -174,11 +27,101 @@
             "Dan Ou",
             "Haihong Tang"
           ],
-          "title_zh": "DNA：解锁CTR模型中的深度扩展",
-          "summary": "论文指出交叉注意力精排堆叠加深时收益饱和，原因是每层都读取同一份固定行为序列；提出DNA，让请求表示先读取序列、再用更新后的请求表示反向更新每个行为token，使序列随深度演化，且更新按请求只算一次、所有候选共享、复杂度对序列长度线性。淘宝搜索离线实验显示，在相近前向FLOPs下DNA比交叉注意力堆叠AUC高0.08–0.26pt，并在基线饱和的深度区间继续提升；线上A/B中DNA-4相对生产模型CTR+0.8%、GMV+0.5%。",
+          "published": "2026-11-19T07:40:54Z",
+          "url": "https://arxiv.org/abs/2611.25659v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.25659v1",
+          "title_zh": "DNA：解锁CTR模型的深度扩展",
+          "summary": "论文指出交叉注意力精排堆叠加深时收益饱和，原因是每层都读取同一份固定行为序列；提出DNA，让请求侧表示（查询、用户特征、场景）先读取序列，再用更新后的请求表示反向更新每个行为token，使序列随深度演化，且更新按请求只算一次、所有候选共享、复杂度对序列长度线性。在淘宝搜索离线实验中，同等前向FLOPs下DNA比交叉注意力堆叠高0.08–0.26 pt AUC，并在基线饱和的深度区间继续提升；线上A/B中DNA-4相对生产模型CTR+0.8%、GMV+0.5%。",
+          "reason": "对做精排长序列建模的工程师直接有用：给出可落地的请求级序列更新机制、明确的复杂度/服务成本分析和线上A/B收益，但收益来自整体架构替换，未单独归因于更新模块，且仅淘宝搜索单场景验证。",
+          "score": 88,
+          "tags": [
+            "CTR预估",
+            "长行为序列",
+            "交叉注意力",
+            "深度扩展",
+            "线上A/B"
+          ],
           "institutions": [
             "Alibaba Group"
-          ]
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 10
+        },
+        {
+          "id": "2611.24006",
+          "title": "MARS Technical Report",
+          "abstract": "Modern industrial recommender systems use multi-stage cascades--retrieval, pre-ranking, ranking, and re-ranking--to narrow millions of candidates to a personalized list. While each stage deploys sophisticated models, pipeline-level decisions on channel activation, quotas, model selection, and score fusion remain engineer-tuned and user-agnostic within each scenario. This report presents MARS (Multi-stage Agentic Recommendation System), extending personalization from individual-stage predictions to full pipeline orchestration. A near-line agent built on fine-tuned Qwen3-0.6B generates per-user configurations--a seven-dimensional action covering pipeline mode, retrieval quotas, model selection, fusion weights, and reranker settings--from a constrained action space. Configurations are validated, cached, and consumed asynchronously; the cascade never waits for LLM inference. Schema checks, fallbacks, and a kill switch ensure serving safety. The policy is trained in three stages: Confidence-aware SFT distills schema-valid generation from a teacher model; Format-Anchored Preference Optimization (FAPO) learns action preferences via ActionMask with posterior weighting; Group Relative Policy Optimization (GRPO) refines the policy through Sandbox replay with a frozen reward model, without exposing exploratory actions to live traffic. Two-week A/B tests across five Taobao scenarios with over ten million daily users show positive gains on all key metrics. The largest reach +5.22% V2P and +7.34% GMV, with positive CTR lifts on both click surfaces. About 20% of requests use a lightweight Minimal mode, and deployment shows 12 ms lower mean serving latency versus production.",
+          "authors": [
+            "Tong Liu",
+            "Chaoqun Hou",
+            "Longxiang Xiong",
+            "Junhong Lou",
+            "Jiaqi Zheng",
+            "Qixin Li",
+            "Zixin Zhao",
+            "Yong Duan",
+            "Xiannian Hu",
+            "Fengze Jiang",
+            "Yu Zhu",
+            "Cheng Guo",
+            "Xinyuan Qi",
+            "Zi Zhuang",
+            "Ping Liu",
+            "Lv Shao",
+            "Zongwei Wang"
+          ],
+          "published": "2026-11-18T07:56:58Z",
+          "url": "https://arxiv.org/abs/2611.24006v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.24006v1",
+          "title_zh": "MARS技术报告",
+          "summary": "MARS用微调Qwen3-0.6B的近线智能体为每个用户生成七维流水线编排配置（流水线模式、召回通道与配额、CTR/CVR模型、融合权重、重排设置），经校验后原子写入iGraph缓存，在线级联异步读取、不阻塞LLM推理，并以SFT→FAPO→GRPO三阶段后训练优化策略。淘宝五个营销场景两周A/B（日活超千万）报告各场景关键指标点估计为正，最大V2P+5.22%、GMV+7.34%，约20%请求走Minimal模式，部署关联在线服务路径平均延迟降低12ms；但端到端收益未拆分到各编排维度，回放与奖励模型为近似而非因果。",
+          "reason": "对做精排/重排与推荐系统全链路优化的工程师，它给出LLM智能体做跨阶段编排的完整工程范式（近线生成+缓存+双端校验+回退+三阶段后训练）和可借鉴的FAPO/ActionMask、沙箱GRPO细节，但需注意收益为端到端点估计、未做阶段归因，且回放与奖励模型存在近似与偏差。",
+          "score": 88,
+          "tags": [
+            "LLM智能体编排",
+            "推荐系统全链路",
+            "偏好优化",
+            "GRPO",
+            "线上A/B"
+          ],
+          "institutions": [
+            "淘宝"
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 46
+        },
+        {
+          "id": "2611.25527",
+          "title": "Learning Generative Ranking Policies for Whole-Page Optimization",
+          "abstract": "A recommendation page is consumed as a whole: the items on it compete for attention and complement one another, so the best page is not simply the individually best items placed side by side. We study whole-page optimization, which selects and orders the items on a page jointly to maximize the score of the page. The number of possible pages grows combinatorially, so good pages must be generated rather than enumerated. Some generative re-ranking methods use the same page-level training signal for every choice in a sampled page. Others imitate target pages built before training, which remain largely fixed as the generator improves. We address both limitations with one local page-level objective, which repeatedly moves the current generator toward pages with higher score. This objective splits exactly into one training target per position, and each target compares candidates at the same partial page by the scores of the complete pages they lead to. Every position therefore learns to choose the item that is better for the whole page, rather than the item that looks best on its own. We call this procedure whole-page policy improvement. On two public datasets, KuaiRand-1K and RL4RS-SeqSlate, which cover multi-objective item selection and constrained ordering, and on an industrial dataset of logged pages, our method outperforms the evaluated generative re-ranking baselines. On a synthetic benchmark with a known optimal page, it also comes closest to the optimum, showing that its improvements come from better whole-page decisions.",
+          "authors": [
+            "Chen Qiu",
+            "Zhigang Hua",
+            "Qi Xu",
+            "Jizhe Zhang",
+            "Sha Hua",
+            "Ren Mao",
+            "Luke Simon"
+          ],
+          "published": "2026-11-19T05:27:22Z",
+          "url": "https://arxiv.org/abs/2611.25527v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.25527v1",
+          "title_zh": "学习用于整页优化的生成式排序策略",
+          "summary": "提出整页策略改进：每轮用当前生成器补全候选后续页面并由页面评估器打分，将完整页分数转化为逐位置的目标分布（对当前概率按exp(Q/τ)重加权），再以交叉熵拟合生成器，并证明精确更新单调提升期望页分、重复精确全量更新收敛到最优页。在KuaiRand-1K、RL4RS-SeqSlate、工业日志数据和合成基准上，离线评估优于GoalRank/DeGRe/GFN4Rec/HAC及PPO/TD3N/GRPO，且贪心解码优于前缀分数束搜索；但所有收益均为离线评估器/仿真打分，无线上A/B。",
+          "reason": "对做生成式重排与整页价值建模的工程师有直接参考价值：给出可落地的逐位置目标构造、部分打分与收敛性分析，并在工业日志上离线优于束搜索且无服务时评估器调用；关键限制是全部为离线评估器打分、无线上A/B，且工业数据仅重排已展示页面、未验证端到端线上收益。",
+          "score": 82,
+          "tags": [
+            "整页优化",
+            "生成式重排",
+            "策略改进",
+            "逐位置目标",
+            "离线评估"
+          ],
+          "institutions": [
+            "Meta Platforms, Inc."
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 13
         }
       ],
       "usage_runs": [
@@ -202,20 +145,41 @@
               "decrease": "0.00"
             }
           ]
+        },
+        {
+          "calls": 15,
+          "prompt_tokens": 285728,
+          "completion_tokens": 5068,
+          "total_tokens": 290796,
+          "prompt_cache_hit_tokens": 1408,
+          "prompt_cache_miss_tokens": 284320,
+          "missing_usage": 0,
+          "balance_after": [
+            {
+              "currency": "CNY",
+              "total_balance": "357.91"
+            }
+          ],
+          "balance_change": [
+            {
+              "currency": "CNY",
+              "decrease": "0.00"
+            }
+          ]
         }
       ],
       "usage": {
-        "calls": 3,
-        "prompt_tokens": 69617,
-        "completion_tokens": 1011,
-        "total_tokens": 70628,
-        "prompt_cache_hit_tokens": 256,
-        "prompt_cache_miss_tokens": 69361,
+        "calls": 15,
+        "prompt_tokens": 285728,
+        "completion_tokens": 5068,
+        "total_tokens": 290796,
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 284320,
         "missing_usage": 0,
         "balance_after": [
           {
             "currency": "CNY",
-            "total_balance": "357.99"
+            "total_balance": "357.91"
           }
         ],
         "balance_change": [
