@@ -47,6 +47,11 @@ class DigestTests(unittest.TestCase):
             'Queries and relevance for search': 'search',
             'Personalization with sequential recommendation': 'recommendation',
             'Real-time nearline serving': 'systems',
+            'Causal inference for recommendation': 'training',
+            'Counterfactual recommendation': 'training',
+            'DAU and user retention': 'growth',
+            'LLM4Rec': 'llm4rec',
+            'Generative recommendation': 'llm4rec',
         }
         for title, topic in examples.items():
             with self.subTest(title=title):

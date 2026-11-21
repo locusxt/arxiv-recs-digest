@@ -22,7 +22,7 @@ def record_usage(usage):
 
 
 SCREEN_PROMPT = '''你是大型电商推荐和搜索技术负责人，服务一位负责全链路的推荐算法工程师；其直接工作是精排阶段的价值建模、重排生成，也希望了解召回、搜索与系统前沿。根据标题和摘要进行初筛，选出最多5篇值得阅读全文的候选，也可选0篇。直接解决长期价值/GMV/CVR、样本选择偏差、多目标优化、精排、生成式列表重排的论文通常优先；有扎实方法或工业经验的召回、检索、特征与实时服务同样欢迎。不要仅因有LLM、工业或数据集名称而高分。评分0-100反映潜在技术价值和关联度，不能把摘要结论当作已验证。输出JSON对象 {"candidates":[{"id":"原始id","score":整数,"reason":"初筛理由"}]}。只用提供的id。'''
-REVIEW_PROMPT = """你是大型电商推荐/搜索资深研究员。读者负责推荐全链路，重点是精排价值建模和生成式重排，也关注召回、检索和系统，以及能明确迁移到这些场景的高效Transformer、MoE和多模态表征。仔细阅读PDF全文后判断是否值得读，可以不推荐。只依据原文，不编造事实或结果；将线上A/B、离线评估和仿真严格区分；不将端到端收益归因于没有单独验证的模块。机构仅依据原文作者署名页，无法确认写“原文未说明”，不要把数据集所属公司写成作者公司。输出严格JSON：{\"worth_reading\":true或false,\"score\":0到100整数,\"title_zh\":\"标题中文翻译\",\"authors\":[\"原文作者姓名，按原顺序\"],\"institutions\":[\"作者所属公司或机构\"],\"summary\":\"主要内容，中文2句以内，说明方法和最重要的实验结论及证据边界\",\"reason\":\"推荐理由，中文1句，说明对电商推荐工程师的具体价值和关键限制\",\"tags\":[\"3到5个中文关键词\"]}。不要输出原文摘录，论文事实与迁移推测分清。对于文本不足以判断的论文设置worth_reading为false。"""
+REVIEW_PROMPT = """你是大型电商推荐/搜索资深研究员。读者负责推荐全链路，重点是精排价值建模、生成式重排、因果推断、DAU增长与用户留存、LLM4Rec，也关注召回、检索和系统，以及能明确迁移到这些场景的高效Transformer、MoE和多模态表征。仔细阅读PDF全文后判断是否值得读，可以不推荐。只依据原文，不编造事实或结果；将线上A/B、离线评估和仿真严格区分；不将端到端收益归因于没有单独验证的模块。机构仅依据原文作者署名页，无法确认写“原文未说明”，不要把数据集所属公司写成作者公司。输出严格JSON：{\"worth_reading\":true或false,\"score\":0到100整数,\"title_zh\":\"标题中文翻译\",\"authors\":[\"原文作者姓名，按原顺序\"],\"institutions\":[\"作者所属公司或机构\"],\"summary\":\"主要内容，中文2句以内，说明方法和最重要的实验结论及证据边界\",\"reason\":\"推荐理由，中文1句，说明对电商推荐工程师的具体价值和关键限制\",\"tags\":[\"3到5个中文关键词\"]}。不要输出原文摘录，论文事实与迁移推测分清。对于文本不足以判断的论文设置worth_reading为false。"""
 
 
 def ask(system, content, max_tokens=4000):
@@ -53,7 +53,9 @@ TOPICS = {
     'search': (3, [r'\bsearch(?:ing)?\b', r'\bquer(?:y|ies)\b', r'\binformation[ -]retrieval\b', r'\brelevance\b', r'\bquery[ -](?:understanding|intent|rewrit(?:ing|e))\b']),
     'recommendation': (3, [r'\brecommend(?:ation|er|ers|ations)\b', r'\bpersonaliz(?:ation|ed)\b', r'\bsequential[ -](?:recommendation|model(?:ing|ling)?)\b', r'\buser[ -](?:interest|intent|behavior|behaviour)\b', r'\b(?:session|interest)[ -]based\b']),
     'systems': (2, [r'\bonline[ -]serving\b', r'\breal[ -]time\b', r'\blatency\b', r'\bnear[ -]?line\b', r'\bproduction[ -]system\b', r'\blarge[ -]scale\b', r'\bmodel[ -]distillation\b', r'\bdistill(?:ation|ed)?\b']),
-    'training': (2, [r'\b(?:selection|position|exposure|popularity)[ -]bias\b', r'\bcold[ -]start\b', r'\b(?:exploration|exploitation)\b', r'\b(?:bandit|bandits)\b', r'\b(?:uplift|counterfactual|causal)[ -](?:model(?:ing|ling)?|inference|learning)\b', r'\bcontrastive[ -]learning\b', r'\b(?:a/b|ab)[ -]test(?:ing)?\b']),
+    'growth': (3, [r'\bdau\b', r'\bdaily[ -]active[ -]users?\b', r'\buser[ -](?:retention|engagement|growth|reactivation|churn)\b', r'\bchurn[ -]prediction\b', r'\b(?:long[ -]term|daily)[ -]engagement\b']),
+    'llm4rec': (4, [r'\bllm4rec\b', r'\bllm[ -](?:based|driven|powered)[ -](?:recommendation|recommender|ranking|retrieval)\b', r'\b(?:generative|language[ -]model)[ -](?:recommendation|recommender|ranking|retrieval)\b', r'\blarge[ -]language[ -]models?[ -]for[ -](?:recommendation|ranking|retrieval)\b']),
+    'training': (2, [r'\b(?:selection|position|exposure|popularity)[ -]bias\b', r'\bcold[ -]start\b', r'\b(?:exploration|exploitation)\b', r'\b(?:bandit|bandits)\b', r'\b(?:uplift|counterfactual|causal)[ -](?:model(?:ing|ling)?|inference|learning|effect(?:s)?)\b', r'\b(?:causal|counterfactual)[ -](?:recommendation|ranking|inference)\b', r'\b(?:treatment[ -]effect|propensity[ -]score|inverse[ -]propensity[ -]scor(?:ing|e))\b', r'\bcontrastive[ -]learning\b', r'\b(?:a/b|ab)[ -]test(?:ing)?\b']),
 }
 
 
@@ -75,7 +77,7 @@ def keyword_prefilter(candidates, limit=120, reserve=12):
     ranked = sorted(candidates, key=lambda p: (keyword_score(p)[0], p.get('published', '')), reverse=True)
     # Reserve room for different pipeline stages before filling remaining slots.
     chosen, seen = [], set()
-    for topic in ('value', 'ranking', 'retrieval', 'search', 'recommendation', 'systems', 'training'):
+    for topic in ('value', 'ranking', 'retrieval', 'search', 'recommendation', 'systems', 'training', 'growth', 'llm4rec'):
         count = 0
         for paper in ranked:
             if len(chosen) >= limit or count >= reserve:
