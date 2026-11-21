@@ -4,6 +4,10 @@ on:
     - cron: '30 0 * * *' # 08:30 Asia/Shanghai
   workflow_dispatch:
     inputs:
+      refresh_existing:
+        description: Re-review existing papers without fetching new candidates
+        type: boolean
+        default: false
       refresh_today:
         description: Re-run selection for today (replaces today only)
         type: boolean
@@ -29,6 +33,7 @@ jobs:
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           REFRESH_TODAY: ${{ inputs.refresh_today }}
+          REFRESH_EXISTING: ${{ inputs.refresh_existing }}
         run: python digest.py
       - name: Save history
         run: |

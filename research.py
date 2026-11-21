@@ -21,7 +21,7 @@ def record_usage(usage):
 
 
 SCREEN_PROMPT = '''你是大型电商推荐和搜索技术负责人，服务一位负责全链路的推荐算法工程师；其直接工作是精排阶段的价值建模、重排生成，也希望了解召回、搜索与系统前沿。根据标题和摘要进行初筛，选出最多5篇值得阅读全文的候选，也可选0篇。直接解决长期价值/GMV/CVR、样本选择偏差、多目标优化、精排、生成式列表重排的论文通常优先；有扎实方法或工业经验的召回、检索、特征与实时服务同样欢迎。不要仅因有LLM、工业或数据集名称而高分。评分0-100反映潜在技术价值和关联度，不能把摘要结论当作已验证。输出JSON对象 {"candidates":[{"id":"原始id","score":整数,"reason":"初筛理由"}]}。只用提供的id。'''
-REVIEW_PROMPT = """你是大型电商推荐/搜索资深研究员。读者负责推荐全链路，重点是精排价值建模和生成式重排，也关注召回、检索和系统。仔细阅读PDF全文后判断是否值得读，可以不推荐。只依据原文，不编造事实或结果；将线上A/B、离线评估和仿真严格区分；不将端到端收益归因于没有单独验证的模块。机构仅依据原文作者署名页，无法确认写“原文未说明”，不要把数据集所属公司写成作者公司。输出严格JSON：{\"worth_reading\":true或false,\"score\":0到100整数,\"title_zh\":\"标题中文翻译\",\"institutions\":[\"作者所属公司或机构\"],\"summary\":\"主要内容，中文2句以内，说明方法和最重要的实验结论及证据边界\",\"reason\":\"推荐理由，中文1句，说明对电商推荐工程师的具体价值和关键限制\",\"tags\":[\"3到5个中文关键词\"]}。不要输出原文摘录，论文事实与迁移推测分清。对于文本不足以判断的论文设置worth_reading为false。"""
+REVIEW_PROMPT = """你是大型电商推荐/搜索资深研究员。读者负责推荐全链路，重点是精排价值建模和生成式重排，也关注召回、检索和系统。仔细阅读PDF全文后判断是否值得读，可以不推荐。只依据原文，不编造事实或结果；将线上A/B、离线评估和仿真严格区分；不将端到端收益归因于没有单独验证的模块。机构仅依据原文作者署名页，无法确认写“原文未说明”，不要把数据集所属公司写成作者公司。输出严格JSON：{\"worth_reading\":true或false,\"score\":0到100整数,\"title_zh\":\"标题中文翻译\",\"authors\":[\"原文作者姓名，按原顺序\"],\"institutions\":[\"作者所属公司或机构\"],\"summary\":\"主要内容，中文2句以内，说明方法和最重要的实验结论及证据边界\",\"reason\":\"推荐理由，中文1句，说明对电商推荐工程师的具体价值和关键限制\",\"tags\":[\"3到5个中文关键词\"]}。不要输出原文摘录，论文事实与迁移推测分清。对于文本不足以判断的论文设置worth_reading为false。"""
 
 
 def ask(system, content, max_tokens=4000):
@@ -97,7 +97,9 @@ def validate_review(paper, pages, result):
         raise ValueError('Invalid score')
     tags = result.get('tags') if isinstance(result.get('tags'), list) else []
     institutions = result.get('institutions') if isinstance(result.get('institutions'), list) else []
-    return {**paper, **{k: result[k] for k in required}, 'score': result['score'], 'tags': [x for x in tags if isinstance(x, str)][:5], 'institutions': [x for x in institutions if isinstance(x, str)][:10], 'source_type': 'pdf_fulltext', 'pdf_pages': len(pages)}
+    authors = result.get('authors') if isinstance(result.get('authors'), list) else []
+    authors = paper.get('authors') or [x for x in authors if isinstance(x, str)]
+    return {**paper, 'authors': authors, **{k: result[k] for k in required}, 'score': result['score'], 'tags': [x for x in tags if isinstance(x, str)][:5], 'institutions': [x for x in institutions if isinstance(x, str)][:10], 'source_type': 'pdf_fulltext', 'pdf_pages': len(pages)}
 
 
 def select(candidates):

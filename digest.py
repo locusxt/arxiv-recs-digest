@@ -143,7 +143,8 @@ def main():
     history = json.loads(DATA.read_text(encoding='utf-8')) if DATA.exists() else {'days': []}
     # Explicitly refresh today after a prompt change, preserving all earlier days.
     previous_today = next((day for day in history['days'] if day['date'] == today), None)
-    if os.environ.get('REFRESH_TODAY') == 'true':
+    refresh_existing = os.environ.get('REFRESH_EXISTING') == 'true'
+    if refresh_existing or os.environ.get('REFRESH_TODAY') == 'true':
         history['days'] = [day for day in history['days'] if day['date'] != today]
     # Reruns on the same day must be idempotent, including days with zero results.
     if any(day['date'] == today for day in history['days']):
@@ -151,16 +152,29 @@ def main():
         render(history)
         return
     seen = {p['id'] for day in history['days'] for p in day['papers']}
-    candidates = fetch_candidates(seen, now)
-    from research import USAGE
+    if refresh_existing:
+        if not previous_today or not previous_today.get('papers'):
+            raise RuntimeError('No existing papers for today to update')
+        candidates = previous_today['papers']
+    else:
+        candidates = fetch_candidates(seen, now)
+    from research import USAGE, review
     before = get_balance()
-    papers = select(candidates)
+    if refresh_existing:
+        papers = []
+        for paper in candidates:
+            result = review(paper)
+            if result is None:
+                raise RuntimeError('Existing paper no longer meets review criteria')
+            papers.append(result)
+    else:
+        papers = select(candidates)
     after = get_balance()
     current = {**USAGE, 'balance_after': after, 'balance_change': balance_changes(before, after)}
     # Preserve completed earlier runs on the same date; old runs were not metered.
     previous_runs = previous_today.get('usage_runs', []) if previous_today else []
     runs = previous_runs + [current]
-    history['days'].append({'date': today, 'candidates': len(candidates), 'papers': papers, 'usage_runs': runs, 'usage': current, 'usage_incomplete': bool(previous_today and (previous_today.get('usage_incomplete') or not previous_runs))})
+    history['days'].append({'date': today, 'candidates': previous_today.get('candidates', len(candidates)) if refresh_existing else len(candidates), 'papers': papers, 'usage_runs': runs, 'usage': current, 'usage_incomplete': bool(previous_today and (previous_today.get('usage_incomplete') or not previous_runs))})
     DATA.parent.mkdir(parents=True, exist_ok=True)
     DATA.write_text(json.dumps(history, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     render(history)
