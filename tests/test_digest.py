@@ -51,6 +51,7 @@ class DigestTests(unittest.TestCase):
             'Counterfactual recommendation': 'training',
             'DAU and user retention': 'growth',
             'LLM4Rec': 'llm4rec',
+            'Reusable KV Memory for Efficient LLM Recommenders': 'llm4rec',
             'Generative recommendation': 'llm4rec',
         }
         for title, topic in examples.items():
