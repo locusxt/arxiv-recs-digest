@@ -2,57 +2,118 @@
   "days": [
     {
       "date": "2026-11-21",
-      "candidates": 200,
+      "candidates": 281,
       "papers": [
         {
-          "id": "2611.25659",
-          "title": "DNA: Unlocking Depth Scaling in CTR Models",
-          "abstract": "Long user behavior sequences are among the strongest signals for click-through rate (CTR) prediction. Cross-attention makes these sequences practical for industrial ranking by keeping compute linear in sequence length. Yet the gains from stacking cross-attention layers taper off: on Taobao search, growing a cross-attention stack from 16 to 28 layers adds only 0.02 percentage points (pt) of AUC. We argue that the key-value side is the bottleneck. Each layer projects the same behavior sequence into keys and values, so adding depth gives the model more reads of a fixed sequence. We propose DNA (Dual-stream Nexus Attention), which lets the sequence itself evolve with depth. At each layer, the request representation (the search query, user features and scene) first reads the sequence. Each behavior token then attends to the updated request representation and uses what it reads to update itself, so the next layer reads a sequence shaped by the current request. The update runs once per request, all candidates share the resulting sequence, and both the reads and the update keep linear complexity in sequence length. At comparable forward FLOPs, DNA improves AUC over cross-attention stacks by 0.08 to 0.26 pt and keeps improving in the depth range where those stacks level off. DNA-4 is deployed in Taobao search. In an online A/B test against the production model, it improves CTR by 0.8% and GMV by 0.5%.",
-          "published": "2026-11-19T07:40:54Z",
-          "url": "https://arxiv.org/abs/2611.25659",
-          "reason": "直接面向电商搜索CTR精排的深度扩展瓶颈，提出让行为序列随深度演化的注意力结构，并在淘宝搜索上线A/B验证，对精排长期价值建模有明确可迁移性。",
-          "method": "DNA（Dual-stream Nexus Attention）：每层先由请求表示读取行为序列，再由行为token读取更新后的请求表示并更新自身，使下一层读取被当前请求重塑的序列；更新每请求一次、候选共享，读写均对序列长度线性；与cross-attention堆叠在同等前向FLOPs下比较AUC。",
-          "application": "可推测用于电商搜索/推荐精排中长用户行为序列的编码器替换，缓解加深cross-attention带来的收益饱和，在同等算力下提升CTR与GMV。",
-          "limitations": "摘要未说明多目标（如转化、GMV与CTR联合）建模细节、序列长度上限与线上延迟分布；A/B仅给出CTR与GMV相对提升，未说明统计显著性与实验周期。",
+          "id": "2611.20448",
+          "title": "MMIntentFlow: An Intent-Driven Real-Time Multimodal Search System with Image-Text Queries at Xiaohongshu",
+          "abstract": "Multimodal search with image-text queries helps users find notes in user-generated content (UGC) communities and serves as a key search tool for multimodal search agents. For such queries, query-note relevance depends on the user's retrieval intent and cannot be determined by visual or topical similarity alone. Simply reranking visual search results cannot fully address this challenge, as notes relevant to the user's intent may be missing from the initial candidate set. This motivates explicit intent modeling to align candidate retrieval and reranking under consistent relevance criteria. We present MMIntentFlow, an intent-driven real-time multimodal search system deployed at Xiaohongshu over an index on the order of ten billion entries. MMIntentFlow represents retrieval objectives with a hierarchical intent taxonomy and uses intent-specific relevance criteria to guide data construction, representation learning, and reranking. An offline agentic data workflow acquires candidates and verifies their relevance under these criteria to produce training supervision. The embedding model combines intent-aware contrastive learning, graded ranking, and distribution distillation, while a compact reranker assesses query-candidate evidence conditioned on predicted hierarchical intents. Evaluations demonstrate that MMIntentFlow delivers substantial gains in search engagement while supporting real-time search at industrial scale. In a user-level A/B test on the Xiaohongshu platform, MMIntentFlow outperforms the existing production system based on visual search followed by reranking, achieving relative gains of 28.17% in Top-4 query click-through rate, 18.96% in query click-through rate, and 12.56% in average time spent on search results pages per user. Production monitoring records an end-to-end P50 latency of 1.07 s.",
+          "published": "2026-11-16T03:17:14Z",
+          "url": "https://arxiv.org/abs/2611.20448",
+          "reason": "面向小红书十亿级索引的图文多模态搜索工业系统，意图分层贯穿数据构造、表征学习与重排，线上A/B有分阶段归因，与精排价值建模和生成式重排高度匹配。",
+          "method": "将检索目标组织为三层意图层级（Visual Search 下 Item/Image/Attribute Variant/Outfit Styling，Information Seeking 下 Target-Specific/Transferable，另加 Unclear Intent），并据此定义0/1/2三级相关性准则；离线agentic工作流做候选构造（正向挖掘+反向构造）、逐条件证据核验（satisfied/violated/unknown）与人工复核，产出正样本、难负样本和分级标签；0.8B多模态embedding用意图感知双向对比学习+Top-K难负margin、基于NDCG的指数增益pairwise分级排序、2B教师分布蒸馏训练；固定文档索引下做query侧LoRA与门控双分支残差投影，并用CSLS校正分数；0.8B生成式意图识别器预测两级意图，0.8B生成式重排器以意图和query-candidate图文证据为条件预测相关性等级token，按等级优先、等级内沿用现有排序策略。",
+          "evidence_result": "离线：2万query、0.5M与1.9M两个图库，仅grade-2为正样本；1.9M上最终配置Hit@1 68.84%、Hit@100 98.85%、NDCG@10 68.13%，WeMM-Embedding-2B（2048维）Hit@1 32.26%；同条件下generic换intent-aware监督使1.9M Hit@1从45.51%升至66.09%（+20.58个百分点）；意图识别在390条人工标注query上二级准确率91.54%、macro-F1 91.63%；重排学生在5,977对评测集上三级准确率73.05%、二分类满足82.67%。线上：用户级A/B，意图识别+重排配置相对生产对照Top-4 QCTR +21.65%、QCTR +15.12%、人均结果页时长+9.66%；再加入多模态召回后为+28.17%、+18.96%、+12.56%（均为相对百分比）；端到端P50 1.07s、P90 1.34s。",
+          "application": "业务迁移假设：适用于以图+文为query、候选需按用户检索意图判定是否满足的UGC/商品内容搜索，落点为意图分层taxonomy+意图条件三级相关性标注+意图条件生成式重排；前提是已有稳定意图分布、可构建agentic核验流水线、有强基线（视觉召回+重排）与用户级A/B能力；query侧适配+固定文档索引可降低索引重编码成本。",
+          "limitations": "线上A/B只给出两个累积配置，意图识别与重排是联合评估、未单独线上消融，多模态召回增益为叠加后的差值，不能把整体效果归因于单一模块；重排学生三级准确率73.05%且COPC显示二分类满足任务预测偏乐观（0.8413）；Transferable Information Seeking上intent-aware监督使Hit@1从65.30%降至58.46%，说明覆盖提升未完全转化为首位选择；agentic数据构造与教师标注成本、人工复核比例原文未说明；1.07s P50对低延迟场景仍偏高。",
+          "experiment": "离线：在自有图文query日志上抽样，固定同一候选池与训练预算，对比generic与意图条件监督的Hit@1/NDCG@10，并按意图分层报告；对重排做三级与二分类满足准确率及COPC校准检查。线上：先小流量A/B仅上线意图条件重排（召回不变），再叠加意图感知召回，分别观测Top-4 QCTR、QCTR、结果页时长；护栏包括P90延迟、零结果率、意图误判率、长尾意图覆盖率与人工相关性抽检。",
+          "score": 88,
           "tags": [
-            "精排",
-            "CTR",
-            "长行为序列",
-            "工业实践"
-          ]
-        },
-        {
-          "id": "2611.25527",
-          "title": "Learning Generative Ranking Policies for Whole-Page Optimization",
-          "abstract": "A recommendation page is consumed as a whole: the items on it compete for attention and complement one another, so the best page is not simply the individually best items placed side by side. We study whole-page optimization, which selects and orders the items on a page jointly to maximize the score of the page. The number of possible pages grows combinatorially, so good pages must be generated rather than enumerated. Some generative re-ranking methods use the same page-level training signal for every choice in a sampled page. Others imitate target pages built before training, which remain largely fixed as the generator improves. We address both limitations with one local page-level objective, which repeatedly moves the current generator toward pages with higher score. This objective splits exactly into one training target per position, and each target compares candidates at the same partial page by the scores of the complete pages they lead to. Every position therefore learns to choose the item that is better for the whole page, rather than the item that looks best on its own. We call this procedure whole-page policy improvement. On two public datasets, KuaiRand-1K and RL4RS-SeqSlate, which cover multi-objective item selection and constrained ordering, and on an industrial dataset of logged pages, our method outperforms the evaluated generative re-ranking baselines. On a synthetic benchmark with a known optimal page, it also comes closest to the optimum, showing that its improvements come from better whole-page decisions.",
-          "published": "2026-11-19T05:27:22Z",
-          "url": "https://arxiv.org/abs/2611.25527",
-          "reason": "聚焦整页/列表级优化，用生成式重排直接生成整页而非逐项打分，且训练目标按位置精确分解为整页级信号，与生成式重排、列表级优化方向高度契合。",
-          "method": "提出whole-page policy improvement：以单一局部页级目标反复将当前生成器推向更高分页面，该目标可精确拆分为每个位置一个训练目标，每个目标在同一部分页条件下按完整页得分比较候选；在KuaiRand-1K、RL4RS-SeqSlate及工业日志页数据上与生成式重排基线比较。",
-          "application": "可推测用于电商推荐页/搜索结果的整页生成式重排，联合决定选品与排序，以页面级多目标得分为优化对象。",
-          "limitations": "摘要未说明多目标得分的具体构成与权重、线上A/B结果、以及页长与候选规模对生成质量的影响；工业数据仅称优于基线，未给出指标数值。",
-          "tags": [
+            "多模态搜索",
+            "意图建模",
             "生成式重排",
-            "列表级优化",
-            "整页优化"
-          ]
+            "对比学习",
+            "分级相关性"
+          ],
+          "citations": [
+            {
+              "page": 1,
+              "quote": "achieving relative gains of 28.17% in Top-4 query click-through rate, 18.96% in query click-through rate, and 12.56% in average time spent on search results pages per user."
+            },
+            {
+              "page": 19,
+              "quote": "replacing generic relevance rules with intent-specific rules raises Hit@1 from 45.51% to 66.09% on the 1.9M gallery and from 60.87% to 80.60% on the 0.5M gallery."
+            },
+            {
+              "page": 20,
+              "quote": "intent-aware supervision increases Hit@100 from 97.25% to 98.75%, but decreases Hit@1 from 65.30% to 58.46%, indicating that improved coverage of useful information has not fully translated into accurate selection of the first result."
+            }
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 29
         },
         {
-          "id": "2611.26096",
-          "title": "From Sessions to Serving: Integrating LLM-Based Embeddings into Retrieval for Production Content Recommendation",
-          "abstract": "Personalized content recommendation on large marketplace websites must reconcile heterogeneous candidate content (e.g., customer stories, product pages, industry pages, and learning content) with sparse, fast-changing user behavior, placing increasing demands on the retrieval stage to represent user interest well, not just the downstream ranking stage. We present LSER (LLM Session Embedding Retrieval), a production content recommendation system for autodesk.com that derives session- and history-level embeddings from a pretrained large language model (LLM) and adds them as auxiliary user-side features in the retrieval-stage user tower alongside existing learned sequence encoders. To keep user-side embeddings fresh under real-time behavior, we build a nearline serving path that asynchronously refreshes sequential and LLM-derived user vectors for our main content recommendation server. We validate the incremental value of the LLM features through an ablation study across our full multi-content-type catalog. Our results indicate that integrating LLM-derived embeddings as additional retrieval signals, together with production-grade nearline serving, is technically feasible and can improve model performances.",
-          "published": "2026-11-19T13:31:04Z",
-          "url": "https://arxiv.org/abs/2611.26096",
-          "reason": "生产级内容推荐检索系统，将LLM会话/历史嵌入作为检索阶段用户塔的辅助特征，并配套近线服务刷新，对搜索与推荐检索阶段的用户兴趣表示有明确工程可迁移价值。",
-          "method": "LSER：用预训练LLM导出会话级与历史级嵌入，作为辅助用户侧特征加入检索阶段用户塔，与已有序列编码器并存；构建近线服务路径异步刷新序列向量与LLM派生用户向量；在全内容类型目录上做消融验证增量价值。",
-          "application": "可推测用于电商推荐/搜索召回阶段的用户兴趣表示增强，尤其适合行为稀疏、候选内容异构的场景，并可作为精排用户特征的补充信号。",
-          "limitations": "摘要未说明具体离线/线上指标数值、延迟与刷新频率开销、以及LLM嵌入相对序列编码器的增益幅度；未说明是否影响下游精排效果。",
+          "id": "2611.22838",
+          "title": "Better Rankers, Worse Retrievers: The Hidden Cost of RL Post-Training in Generative Recommendation",
+          "abstract": "Generative recommenders decode the semantic ID of a user's next item with a language model, and post-training them with reinforcement learning (RL) after supervised fine-tuning (SFT) has become standard practice. The gains are mostly reported on the first ten results, yet in deployment such models hand hundreds of candidates to a downstream ranker or reward model. We show that RL post-training has a hidden cost: it improves accuracy at the top of the list (hit@K for small K) but, on all five datasets we study, lowers the recall of the candidate list (hit@K for K in the hundreds). The model becomes a better ranker and a worse retriever. Controlled experiments trace the loss to the negative advantages that RL assigns to the candidates it samples, the rollout. The root cause is that only one next item is logged per user, so RL treats every other candidate as wrong. Yet these candidates are the model's most plausible alternatives, and often the next items of other users with similar histories. Penalising them pushes down exactly what similar users choose next, and these items drop out of those users' candidate lists. This diagnosis points directly to a remedy: out-of-rollout anchoring, a single additional loss term that preserves the SFT model's ordering of the items outside the rollout. It keeps the gain at the top and restores recall to the SFT level on all five datasets, and it is effective under other RL configurations as well. To our knowledge, this is the first systematic study of this recall loss: we measure it, identify its cause, and show that, once the cause is known, a simple remedy suffices.",
+          "published": "2026-11-17T14:19:22Z",
+          "url": "https://arxiv.org/abs/2611.22838",
+          "reason": "该论文系统性地揭示了生成式推荐中RL后训练在候选列表深度上的召回损失，并给出可操作的补救措施，与精排/重排及召回系统视野高度匹配。",
+          "method": "论文研究基于语义ID的生成式推荐模型在SFT后使用GRPO进行RL后训练的效果。核心机制：GRPO对rollout中非目标候选施加负优势，导致模型自身的高分候选被惩罚，由于跨用户泛化，这些候选在相似用户上的排名下降，从而在较大K处造成召回损失。提出的补救措施为out-of-rollout anchoring：在GRPO损失基础上增加一个KL项，约束策略在rollout外采样的M个物品上保持与SFT模型的相对排序。训练时每个prompt额外采样M=16个锚点物品（一半来自与rollout候选共享前两个语义码的物品，一半来自共享第一个语义码的物品），损失为L_GRPO + λ KL(q0||qθ)，其中q0和qθ是在锚点集上重新归一化的SFT模型和策略分布，λ=0.1。推理时使用约束beam search生成候选列表。",
+          "evidence_result": "在五个数据集（Office, Industrial, Beauty, Toys, Sports）上，使用Qwen2.5-1.5B-Instruct全参数微调，精确全目录排序评估。GRPO后训练在top-10内提升NDCG和hit@K，但在K≥50后hit@K下降：Office上NDCG@10从11.59%升至12.55%，hit@50从25.73%降至24.22%，hit@500从52.84%降至47.69%；Industrial上hit@500从53.23%降至51.72%。损失在五个数据集上均出现，且beam search下同样存在。加入anchor后，Office上hit@500恢复至52.14%（恢复4.4/5.1点），NDCG@10与GRPO无显著差异；其他数据集hit@500恢复至SFT水平或略高。在REINFORCE++和synced reference配置下anchor同样有效。所有结果均为离线实验，无线上A/B测试。",
+          "application": "业务迁移假设：在电商生成式召回通道中，若使用RL后训练提升top结果，需警惕候选列表深度召回下降。可落点：在现有GRPO训练流程中加入out-of-rollout anchoring项，以低成本保持SFT模型的候选覆盖。前提：业务已有基于语义ID的生成式召回模型和SFT基线，且下游精排依赖较大K的候选列表。需验证锚点采样策略与业务语义ID结构的匹配度。",
+          "limitations": "实验仅在五个公开数据集和1.5B模型上进行，未在工业级大规模目录和线上环境验证；未报告计算开销（锚点采样和额外KL项的训练成本）；未与强基线如DPO、其他RL变体进行全面的在线对比；anchor的超参数（M=16, λ=0.1）未做敏感性分析；论文承认RL本身对rollout外目标仍无学习信号，anchor仅保护排序而非提升召回。",
+          "experiment": "最小离线验证：在现有电商生成式召回模型上，用历史日志构造SFT和GRPO两个版本，精确计算hit@K（K=50,100,200,500）和NDCG@10，确认召回损失是否存在。若存在，加入anchor项重训，对比hit@K恢复情况和NDCG@10是否保持。线上验证：将anchor版本与GRPO版本在召回通道进行A/B测试，护栏指标包括下游精排的候选覆盖率、最终成交转化率、以及训练/服务延迟。",
+          "score": 88,
           "tags": [
-            "检索",
-            "LLM嵌入",
-            "工业实践",
-            "用户表示"
-          ]
+            "生成式推荐",
+            "强化学习",
+            "GRPO",
+            "召回损失",
+            "语义ID"
+          ],
+          "citations": [
+            {
+              "page": 1,
+              "quote": "We show that RL post-training has a hidden cost: it improves accuracy at the top of the list (hit@𝐾 for small𝐾) but, on all five datasets we study, lowers the recall of the candidate list (hit@𝐾for𝐾in the hundreds)."
+            },
+            {
+              "page": 3,
+              "quote": "On Office the anchor recovers 4.4 of the 5.1 points of hit@500 lost under GRPO and keeps the gain at the top; on the other four datasets hit@500 returns to the level of the SFT model or slightly above it, and NDCG@10 matches that of GRPO on all five."
+            },
+            {
+              "page": 9,
+              "quote": "RL itself still has no learning signal for targets outside the rollout; an RL objective designed for large 𝐾, with rollouts and rewards that reach deep into the list, could strengthen recall itself and improve both ends of the list at once."
+            }
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 11
+        },
+        {
+          "id": "2611.24006",
+          "title": "MARS Technical Report",
+          "abstract": "Modern industrial recommender systems use multi-stage cascades--retrieval, pre-ranking, ranking, and re-ranking--to narrow millions of candidates to a personalized list. While each stage deploys sophisticated models, pipeline-level decisions on channel activation, quotas, model selection, and score fusion remain engineer-tuned and user-agnostic within each scenario. This report presents MARS (Multi-stage Agentic Recommendation System), extending personalization from individual-stage predictions to full pipeline orchestration. A near-line agent built on fine-tuned Qwen3-0.6B generates per-user configurations--a seven-dimensional action covering pipeline mode, retrieval quotas, model selection, fusion weights, and reranker settings--from a constrained action space. Configurations are validated, cached, and consumed asynchronously; the cascade never waits for LLM inference. Schema checks, fallbacks, and a kill switch ensure serving safety. The policy is trained in three stages: Confidence-aware SFT distills schema-valid generation from a teacher model; Format-Anchored Preference Optimization (FAPO) learns action preferences via ActionMask with posterior weighting; Group Relative Policy Optimization (GRPO) refines the policy through Sandbox replay with a frozen reward model, without exposing exploratory actions to live traffic. Two-week A/B tests across five Taobao scenarios with over ten million daily users show positive gains on all key metrics. The largest reach +5.22% V2P and +7.34% GMV, with positive CTR lifts on both click surfaces. About 20% of requests use a lightweight Minimal mode, and deployment shows 12 ms lower mean serving latency versus production.",
+          "published": "2026-11-18T07:56:58Z",
+          "url": "https://arxiv.org/abs/2611.24006",
+          "reason": "该论文提出了一种基于LLM的推荐系统全链路个性化编排方法，在淘宝多个场景进行了两周A/B测试，报告了正向业务收益和延迟降低，对精排价值建模和生成式重排有直接参考价值，但需注意其动作空间受限、离线回放保真度有限、部分消融实验证据强度不足。",
+          "method": "MARS将推荐流水线的编排决策（流水线模式、召回通道及配额、CTR/CVR模型选择、融合权重、重排设置）建模为七维结构化动作，由微调的Qwen3-0.6B模型在近线异步生成用户级配置，经校验后缓存供在线级联消费。训练采用三阶段后训练：置信度感知SFT从Qwen3.6-Max教师蒸馏结构化生成能力，并用Wilson下界选择执行证据对齐推荐效率；FAPO通过ActionMask仅对动作值差异部分进行偏好比较，并用后验V2P加权；GRPO在沙盒中回放请求快照，用冻结的学习奖励模型进行组相对策略优化。",
+          "evidence_result": "在淘宝五个营销场景（日活超千万）进行两周A/B测试，购买场景V2P提升+2.24%至+5.22%，GMV提升+4.83%至+7.34%；点击场景uCTR和pCTR均有正向提升。约20%请求路由至Minimal模式，整体部署平均在线服务路径延迟降低12ms。训练阶段消融显示GRPO在Baiyibutie和Miaosha上均取得最高点估计；FAPO相比ORPO在Baiyibutie上V2P+3.70%、GMV+0.32%，在Miaosha上V2P+1.38%、GMV+3.17%；模型奖励相比公式奖励在Baiyibutie上V2P+2.30%但GMV-0.74%，在Miaosha上V2P+0.87%、GMV+0.68%。与DNN基线相比，MARS在Baiyibutie上V2P+3.36%、GMV+5.90%，在Miaosha上V2P+2.03%、GMV+1.76%。",
+          "application": "业务迁移假设：在电商推荐系统中，可将MARS的编排思想用于精排阶段模型选择与融合权重个性化，或用于生成式重排的配置调优。前提是具备近线LLM推理能力、结构化动作空间定义、可靠的缓存与回退机制，以及足够的日志和反馈数据用于训练。最小落点可先针对单一场景（如大促会场）的召回通道配额和融合权重进行个性化编排，验证收益后再扩展。",
+          "limitations": "动作空间受限于预定义模板和参数范围，无法选择未定义的能力；沙盒回放是近似重建而非精确反事实，无法揭示用户对未曝光列表的真实响应；公式化业务分数是匹配代理而非因果响应；学习奖励模型可能继承噪声和分布偏移；在线实验评估的是端到端系统，未隔离各服务阶段贡献；12ms延迟降低仅反映服务路径，未计入近线LLM生成的计算成本；部分消融实验为单次运行点估计，置信区间未考虑聚类和序列相关；FAPO中后验V2P加权基于观测统计，不能建立因果转化效应。",
+          "experiment": "最小离线验证：在历史日志上构造候选编排集合，用离线回放和奖励模型评估个性化编排相比固定编排的排序质量（如NDCG@K、HitRate@K），并检查缓存覆盖率和回退率。最小线上验证：选择一个流量较小的场景，以固定编排为对照，进行两周A/B测试，主指标为V2P和GMV，护栏指标包括服务延迟、缓存命中率、回退率、系统错误率。同时监控近线LLM推理的资源消耗和生成延迟，确保不影响在线服务。",
+          "score": 85,
+          "tags": [
+            "推荐系统",
+            "LLM智能体",
+            "全链路编排",
+            "生成式重排",
+            "强化学习"
+          ],
+          "citations": [
+            {
+              "page": 1,
+              "quote": "A centralized near-line agent, built on a fine-tuned Qwen3-0.6B model, periodically generates user-specific orchestra- tion configurations—a structured seven-dimensional action covering pipeline mode, retrieval-channel quotas, model selection, fusion weights, and reranker settings—from a formally constrained action space."
+            },
+            {
+              "page": 21,
+              "quote": "On the purchase-oriented scenarios, MARS improves V2P by+2.24%to +5.22%and GMV by+4.83%to +7.34%, led by Baiyibutie (Table 5)."
+            },
+            {
+              "page": 29,
+              "quote": "Sandbox replay enables the evaluation of alternative configurations without exposing every candidate to users. Nevertheless, replay is an approximation of historical serving rather than an exact reconstruction."
+            }
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 46
         }
       ]
     }
