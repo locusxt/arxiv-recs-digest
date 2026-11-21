@@ -23,7 +23,7 @@ QUERIES = [
     '(cat:cs.IR OR cat:cs.LG OR cat:cs.AI) AND (all:ranking OR all:reranking OR all:re-ranking)',
     '(cat:cs.IR OR cat:cs.LG OR cat:cs.AI) AND (all:"information retrieval" OR all:"search engine" OR all:"search ranking")',
     '(cat:cs.IR OR cat:cs.LG OR cat:cs.AI) AND (all:"lifetime value" OR all:"conversion rate prediction" OR all:"click-through rate" OR all:"multi-objective recommendation")',
-    '(cat:cs.IR OR cat:cs.LG OR cat:cs.AI) AND (all:LLM4Rec OR all:"generative recommendation" OR all:"causal recommendation" OR all:"daily active users" OR all:"user retention")',
+    '(cat:cs.IR OR cat:cs.LG OR cat:cs.AI) AND (all:LLM4Rec OR all:"generative recommendation" OR all:"causal recommendation" OR all:"daily active users" OR all:DAU OR all:"user retention" OR all:"user engagement")',
 ]
 
 

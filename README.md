@@ -8,7 +8,7 @@
 
 ## 关键词与筛选
 
-本地初筛同时匹配标题和摘要，按主题分组加权，并为价值建模、排序、召回、搜索、推荐、系统、因果训练、用户活跃与 LLM4Rec 等方向保留候选。关键词参考 [Algorithm-Practice-in-Industry 的旧版会议论文筛选](https://github.com/Doragd/Algorithm-Practice-in-Industry/blob/main/legacy/conf.py)，另补充 LTV、延迟反馈和生成式重排等电商场景术语；其当前 arXiv 主线使用大模型粗排和精排。没有把 user、item 等过宽泛的词单独设置为高权重，也没有硬性排除隐私、公平性等可能相关的研究。关键词和权重在 `research.py` 的 `TOPICS` 中。
+本地初筛同时匹配标题和摘要，按主题分组加权，并为价值建模、排序、召回、搜索、推荐、系统、因果训练、用户活跃与 LLM4Rec 等方向保留候选。关键词参考 [Algorithm-Practice-in-Industry 的旧版会议论文筛选](https://github.com/Doragd/Algorithm-Practice-in-Industry/blob/main/legacy/conf.py)，另补充 LTV、延迟反馈和生成式重排等电商场景术语；其当前 arXiv 主线使用大模型粗排和精排。没有把 user、item 等过宽泛的词单独设置为高权重，也没有硬性排除隐私、公平性等可能相关的研究。关键词和权重在 `research.py` 的 `TOPICS` 中。每次成功选文后，`data/latest_audit.json` 保存候选、关键词初筛、模型摘要筛选和全文审核结果，方便复盘；同日网页部署不会重新运行选文。
 
 初筛使用词边界并覆盖部分单复数和连字符变化，仍可能遗漏不同写法。arXiv 检索限制于 cs.IR、cs.LG、cs.AI 和脚本中的查询表达式；通用基础模型论文如未被这些查询召回，提示词不会使其自动进入候选。
 

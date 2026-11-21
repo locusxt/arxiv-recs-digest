@@ -57,6 +57,8 @@ class DigestTests(unittest.TestCase):
             with self.subTest(title=title):
                 self.assertIn(topic, research.keyword_score(dict(title=title, abstract=''))[1])
         self.assertNotIn('ranking', research.keyword_score(dict(title='Frank reads books', abstract=''))[1])
+        self.assertNotIn('ranking', research.keyword_score(dict(title='Low-rank approximation for matrices', abstract=''))[1])
+        self.assertIn('ranking', research.keyword_score(dict(title='Low-rank features for recommendation ranking', abstract=''))[1])
         self.assertNotIn('value', research.keyword_score(dict(title='A conversation about images', abstract=''))[1])
 
     def test_title_normalization(self):
@@ -70,6 +72,26 @@ class DigestTests(unittest.TestCase):
             self.assertIn('推荐评分 4.3 / 5', page)
             self.assertIn('2026-11-19（UTC）', page)
             self.assertIn('a、b、c 等', page)
+
+    def test_abstract_shortlist_uses_balanced_batches(self):
+        papers = [dict(id=str(i), title='t', abstract='a') for i in range(60)]
+        batch_sizes = []
+        def fake_ask(system, content):
+            batch = json.loads(content)
+            batch_sizes.append(len(batch))
+            return {'candidates': [{'id': p['id'], 'score': 80} for p in batch[:6]]}
+        with patch.object(research, 'ask', side_effect=fake_ask):
+            shortlist = research.shortlist(papers)
+        self.assertEqual(batch_sizes, [30, 30])
+        self.assertEqual(len(shortlist), 8)
+
+    def test_medical_penalty_is_soft_and_contextual(self):
+        clinical = dict(title='Uplift modelling for blood pressure monitoring', abstract='patient care')
+        clinical_recs = dict(title='Recommendation ranking for patient care', abstract='clinical')
+        score, groups = research.keyword_score(clinical)
+        self.assertIn('training', groups)
+        self.assertEqual(score, 0)
+        self.assertGreater(research.keyword_score(clinical_recs)[0], 0)
 
     def test_balance_change_preserves_decimals(self):
         before = [{'currency': 'CNY', 'total_balance': '10.25'}]
