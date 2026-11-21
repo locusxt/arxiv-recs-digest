@@ -64,8 +64,22 @@ def normalized(text):
 def review(paper):
     pages = pdf_pages(paper['id'])
     fulltext = '\n\n'.join(f'--- PDF PAGE {i} ---\n{text}' for i, text in enumerate(pages, 1))
-    result = ask(REVIEW_PROMPT, f"标题：{paper['title']}\narXiv ID：{paper['id']}\n以下为论文PDF原文：\n{fulltext}", max_tokens=5000)
-    if result.get('worth_reading') is not True:
+    content = f"标题：{paper['title']}\narXiv ID：{paper['id']}\n以下为论文PDF原文：\n{fulltext}"
+    error = None
+    for attempt in range(2):
+        try:
+            extra = '' if not attempt else '\n上一次输出未通过格式或引文校验。请严格输出完整字段，citations 必须是至少三条不同的、从对应页逐字复制的原文短句；无足够原文证据则 worth_reading 为 false。'
+            result = ask(REVIEW_PROMPT, content + extra, max_tokens=5000)
+            return validate_review(paper, pages, result)
+        except (ValueError, RuntimeError) as exc:
+            error = exc
+    raise ValueError(f'Review failed after retry: {error}')
+
+
+def validate_review(paper, pages, result):
+    if not isinstance(result.get('worth_reading'), bool):
+        raise ValueError('Missing worth_reading boolean')
+    if not result['worth_reading']:
         return None
     required = ('reason', 'method', 'evidence_result', 'application', 'limitations', 'experiment')
     if any(not isinstance(result.get(k), str) or not result[k].strip() for k in required):
