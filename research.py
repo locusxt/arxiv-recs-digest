@@ -73,7 +73,7 @@ def keyword_score(paper):
     return score, groups
 
 
-def keyword_prefilter(candidates, limit=120, reserve=12):
+def keyword_prefilter(candidates, limit=60, reserve=4):
     ranked = sorted(candidates, key=lambda p: (keyword_score(p)[0], p.get('published', '')), reverse=True)
     # Reserve room for different pipeline stages before filling remaining slots.
     chosen, seen = [], set()
@@ -107,7 +107,7 @@ def shortlist(candidates):
         for item in results:
             if isinstance(item, dict) and item.get('id') in allowed and isinstance(item.get('score'), (int, float)) and not isinstance(item['score'], bool):
                 scores[item['id']] = max(scores.get(item['id'], 0), min(100, item['score']))
-    return sorted((p for p in candidates if p['id'] in scores), key=lambda p: scores[p['id']], reverse=True)[:12]
+    return sorted((p for p in candidates if p['id'] in scores), key=lambda p: scores[p['id']], reverse=True)[:8]
 
 
 def pdf_pages(pdf_url):
