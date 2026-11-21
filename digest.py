@@ -109,7 +109,7 @@ def render(history):
                 expl_html = f'<details class="analysis"><summary><span class="show-label">点击查看文章解析</span><span class="hide-label">收起文章解析</span></summary><div class="analysis-body">{expl_blocks}<p class="analysis-note">基于论文原文生成，具体细节请结合原文核对。</p></div></details>'
             else:
                 expl_html = '<p class="analysis-unavailable">这篇历史论文暂无详细解析。</p>'
-            cards.append(f'''<article><div class="meta">{score_label}{tags}<span>{esc(p['id'])}</span></div><h3><a href="{esc(p['url'])}" target="_blank" rel="noopener noreferrer">{esc(title_zh)}</a></h3><p class="english">{esc(p['title'])}</p><p class="authors">作者：{esc(authors)}<br>机构：{esc(institutions)}<br>arXiv 首次提交：{esc(published)}（UTC）</p>{expl_html}<div class="details"><div><h4>主要内容</h4><p>{esc(summary)}</p></div><div><h4>推荐理由</h4><p>{esc(reason)}</p></div></div><p class="paper-link"><a href="{esc(p.get('pdf_url', p['url']))}" target="_blank" rel="noopener noreferrer">阅读论文 PDF</a></p></article>''')
+            cards.append(f'''<article><div class="meta">{score_label}{tags}</div><h3><a href="{esc(p['url'])}" target="_blank" rel="noopener noreferrer">{esc(title_zh)}</a></h3><p class="english">{esc(p['title'])}</p><p class="authors">作者：{esc(authors)}<br>机构：{esc(institutions)}<br>arXiv 首次提交：{esc(published)}（UTC）</p>{expl_html}<div class="details"><div><h4>主要内容</h4><p>{esc(summary)}</p></div><div><h4>推荐理由</h4><p>{esc(reason)}</p></div></div><p class="paper-link"><a href="{esc(p.get('pdf_url', p['url']))}" target="_blank" rel="noopener noreferrer">阅读论文 PDF</a></p></article>''')
         content = ''.join(cards) or '<div class="empty">当天没有达到筛选标准的新论文。</div>'
         runs = day.get('usage_runs', [])
         if runs:
@@ -193,7 +193,7 @@ def main():
         candidates = previous_today['papers']
     else:
         candidates = fetch_candidates(seen, now, seen_titles)
-    from research import AUDIT, USAGE, review
+    from research import AUDIT, USAGE, coverage_topic, review
     before = get_balance()
     if refresh_existing:
         papers = []
@@ -205,9 +205,9 @@ def main():
     else:
         cache_path = DATA.parent / 'review_cache.json'
         cache = json.loads(cache_path.read_text()) if cache_path.exists() else {}
-        recent_topics = [p['primary_topic'] for day in history['days']
+        recent_topics = [coverage_topic(p) for day in history['days']
                          if 0 < (dt.date.fromisoformat(today) - dt.date.fromisoformat(day['date'])).days <= 7
-                         for p in day['papers'] if 'primary_topic' in p]
+                         for p in day['papers']]
         papers = select(candidates, cache, recent_topics)
     after = get_balance()
     current = {**USAGE, 'balance_after': after, 'balance_change': balance_changes(before, after)}

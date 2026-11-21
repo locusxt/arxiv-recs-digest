@@ -145,10 +145,11 @@ def review(paper):
     pages = pdf_pages(paper['pdf_url'])
     fulltext = '\n\n'.join(f'--- PDF PAGE {i} ---\n{text}' for i, text in enumerate(pages, 1))
     content = f"标题：{paper['title']}\narXiv ID：{paper['id']}\n以下为论文PDF原文：\n{fulltext}"
+    content += "\n首页 summary 只用一句话讲方法，尽量不超过50个汉字。reason 用一句话讲可借鉴之处及关键限制，尽量不超过45字。实验数字和基线比较放入展开的 evidence.finding。"
     error = None
     for attempt in range(2):
         try:
-            extra = '' if not attempt else '\n上次输出格式有误，请严格按要求输出完整JSON。'
+            extra = '' if not attempt else f'\n上次校验反馈：{error}。请检查对应字段，quote 须从所标 PDF PAGE 逐字复制，返回完整 JSON。'
             return validate_review(paper, pages, ask(REVIEW_PROMPT, content + extra, max_tokens=2500))
         except (ValueError, RuntimeError) as exc:
             error = exc
@@ -189,6 +190,21 @@ def validate_review(paper, pages, result):
     return {**paper, 'authors': authors, 'explanation': explanation, **{k: result[k] for k in required}, 'score': sum(weights[k] * rubric[k] for k in weights), 'rubric': rubric, 'primary_topic': topic, 'evidence': {'page': page, 'finding': finding}, 'tags': [x for x in tags if isinstance(x, str)][:5], 'institutions': [x for x in institutions if isinstance(x, str)][:10], 'source_type': 'pdf_fulltext', 'pdf_pages': len(pages)}
 
 
+def coverage_topic(paper):
+    # Broad ranking labels hide different engineering problems. Use the same
+    # title signals for today's candidates and pre-rubric history.
+    title = paper.get('title', '').lower()
+    for topic, pattern in (
+        ('calibration', r'calibrat'),
+        ('bundling', r'\bbundl'),
+        ('reranking', r'whole.page|re.ranking|reranking'),
+        ('ctr', r'\bctr\b|click.through'),
+    ):
+        if re.search(pattern, title):
+            return topic
+    return paper.get('primary_topic') or next(iter(paper.get('tags', [])), 'other')
+
+
 def finalists(papers, recent_topics):
     remaining = list(papers)
     chosen = []
@@ -196,9 +212,9 @@ def finalists(papers, recent_topics):
     while remaining and len(chosen) < 3:
         best = max(p['score'] for p in remaining)
         near = [p for p in remaining if p['score'] >= best - 2]
-        winner = max(near, key=lambda p: (-topics.count(p['primary_topic']), p['score'], p['rubric']['evidence'], p['rubric']['fit'], p['id']))
+        winner = max(near, key=lambda p: (-topics.count(coverage_topic(p)), p['score'], p['rubric']['evidence'], p['rubric']['fit'], p['id']))
         chosen.append(winner)
-        topics.append(winner['primary_topic'])
+        topics.append(coverage_topic(winner))
         remaining.remove(winner)
     return chosen
 
