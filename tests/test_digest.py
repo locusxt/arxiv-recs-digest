@@ -21,7 +21,8 @@ class DigestTests(unittest.TestCase):
             digest.render({'days': [{'date': '2026-01-01', 'papers': [paper]}]})
             page = digest.SITE.read_text()
             self.assertIn('<details class="analysis">', page)
-            self.assertIn('展开文章解析', page)
+            self.assertIn('点击查看文章解析', page)
+            self.assertLess(page.index('点击查看文章解析'), page.index('主要内容'))
             self.assertNotIn('<script>bad</script>', page)
 
     def test_same_day_is_idempotent(self):
