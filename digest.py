@@ -182,7 +182,7 @@ def main():
         candidates = previous_today['papers']
     else:
         candidates = fetch_candidates(seen, now, seen_titles)
-    from research import USAGE, review
+    from research import AUDIT, USAGE, review
     before = get_balance()
     if refresh_existing:
         papers = []
@@ -212,6 +212,8 @@ def main():
     DATA.parent.mkdir(parents=True, exist_ok=True)
     DATA.write_text(json.dumps(history, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     render(history)
+    if not refresh_existing:
+        (DATA.parent / 'latest_audit.json').write_text(json.dumps({'date': today, **AUDIT}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(f'{today}: {len(candidates)} candidates, {len(papers)} selected')
 
 
