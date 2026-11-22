@@ -88,8 +88,10 @@ def keyword_score(paper):
     return score, groups
 
 
-def keyword_prefilter(candidates, limit=60, reserve=4):
-    ranked = sorted(candidates, key=lambda p: (keyword_score(p)[0], p.get('published', '')), reverse=True)
+def keyword_prefilter(candidates, limit=60, reserve=4, scores=None):
+    if scores is None:
+        scores = {p['id']: keyword_score(p) for p in candidates}
+    ranked = sorted(candidates, key=lambda p: (scores[p['id']][0], p.get('published', '')), reverse=True)
     # Reserve room for different pipeline stages before filling remaining slots.
     chosen, seen = [], set()
     for topic in ('value', 'causal', 'ranking', 'retrieval', 'search', 'recommendation', 'systems', 'training', 'growth', 'llm4rec'):
@@ -97,7 +99,7 @@ def keyword_prefilter(candidates, limit=60, reserve=4):
         for paper in ranked:
             if len(chosen) >= limit or count >= reserve:
                 break
-            if paper['id'] not in seen and topic in keyword_score(paper)[1]:
+            if paper['id'] not in seen and topic in scores[paper['id']][1]:
                 chosen.append(paper)
                 seen.add(paper['id'])
                 count += 1
@@ -107,7 +109,7 @@ def keyword_prefilter(candidates, limit=60, reserve=4):
         if paper['id'] not in seen:
             chosen.append(paper)
             seen.add(paper['id'])
-    return sorted(chosen, key=lambda p: (keyword_score(p)[0], p.get('published', '')), reverse=True)
+    return sorted(chosen, key=lambda p: (scores[p['id']][0], p.get('published', '')), reverse=True)
 
 
 def shortlist(candidates):
@@ -224,8 +226,9 @@ def select(candidates, cache, recent_topics):
         AUDIT.update({'candidates': [], 'prefilter': [], 'shortlist': [], 'reviews': []})
         return []
     selected, failures, reviewed = [], [], 0
-    AUDIT['candidates'] = [{'id': p['id'], 'title': p['title'], 'abstract': p['abstract'], 'published': p.get('published', ''), 'keyword_score': keyword_score(p)[0], 'topics': sorted(keyword_score(p)[1])} for p in candidates]
-    filtered = keyword_prefilter(candidates)
+    scores = {p['id']: keyword_score(p) for p in candidates}
+    AUDIT['candidates'] = [{'id': p['id'], 'title': p['title'], 'abstract': p['abstract'], 'published': p.get('published', ''), 'keyword_score': scores[p['id']][0], 'topics': sorted(scores[p['id']][1])} for p in candidates]
+    filtered = keyword_prefilter(candidates, scores=scores)
     AUDIT['prefilter'] = [p['id'] for p in filtered]
     AUDIT['reviews'] = []
     print(f'Keyword prefilter: {len(candidates)} -> {len(filtered)} candidates')
