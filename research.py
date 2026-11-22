@@ -114,8 +114,10 @@ def keyword_prefilter(candidates, limit=60, reserve=4, scores=None):
 
 def shortlist(candidates):
     scores = {}
-    for offset in range(0, len(candidates), 30):
-        batch = candidates[offset:offset + 30]
+    # Share highly ranked papers across batches competing for six nominations.
+    batches = (len(candidates) + 29) // 30
+    for offset in range(batches):
+        batch = candidates[offset::batches]
         data = [{'id': p['id'], 'title': p['title'], 'abstract': p['abstract']} for p in batch]
         results = ask(SCREEN_PROMPT, json.dumps(data, ensure_ascii=False)).get('candidates')
         if not isinstance(results, list):
@@ -221,7 +223,7 @@ def finalists(papers, recent_topics):
     return chosen
 
 
-def select(candidates, cache, recent_topics):
+def select(candidates, cache, recent_topics, checkpoint=None):
     if not candidates:
         AUDIT.update({'candidates': [], 'prefilter': [], 'shortlist': [], 'reviews': []})
         return []
@@ -247,6 +249,9 @@ def select(candidates, cache, recent_topics):
         except (ValueError, RuntimeError, OSError, PdfReadError) as exc:
             failures.append(f"{paper['id']}: {exc}")
             AUDIT['reviews'].append({'id': paper['id'], 'status': 'error', 'error': str(exc)})
+            continue
+        if not cached and checkpoint:
+            checkpoint(cache)
     if failures:
         print('Papers skipped (full text/review validation): ' + '; '.join(failures))
     if not reviewed and failures:

@@ -5,6 +5,7 @@ import html
 import json
 import os
 import re
+import subprocess
 import time
 import urllib.error
 import urllib.parse
@@ -77,9 +78,22 @@ def fetch_candidates(seen, now, seen_titles=None):
     return found
 
 
+def save_reviews(cache):
+    path = DATA.with_name('review_cache.json')
+    path.parent.mkdir(parents=True, exist_ok=True)
+    pending = path.with_suffix('.tmp')
+    pending.write_text(json.dumps(cache, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    pending.replace(path)
+    if os.environ.get('PUSH_REVIEW_CHECKPOINTS') == 'true':
+        relative = str(path.relative_to(ROOT))
+        subprocess.run(['git', 'add', '--', relative], cwd=ROOT, check=True)
+        subprocess.run(['git', 'commit', '-m', 'Checkpoint completed PDF review', '--', relative], cwd=ROOT, check=True)
+        subprocess.run(['git', 'push', 'origin', 'HEAD:main'], cwd=ROOT, check=True)
+
+
 def select(candidates, cache, recent_topics):
     from research import select as select_research
-    return select_research(candidates, cache, recent_topics)
+    return select_research(candidates, cache, recent_topics, save_reviews)
 
 
 def render(history):
@@ -229,7 +243,6 @@ def main():
     DATA.write_text(json.dumps(history, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     render(history)
     if not refresh_existing:
-        cache_path.write_text(json.dumps(cache, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         audit = json.dumps({'date': today, **AUDIT}, ensure_ascii=False, indent=2) + '\n'
         archive = DATA.parent / 'audits'
         archive.mkdir(exist_ok=True)

@@ -21,9 +21,16 @@ concurrency:
   cancel-in-progress: false
 jobs:
   digest:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Configure checkpoint commits
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -31,14 +38,13 @@ jobs:
         run: python -m pip install -r requirements.txt
       - name: Fetch, select and render
         env:
+          PUSH_REVIEW_CHECKPOINTS: 'true'
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           REFRESH_TODAY: ${{ inputs.refresh_today }}
           REFRESH_EXISTING: ${{ inputs.refresh_existing }}
         run: python digest.py
       - name: Save history
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add data site/index.html
           if ! git diff --cached --quiet; then
             git commit -m 'Update daily paper digest'
