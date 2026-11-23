@@ -391,5 +391,59 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 11
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.22503v2": {
+    "id": "2611.22503",
+    "title": "From Relevance to Utility: Rubric Alignment in Yuanbao Search",
+    "abstract": "Agentic search demands that a search engine move beyond per document relevance ranking to assemble document sets optimized for downstream LLM reasoning. Prior work addresses this either by improving individual pipeline stages in isolation or by applying RL based selection on top of relevance trained upstream modules, leaving the full stack unaligned to utility for reasoning. We propose rubric aligned search, a framework that unifies the traditional search pipeline under a single supervision surface. For each query, we derive a rubric from coarse to fine, specifying weighted positive criteria that the document set must satisfy and negative criteria that it must avoid. From this rubric we derive two training signals. First, a lightweight labeler distills rubric grounded judgments into per document utility labels, which supervise a contrastive dual encoder for retrieval and a multi task ranker trained with four rubric aligned scoring heads. Second, a rubric conditioned evaluator produces a set level reward that drives a dual branch RL selector, combining GRPO with best rollout distillation to resolve credit assignment in subset optimization. Deployed in Yuanbao Search, the pipeline improves end to end answer quality by 8.52% over the online production baseline.",
+    "authors": [
+      "Yu Lu",
+      "Lixin Zou",
+      "Yangqi Chen",
+      "Hui Xu",
+      "Qiaolin Xia",
+      "Hao Wang",
+      "Qianwen Ma",
+      "Reed Li",
+      "Shuang Zeng",
+      "Haijin Liang",
+      "Haibo Shi"
+    ],
+    "published": "2026-11-17T10:00:05Z",
+    "url": "https://arxiv.org/abs/2611.22503v2",
+    "pdf_url": "https://arxiv.org/pdf/2611.22503v2",
+    "explanation": {
+      "problem": "智能搜索里LLM只看一小撮文档作答，传统按单文档相关性排序挑出的文档集合未必能让答案更好。",
+      "method": "先为每个查询自动生成由粗到细的评分标准，列出必须覆盖的加权要点和必须避免的缺陷；再用大模型按标准给文档打分，蒸馏成轻量标注器，为海量查询-文档对产出效用等级，用来训练召回双塔和排序模型；最后用同一标准给候选文档子集打分作为奖励，用强化学习训练选择器，并用组内最佳结果做蒸馏缓解奖励稀疏。",
+      "application": "推测可把评分标准思路迁移到电商精排与生成式重排：用大模型按商品属性要点蒸馏逐商品效用标签，再对最终展示集合做集合级奖励训练。",
+      "caveat": "线上证据仅为14天5%流量的GSB人工对比，未报告留存或成交等业务指标，各模块增益存在重叠。"
+    },
+    "title_zh": "从相关性到效用：元宝搜索中的评分标准对齐",
+    "summary": "提出以查询级评分标准（加权正/负准则）作为统一监督信号，蒸馏出逐文档效用标签训练检索与排序，并用GRPO加最佳轨迹蒸馏训练集合选择器。线上A/B显示各组件独立增益，全链路答案质量GSB提升8.52%。",
+    "reason": "对做生成式重排与集合级效用建模的推荐工程师有直接参考价值，但线上仅报告GSB人工评测，缺少留存等业务指标。",
+    "score": 73,
+    "rubric": {
+      "fit": 4,
+      "evidence": 3,
+      "action": 4
+    },
+    "primary_topic": "llm4rec",
+    "evidence": {
+      "page": 6,
+      "finding": "线上A/B中三个组件各自独立加入生产基线均显著提升答案GSB，全链路净增益8.52%，但各组件增益之和9.16%高于净增益，说明收益存在重叠。"
+    },
+    "tags": [
+      "评分标准对齐",
+      "集合级效用",
+      "生成式重排",
+      "强化学习选择",
+      "智能搜索"
+    ],
+    "institutions": [
+      "Tencent Inc., Beijing, China",
+      "School of Cyber Science and Engineering, Wuhan University"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 10
   }
 }
