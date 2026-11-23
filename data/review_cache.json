@@ -490,5 +490,55 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 10
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.22597v1": {
+    "id": "2611.22597",
+    "title": "COTTI: Contrastive Training and Time-Aware Inference for Robust Industrial Recommendation under Promotional Drift",
+    "abstract": "Promotional events shift traffic composition, purchase behavior, and the scale of conversion probabilities on different time horizons. We present \\textbf{COTTI} (\\textbf{CO}ntrastive \\textbf{T}raining and \\textbf{T}ime-aware \\textbf{I}nference), an industrial recommendation framework that separates historical representation learning from event-time score adjustment. Cross-Period Contrastive Alignment (CPC) regularizes paired histories of the same user with adaptive consistency weights. Active Re-weighting (RW) controls the influence of promotional examples through historical-interest distance. Adaptive Boundary Alignment (ABA) combines stochastic prediction variability with a temporal event kernel to adjust logits while keeping predictor parameters fixed. We analyze the weighted objective and bound ABA-induced probability and ranking changes. On Fliggy data, COTTI attains an offline AUC of 0.8127, compared with 0.8101 for TEN and 0.8123 for TEN with ABA. Cross-category analysis reveals improved discrimination alongside declines in paid-item recall for novel categories. End-to-end measurements give a p99 latency of 38.9\\,ms and throughput of 14,700 requests/s; enabling ABA adds 2.2\\,ms to p99. A ten-day online experiment against the serving HDR model yields relative gains of 3.14\\% in conversion rate and 2.68\\% in revenue per mille. Together, these results characterize the trade-off between aggregate prediction, novel-category discovery, and serving cost in promotional recommendation.",
+    "authors": [
+      "Maolei Huang",
+      "Jing Tian",
+      "Dexuan Duan",
+      "Fangfang Lin",
+      "Huawei Cao",
+      "Shuhan Song"
+    ],
+    "published": "2026-11-17T11:18:28Z",
+    "url": "https://arxiv.org/abs/2611.22597v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.22597v1",
+    "explanation": {
+      "problem": "大促期间用户行为和转化率分布突变，平时训练的模型反应太慢，排序和转化率估计会失准。",
+      "method": "先用同一用户平时与促销期的两段历史做对比学习，让表示保持一定一致，并按两段差异自适应调弱对齐强度；再按促销样本与用户历史兴趣的距离给训练样本加权，离历史越远权重越低；最后在参数冻结的推理阶段，用已公布的活动时间核和预测头多次随机前向得到的方差，对转化logit做单向抬升校正。",
+      "application": "推测可把训练期历史一致性正则与推理期事件感知分数校正拆开落地，在电商大促精排中作为独立于主模型的校准层试验，并用新品类召回和延迟做约束。",
+      "caveat": "线上仅与HDR单基线对比十天，未报告置信区间、分流方式和聚合权重，全量上线轨迹无同期对照。"
+    },
+    "title_zh": "COTTI：面向促销漂移下鲁棒工业推荐的对比训练与时间感知推理",
+    "summary": "提出COTTI框架，用跨周期对比对齐、按历史距离重加权促销样本、以及推理期基于事件时间核与预测方差的logit校正三部分应对促销期分布漂移。Fliggy离线AUC 0.8127略高于TEN的0.8101，但TEN加ABA后差距仅0.0004；十天线上A/B相对HDR提升CVR 3.14%、RPM 2.68%，同时新品类付费召回下降、p99延迟增加2.2ms。",
+    "reason": "三组件分工清晰、消融与校准对照较完整，可借鉴其训练期正则与推理期分数校正分离的思路；但增益幅度小、线上仅对HDR单基线且无置信区间，新品类召回有损。",
+    "score": 73,
+    "rubric": {
+      "fit": 4,
+      "evidence": 3,
+      "action": 4
+    },
+    "primary_topic": "value",
+    "evidence": {
+      "page": 6,
+      "finding": "离线消融显示去掉CPC、RW、ABA后AUC分别降至0.8082、0.8051、0.8102，但均为点估计且未分离组件交互。"
+    },
+    "tags": [
+      "促销漂移",
+      "对比学习",
+      "样本重加权",
+      "推理期校准",
+      "转化率预估"
+    ],
+    "institutions": [
+      "Alibaba Group",
+      "University of Chinese Academy of Sciences",
+      "Santa Clara University"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 9
   }
 }
