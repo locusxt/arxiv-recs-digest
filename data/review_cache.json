@@ -445,5 +445,50 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 10
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.24757v3": {
+    "id": "2611.24757",
+    "title": "Variance-Optimal Counterfactual Policy Design for Sample-Efficient Online A/B Testing",
+    "abstract": "Online A/B testing is the standard approach for evaluating changes to user-facing systems, such as a new recommendation or ranking policy, before deployment. While the difference-in-means estimator of a standard A/B test is unbiased, it often suffers from high variance. When the treatment and production policies choose the same actions with similar probabilities, the resulting observations can add noise while providing little information about the difference between the policies. Consequently, A/B tests can require large amounts of traffic and long durations to detect small treatment effects. Existing variance-reduction methods mainly improve the estimator after the data-collection scheme has been fixed, and recent overlap-aware designs only optimize a single traffic split between the two policies; thereby, they cannot direct traffic to the actions on which the policies disagree. In this paper, we jointly optimize how actions are sampled and how the resulting observations are used to estimate the treatment effect. Our contributions are two-fold. First, building on pairwise off-policy evaluation, we derive the variance-optimal action-level logging policy for estimating the average treatment effect between two policies, which has a closed-form solution for any fixed control variate. Second, we use historical logs to jointly optimize the logging policy and a control variate to further reduce variance. Our experimental results in simulated policy A/B tests show that our designs estimate the average treatment effect more accurately than existing variance reduction methods on every evaluated setting, while generally improving statistical power and reducing how often the worse policy is selected. As a result, our designs enable practitioners to reach reliable deployment decisions with considerably less online traffic.",
+    "authors": [
+      "Shashank Gupta",
+      "Subhadeep Maji"
+    ],
+    "published": "2026-11-18T17:11:57Z",
+    "url": "https://arxiv.org/abs/2611.24757v3",
+    "pdf_url": "https://arxiv.org/pdf/2611.24757v3",
+    "explanation": {
+      "problem": "两个推荐策略差别很小时，常规A/B测试要花大量流量才能测出效果。",
+      "method": "先假设一个记录策略，按上下文为每个动作指定采样概率，再用历史日志训练奖励预测作为控制变量；推导出给定控制变量时方差最小的采样概率，正比于两策略概率差乘以剩余奖励不确定性，于是只需优化控制变量；最后用该策略收集新数据并加权估计两策略期望奖励之差。",
+      "application": "推测可用于推荐精排新策略上线前的流量分配：按两策略打分差异和剩余不确定性给动作分配曝光，而非固定五五分流。",
+      "caveat": "全部结论来自合成仿真环境，无真实线上A/B或离线日志验证。"
+    },
+    "title_zh": "方差最优的反事实策略设计：面向样本高效的在线A/B测试",
+    "summary": "该文把两个策略之间的A/B测试写成成对离策略估计，推导出在给定控制变量下方差最优的动作级记录策略闭式解，并用历史日志联合优化记录策略与控制变量。仿真A/B测试中，基于模型的方案在全部60个设置上MSE低于四个基线，达到均衡A/B同等MSE只需39%至51%的评估流量。",
+    "reason": "为精排/推荐A/B测试提供按动作分配流量的可落地降方差设计，但证据仅来自合成仿真，无真实线上验证。",
+    "score": 66,
+    "rubric": {
+      "fit": 4,
+      "evidence": 2,
+      "action": 4
+    },
+    "primary_topic": "causal",
+    "evidence": {
+      "page": 8,
+      "finding": "仿真中基于模型的控制变量方案在1万次评估交互时把均衡A/B的统计功效提高1.5至2.1倍，错误选策略率降低42%至63%，但绝对功效仍低于0.40，且全部为合成环境。"
+    },
+    "tags": [
+      "A/B测试",
+      "离策略评估",
+      "方差最优设计",
+      "控制变量",
+      "策略重叠"
+    ],
+    "institutions": [
+      "Microsoft, India",
+      "DeepL, UK"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 10
   }
 }
