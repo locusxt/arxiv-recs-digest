@@ -340,5 +340,56 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 18
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.22788v1": {
+    "id": "2611.22788",
+    "title": "IntentGR: Enhancing Intent for End-to-End Personalized Generative Retrieval in Search",
+    "abstract": "Personalized generative retrieval in search should jointly satisfy the user's immediate search intent and long-term preference. Recent end-to-end approaches, primarily explored in recommendation, unify item tokenization and sequence generation within a single model, allowing semantic identifiers (SIDs) to be optimized toward the downstream generation objective. However, these methods often treat the query merely as an input feature, without explicitly leveraging it to guide either identifier learning or sequence generation. This leaves intent guidance weak in both the tokenization and the generation stage, causing generated semantic identifiers to drift toward high-frequency token patterns rather than the current search intent. In this work, we find that incorporating additional query-related evidence into the framework of end-to-end generative retrieval is important. Based on this finding, we propose IntentGR, an intent-enhanced end-to-end framework that strengthens query semantics at four complementary stages of the retrieval pipeline. Query-Aware Semantic Behavior Representation (QBR) introduces query-level behavioral evidence as a new input signal; Query-Semantic Alignment (QSA), Long-Tail Query Enrichment (LQE), and Query-conditioned Attention Modulation (QAM) then serve as integration mechanisms at the optimization, training-distribution, and decoding stages to fully exploit this evidence. Experiments on the public AOL4PS benchmark and AE, a large-scale industrial e-commerce dataset, show that IntentGR improves Recall@10 by 8.11% and 11.96% over the strongest baseline, with strong gains on long-tail queries. These results suggest that enriched query-related input evidence, together with effective integration mechanisms, is beneficial for building intent-aware end-to-end generative search systems.",
+    "authors": [
+      "Gefan Ye",
+      "Yanjing Wu",
+      "Yinfu Feng",
+      "Zhiqiang Wang",
+      "Liang Li",
+      "Jun Xiao",
+      "Rong Xiao",
+      "Xiaoyi Zeng"
+    ],
+    "published": "2026-11-17T13:51:07Z",
+    "url": "https://arxiv.org/abs/2611.22788v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.22788v1",
+    "explanation": {
+      "problem": "个性化搜索里，生成式检索模型容易忽略当前查询意图，生成的物品标识偏向高频模式，长尾查询尤其差。",
+      "method": "先把同一查询下其他用户的历史点击序列作为新输入，与用户自身历史一起编码；再用对比学习把查询表示与目标物品的重构表示对齐，让分词器和生成器共享查询语义目标；接着对低频查询重复采样并做查询改写，平衡训练分布；最后在解码时把查询向量融合进上下文各位置，强化查询对生成标识的引导。",
+      "application": "推测可把查询级协同点击序列作为精排/生成式重排的额外输入特征，并用查询-物品对比损失约束语义标识学习；长尾查询重采样与改写可迁移到搜索训练数据构造。",
+      "caveat": "全部为离线数据集评测，无线上A/B或仿真，四模块增益主要来自消融累加，未单独验证各模块在真实流量下的独立贡献。"
+    },
+    "title_zh": "IntentGR：面向搜索端到端个性化生成式检索的意图增强",
+    "summary": "提出IntentGR，在输入、优化、训练分布和解码四个阶段强化查询意图，联合优化RQ-VAE物品分词器与生成式检索器。在AOL4PS和AliExpress工业数据集上，Recall@10较最强基线ETEGRec-Q分别提升8.11%和11.96%，长尾查询增益更大；证据限于离线评测，无线上A/B。",
+    "reason": "对做生成式重排/检索的工程师，它给出查询级行为序列、查询-物品对比对齐、长尾查询增强和解码注意力调制四个可拆解模块，但只有离线指标、无线上验证。",
+    "score": 73,
+    "rubric": {
+      "fit": 4,
+      "evidence": 3,
+      "action": 4
+    },
+    "primary_topic": "retrieval",
+    "evidence": {
+      "page": 8,
+      "finding": "表2离线对比显示IntentGR在AOL4PS和AE上Recall@10分别为77.99%和34.36%，高于最强基线ETEGRec-Q的69.88%和22.40%，但仅为离线评测，无线上A/B。"
+    },
+    "tags": [
+      "生成式检索",
+      "个性化搜索",
+      "语义标识",
+      "长尾查询",
+      "查询意图"
+    ],
+    "institutions": [
+      "Zhejiang University",
+      "Alibaba International Digital Commercial Group"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 11
   }
 }
