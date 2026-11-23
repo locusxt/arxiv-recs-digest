@@ -98,6 +98,7 @@ def select(candidates, cache, recent_topics):
 
 def render(history):
     esc = lambda value: html.escape(str(value), quote=True)
+    by_date = {day["date"]: day for day in history["days"]}
     sections = []
     for day in reversed(history['days']):
         cards = []
@@ -132,16 +133,25 @@ def render(history):
             total = sum(run.get('total_tokens', 0) for run in runs)
             prompt = sum(run.get('prompt_tokens', 0) for run in runs)
             completion = sum(run.get('completion_tokens', 0) for run in runs)
-            changes = {}
-            for run in runs:
-                for item in run.get('balance_change', []):
-                    try:
-                        changes[item['currency']] = changes.get(item['currency'], Decimal('0')) + Decimal(item['decrease'])
-                    except (InvalidOperation, KeyError):
-                        pass
-            change = '、'.join(f'{esc(currency)} {esc(value)}' for currency, value in changes.items()) or '无法计算'
+            yesterday = (dt.date.fromisoformat(day['date']) - dt.timedelta(days=1)).isoformat()
+            previous_runs = by_date.get(yesterday, {}).get('usage_runs', [])
+            baseline = previous_runs[-1].get('balance_after', []) if previous_runs else []
+            period = '较昨日最后一次记录'
+            if not baseline:
+                baseline = runs[0].get('balance_before', [])
+                period = '自当日首次运行开始'
+                if not baseline and len(runs) > 1:
+                    baseline = runs[0].get('balance_after', [])
+                    period = '自当日首次运行结束'
+            changes = []
+            for item in balance_changes(baseline, latest.get('balance_after', [])):
+                value = Decimal(item['decrease'])
+                direction = '减少' if value > 0 else '增加'
+                change = f'{direction} {esc(item["currency"])} {abs(value)}' if value else f'{esc(item["currency"])} 余额持平'
+                changes.append(change)
+            change = period + '，' + '、'.join(changes) if changes else '缺少可比较的余额记录'
             incomplete = '；此前运行未记录，用量不完整' if day.get('usage_incomplete') else ''
-            usage_text = f'<details class="usage-detail"><summary>查看当日用量与余额</summary><p class="usage">本任务已记录 {len(runs)} 次运行，共 {total} tokens（输入 {prompt} / 输出 {completion}）；运行期间账户余额净减少 {change}；最新余额 {amounts}{incomplete}。余额变化可能包含其他调用或充值；失败运行可能未计入。</p></details>'
+            usage_text = f'<details class="usage-detail"><summary>查看当日用量与余额</summary><p class="usage">本任务已记录 {len(runs)} 次运行，共 {total} tokens（输入 {prompt} / 输出 {completion}）；{change}；当次查询余额 {amounts}{incomplete}。账户变化受结算时间、其他调用和充值影响；失败运行可能未计入。</p></details>'
         else:
             usage_text = '<p class="usage">该日期的用量和余额未记录。</p>'
         sections.append(f'<section><div class="date"><h2>{esc(day["date"])}</h2><span>{len(day["papers"])} 篇精选 · {esc(day.get("candidates", 0))} 篇候选</span></div>{usage_text}{content}</section>')
@@ -224,7 +234,7 @@ def main():
                          for p in day['papers']]
         papers = select(candidates, cache, recent_topics)
     after = get_balance()
-    current = {**USAGE, 'balance_after': after, 'balance_change': balance_changes(before, after)}
+    current = {**USAGE, 'balance_before': before, 'balance_after': after, 'balance_change': balance_changes(before, after)}
     # Preserve completed earlier runs on the same date; old runs were not metered.
     previous_runs = previous_today.get('usage_runs', []) if previous_today else []
     runs = previous_runs + [current]
