@@ -691,6 +691,216 @@
         ]
       },
       "usage_incomplete": false
+    },
+    {
+      "date": "2026-11-24",
+      "candidates": 260,
+      "papers": [
+        {
+          "id": "2611.27514",
+          "title": "Deep Cross-Division Network for Product-and-Ratio Feature Interactions in Industrial Ranking",
+          "abstract": "Learning effective feature interactions is essential for industrial recommender systems. DCN and DCNv2 efficiently automate polynomial feature crossing. However, their cross layers construct interactions using only non-negative integer powers of the input features, with the maximum degree controlled by network depth. Consequently, they cannot directly represent the reciprocal terms required for ratios, rates, and normalized counts unless such features are explicitly provided as inputs. We introduce DCDN, a Deep Cross-Division Network that augments a DCNv2-style cross layer with a division branch. DCDN jointly learns product, ratio, and mixed product-ratio interactions. We characterize the representable interactions as multivariate Laurent polynomials and show that a $K$-layer DCDN generates Laurent monomials of $\\ell_1$-order up to $K+1$, with signed degree between $-K$ and $K+1$. We evaluate DCDN against a production-optimized neural-ranking baseline built around DCNv2 and supplied with manually engineered ratio features. Replacing the DCNv2 block with DCDN allowed us to eliminate the entire class of manually engineered ratio features from the model input, reducing the number of input features by $40.1\\%$. DCDN is deployed in the production ranking stack of a major short-video service. In a live A/B test on this service, DCDN increased likes by $3.25\\%$, shares by $16.26\\%$, total view time (TVT) by $0.33\\%$, and clicks to open fullscreen by $0.38\\%$; all changes were statistically significant. The number of shown videos decreased slightly ($-0.24\\%$). These results demonstrate that DCDN can improve user engagement while eliminating reliance on manually engineered ratio features. Our code is publicly released at https://github.com/rw404/DCDN.",
+          "authors": [
+            "Mikhail Trapeznikov",
+            "Sofia Gulevskaia",
+            "Maksim Utushkin",
+            "Aleksandr Poslavsky",
+            "Alexander D'yakonov"
+          ],
+          "published": "2026-11-20T12:06:35Z",
+          "url": "https://arxiv.org/abs/2611.27514v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.27514v1",
+          "explanation": {
+            "problem": "人工构造的点击率、完播率这类比值特征又多又贵，能否让模型自己从分子分母学出比值关系。",
+            "method": "输入仍是原始计数、上游模型分数等基础特征，不再提供人工比值。在DCNv2交叉层旁并联一条分支，用输入的逐元素倒数（带下限截断防止除零爆炸）与当前表示相乘，再与原乘积分支和残差相加，堆叠后即可生成乘、除及混合的单项式。输出送入后续Hiformer与多任务塔，端到端训练排序模型。",
+            "application": "推测可把电商精排中人工构造的转化率、人均曝光、比值类统计特征从输入中移除，改由交叉层的除法分支重建，并用容量匹配的DCNv2作对照验证增益来源。",
+            "caveat": "线上A/B同时改了特征集与交叉块，端到端收益无法单独归因于除法分支。"
+          },
+          "title_zh": "面向工业排序中乘积与比值特征交互的深度交叉除法网络",
+          "summary": "在DCNv2交叉层上增加以输入逐元素倒数为锚的除法分支，使单层即可表达乘积与比值交互，并给出Laurent单项式支撑的理论刻画。离线四个公开数据集上稳定优于DCNv2且延迟相近，线上短视频排序A/B中点赞+3.25%、分享+16.26%、总观看时长+0.33%，同时移除40.1%人工比值特征。",
+          "reason": "对精排特征工程有直接价值：用模型结构吸收人工比值特征，且有线上A/B与延迟证据；但收益是特征路径与交叉块联合改动，未单独归因。",
+          "score": 80,
+          "rubric": {
+            "fit": 4,
+            "evidence": 4,
+            "action": 4
+          },
+          "primary_topic": "ranking",
+          "evidence": {
+            "page": 9,
+            "finding": "线上两周A/B（CUPED校正、双侧t检验、p<0.01）显示点赞+3.25%、分享+16.26%、总观看时长+0.33%、全屏点击+0.38%、曝光-0.24%，但处理组同时移除比值特征并替换交叉块，属联合干预。"
+          },
+          "tags": [
+            "特征交互",
+            "DCNv2",
+            "比值特征",
+            "工业排序",
+            "线上A/B"
+          ],
+          "institutions": [
+            "AI VK",
+            "Lomonosov Moscow State University"
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 14
+        },
+        {
+          "id": "2611.25288",
+          "title": "Intelligent Embedding Pruning for Large-Scale Recommendation Models",
+          "abstract": "Modern recommendation systems face substantial memory pressure, largely from the sparse embedding layer that maps high-cardinality categorical features into dense vectors. In-training embedding pruning (ITEP) removes less important embedding rows during training, yielding end-to-end memory savings but sometimes degrading accuracy because per-table pruning ratios are set by size-based heuristics. We use feature importance (FI) to guide these ratios (FI-ITEP), assigning higher pruning to tables tied to less important features. Across three large-scale recommendation models, FI-ITEP achieves 20--40% total memory reduction while matching or improving accuracy relative to percentile-based ITEP. Because the feature-importance signal requires minimal resources to compute, these memory savings translate into concrete systems benefits: the same models train on fewer GPU trainers (e.g., 112 to 80) with higher per-GPU throughput, saving 1,000+ GPU-hours per model launch. We reproduce these trends on the open-source DLRM (Criteo 1TB) and quantify the end-to-end training-time and GPU-cost tradeoff---including the burden of computing FI---offering practical guidance for embedding pruning in real-world systems.",
+          "authors": [
+            "Anish Khazane",
+            "Alex Saad-Falcon",
+            "Guanchu Wu",
+            "Marcio Porto",
+            "Jasper Shan",
+            "Fei Yu",
+            "Eugene Shulga",
+            "Intaik Park",
+            "Yongzhe Zhang",
+            "Xiaoyu Deng",
+            "Sheng Luo",
+            "Xiaoya Wang"
+          ],
+          "published": "2026-11-18T23:26:49Z",
+          "url": "https://arxiv.org/abs/2611.25288v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.25288v1",
+          "explanation": {
+            "problem": "大规模推荐模型的稀疏嵌入表太占显存，现有按表大小决定剪枝力度的做法没有考虑特征本身对效果的重要性。",
+            "method": "先在小批量数据上对每个特征做打乱或Shapley采样，观察模型损失变化得到重要性分数；再按分数高低为每张嵌入表分配剪枝比例，越不重要的表剪得越多；训练中沿用原有机制把低重要ID哈希到共享行；最后在多个工业模型和开源数据上对比内存节省与NE。",
+            "application": "推测：电商推荐可把该重要性信号用于稀疏特征表的分级剪枝与训练资源规划，先离线验证NE与内存权衡再考虑上线。",
+            "caveat": "主要证据为离线NE与训练资源对比，缺少线上A/B和线上服务指标验证。"
+          },
+          "title_zh": "面向大规模推荐模型的智能嵌入剪枝",
+          "summary": "用置换/Shapley采样得到的特征重要性为每张稀疏嵌入表设定训练中剪枝比例（FI-ITEP），在三个工业级DLRM上相比按表大小分档的百分位基线取得20–40%总内存节省且评估NE持平或更优，并在开源DLRM+Criteo 1TB上复现趋势；线上收益仅体现为训练侧GPU数量与吞吐的仿真/配置对比，未做线上A/B。",
+          "reason": "对做大规模稀疏嵌入训练与系统成本的推荐工程师有直接参考价值：给出可落地的按特征重要性分配剪枝比例方案及FI计算开销与漂移证据，但收益限于训练内存/GPU成本，未验证线上服务指标。",
+          "score": 73,
+          "rubric": {
+            "fit": 4,
+            "evidence": 3,
+            "action": 4
+          },
+          "primary_topic": "training",
+          "evidence": {
+            "page": 3,
+            "finding": "该页给出开源DLRM+Criteo 1TB的离线复现实验，FI-ITEP在相同内存削减下AUROC持平或更优，但仅为离线评估。"
+          },
+          "tags": [
+            "嵌入剪枝",
+            "特征重要性",
+            "稀疏嵌入",
+            "训练内存优化",
+            "推荐系统"
+          ],
+          "institutions": [
+            "Meta"
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 11
+        },
+        {
+          "id": "2611.24757",
+          "title": "Variance-Optimal Counterfactual Policy Design for Sample-Efficient Online A/B Testing",
+          "abstract": "Online A/B testing is the standard approach for evaluating changes to user-facing systems, such as a new recommendation or ranking policy, before deployment. While the difference-in-means estimator of a standard A/B test is unbiased, it often suffers from high variance. When the treatment and production policies choose the same actions with similar probabilities, the resulting observations can add noise while providing little information about the difference between the policies. Consequently, A/B tests can require large amounts of traffic and long durations to detect small treatment effects. Existing variance-reduction methods mainly improve the estimator after the data-collection scheme has been fixed, and recent overlap-aware designs only optimize a single traffic split between the two policies; thereby, they cannot direct traffic to the actions on which the policies disagree. In this paper, we jointly optimize how actions are sampled and how the resulting observations are used to estimate the treatment effect. Our contributions are two-fold. First, building on pairwise off-policy evaluation, we derive the variance-optimal action-level logging policy for estimating the average treatment effect between two policies, which has a closed-form solution for any fixed control variate. Second, we use historical logs to jointly optimize the logging policy and a control variate to further reduce variance. Our experimental results in simulated policy A/B tests show that our designs estimate the average treatment effect more accurately than existing variance reduction methods on every evaluated setting, while generally improving statistical power and reducing how often the worse policy is selected. As a result, our designs enable practitioners to reach reliable deployment decisions with considerably less online traffic.",
+          "authors": [
+            "Shashank Gupta",
+            "Subhadeep Maji"
+          ],
+          "published": "2026-11-18T17:11:57Z",
+          "url": "https://arxiv.org/abs/2611.24757v3",
+          "pdf_url": "https://arxiv.org/pdf/2611.24757v3",
+          "explanation": {
+            "problem": "两个推荐策略差别很小时，常规A/B测试要花大量流量才能测出效果。",
+            "method": "先假设一个记录策略，按上下文为每个动作指定采样概率，再用历史日志训练奖励预测作为控制变量；推导出给定控制变量时方差最小的采样概率，正比于两策略概率差乘以剩余奖励不确定性，于是只需优化控制变量；最后用该策略收集新数据并加权估计两策略期望奖励之差。",
+            "application": "推测可用于推荐精排新策略上线前的流量分配：按两策略打分差异和剩余不确定性给动作分配曝光，而非固定五五分流。",
+            "caveat": "全部结论来自合成仿真环境，无真实线上A/B或离线日志验证。"
+          },
+          "title_zh": "方差最优的反事实策略设计：面向样本高效的在线A/B测试",
+          "summary": "该文把两个策略之间的A/B测试写成成对离策略估计，推导出在给定控制变量下方差最优的动作级记录策略闭式解，并用历史日志联合优化记录策略与控制变量。仿真A/B测试中，基于模型的方案在全部60个设置上MSE低于四个基线，达到均衡A/B同等MSE只需39%至51%的评估流量。",
+          "reason": "为精排/推荐A/B测试提供按动作分配流量的可落地降方差设计，但证据仅来自合成仿真，无真实线上验证。",
+          "score": 66,
+          "rubric": {
+            "fit": 4,
+            "evidence": 2,
+            "action": 4
+          },
+          "primary_topic": "causal",
+          "evidence": {
+            "page": 8,
+            "finding": "仿真中基于模型的控制变量方案在1万次评估交互时把均衡A/B的统计功效提高1.5至2.1倍，错误选策略率降低42%至63%，但绝对功效仍低于0.40，且全部为合成环境。"
+          },
+          "tags": [
+            "A/B测试",
+            "离策略评估",
+            "方差最优设计",
+            "控制变量",
+            "策略重叠"
+          ],
+          "institutions": [
+            "Microsoft, India",
+            "DeepL, UK"
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 10
+        }
+      ],
+      "usage_runs": [
+        {
+          "calls": 13,
+          "prompt_tokens": 219606,
+          "completion_tokens": 7147,
+          "total_tokens": 226753,
+          "prompt_cache_hit_tokens": 143360,
+          "prompt_cache_miss_tokens": 76246,
+          "missing_usage": 0,
+          "balance_before": [
+            {
+              "currency": "CNY",
+              "total_balance": "356.84"
+            }
+          ],
+          "balance_after": [
+            {
+              "currency": "CNY",
+              "total_balance": "356.84"
+            }
+          ],
+          "balance_change": [
+            {
+              "currency": "CNY",
+              "decrease": "0.00"
+            }
+          ]
+        }
+      ],
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 219606,
+        "completion_tokens": 7147,
+        "total_tokens": 226753,
+        "prompt_cache_hit_tokens": 143360,
+        "prompt_cache_miss_tokens": 76246,
+        "missing_usage": 0,
+        "balance_before": [
+          {
+            "currency": "CNY",
+            "total_balance": "356.84"
+          }
+        ],
+        "balance_after": [
+          {
+            "currency": "CNY",
+            "total_balance": "356.84"
+          }
+        ],
+        "balance_change": [
+          {
+            "currency": "CNY",
+            "decrease": "0.00"
+          }
+        ]
+      },
+      "usage_incomplete": false
     }
   ],
   "recommended_ids": [
@@ -703,22 +913,28 @@
     "2611.22838",
     "2611.24006",
     "2611.24283",
+    "2611.24757",
+    "2611.25288",
     "2611.25527",
     "2611.25659",
-    "2611.26096"
+    "2611.26096",
+    "2611.27514"
   ],
   "recommended_titles": [
     "betterrankersworseretrieversthehiddencostofrlposttrainingingenerativerecommendation",
     "cotticontrastivetrainingandtimeawareinferenceforrobustindustrialrecommendationunderpromotionaldrift",
+    "deepcrossdivisionnetworkforproductandratiofeatureinteractionsinindustrialranking",
     "dnaunlockingdepthscalinginctrmodels",
     "fromrelevancetoutilityrubricalignmentinyuanbaosearch",
     "fromsessionstoservingintegratingllmbasedembeddingsintoretrievalforproductioncontentrecommendation",
+    "intelligentembeddingpruningforlargescalerecommendationmodels",
     "intentgrenhancingintentforendtoendpersonalizedgenerativeretrievalinsearch",
     "learninggenerativerankingpoliciesforwholepageoptimization",
     "lostinthefunnelselectioninducedmiscalibrationinrankinganddecisionsystems",
     "marstechnicalreport",
     "mmintentflowanintentdrivenrealtimemultimodalsearchsystemwithimagetextqueriesatxiaohongshu",
     "peetspreferenceawareembeddingswithexplicittreestructureforauxiliaryproductbundling",
+    "varianceoptimalcounterfactualpolicydesignforsampleefficientonlineabtesting",
     "xsplitarguslearningreusablehistorytokensforefficientctrprediction"
   ]
 }
