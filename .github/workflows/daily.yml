@@ -2,6 +2,7 @@ name: Daily paper digest
 on:
   schedule:
     - cron: '30 0 * * *' # 08:30 Asia/Shanghai
+    - cron: '17 1,2 * * *' # Retry at 09:17 and 10:17 Asia/Shanghai
   workflow_dispatch:
     inputs:
       refresh_existing:

@@ -16,7 +16,7 @@
 
 1. 在仓库 Actions Secrets 添加 `DEEPSEEK_API_KEY`。
 2. 将 GitHub Pages Source 设为 **GitHub Actions**。
-3. 在 Actions → Daily paper digest 手动执行一次，此后每日自动运行。定时任务可能延迟。
+3. 在 Actions → Daily paper digest 手动执行一次，此后每日自动运行。北京时间 09:17 和 10:17 另有补跑机会。当天已有记录时直接重建并发布页面，不重复选文。三个触发点均可能受 GitHub 调度延迟影响。
 
 每个主题最多检索最近 200 篇，关键词初筛最多保留 60 篇，DeepSeek 摘要筛选后最多阅读全文 8 篇；关键词规则可能遗漏不使用常见术语的论文；无法提取全文的论文会跳过。DeepSeek 按实际用量计费。
 
