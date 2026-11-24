@@ -588,5 +588,52 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 14
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.28379v1": {
+    "id": "2611.28379",
+    "title": "Beyond Relevance: An Empirical Study of Multimodal LLMs for Diversity-Aware Recommendation Reranking",
+    "abstract": "Large language models (LLMs) have emerged as promising rerankers for recommendation, yet most existing approaches rely on textual item descriptions and primarily focus on relevance. In visually oriented domains such as video streaming, item images provide complementary signals that may also inform recommendation diversity. This raises two questions: when does visual information improve recommendation quality, and can multimodal LLMs (MLLMs) enhance relevance and diversity simultaneously? We investigate these questions through a training-free, diversity-aware multimodal reranking framework that jointly incorporates item images, textual metadata, and user interaction histories. We conduct an empirical study across three public Amazon Review datasets and an industrial Amazon Prime Video dataset, using both open-source and proprietary MLLMs. Our results reveal substantial domain-dependent effects: adding visual information yields up to 121.9% relative improvement in NDCG@5 on Prime Video, while producing limited or inconsistent gains on product recommendation datasets. Furthermore, MLLM-based reranking improves both relevance and category-diversity-sensitive ranking quality over a sequential recommendation baseline, achieving up to 71.0% improvement in NDCG@5 and 14.1% in $α$-NDCG@5 on Prime Video. These findings highlight the conditional value of visual information and the potential of training-free MLLMs for relevance- and diversity-aware recommendation reranking.",
+    "authors": [
+      "Chengkai Liu",
+      "Yan Fu",
+      "Huiyuan Chen",
+      "Sheikh Sarwar",
+      "Qilin Qi"
+    ],
+    "published": "2026-11-20T22:37:29Z",
+    "url": "https://arxiv.org/abs/2611.28379v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.28379v1",
+    "explanation": {
+      "problem": "想知道给推荐重排加入商品图片，究竟在什么场景下能同时提升相关性和多样性。",
+      "method": "把用户最近若干条交互的图片横向拼成一张长图，候选商品图片同样拼成一张，并按顺序配上编号标题，使图文一一对应。提示词中加入分析视觉风格、考虑兴趣随时间变化、平衡探索与利用、兼顾相关性与品类多样性四条准则，要求模型只输出候选编号的排序。模型全程不训练，直接对采样候选或召回列表重排，再用相关性指标和品类覆盖指标评估。",
+      "application": "推测可先在视频、封面图信息量大的场景做离线重排试验，用组合图提示替代逐图输入以控制成本，并以α-NDCG监控多样性副作用。",
+      "caveat": "全部为离线小候选集实验，无线上A/B，且未单独消融多样性指令的贡献。"
+    },
+    "title_zh": "超越相关性：多模态大语言模型用于多样性感知推荐重排的实证研究",
+    "summary": "提出免训练的多模态重排框架MMRerank，把用户历史与候选商品的图片拼成组合图、配标题和多样性指令交给预训练多模态大模型直接输出排序。在三个公开Amazon商品集与工业Prime Video集上，视频域加图相对纯文本NDCG@5最高提升121.9%，重排相对SASRec最高提升71.0% NDCG@5和14.1% α-NDCG@5，但商品域增益有限且因模型而异。",
+    "reason": "给出多模态大模型做多样性重排的域依赖证据与成本数据，可借鉴其组合图提示与α-NDCG评估，但仅离线小候选集实验、无线上A/B。",
+    "score": 68,
+    "rubric": {
+      "fit": 4,
+      "evidence": 3,
+      "action": 3
+    },
+    "primary_topic": "ranking",
+    "evidence": {
+      "page": 6,
+      "finding": "该页表2给出Prime Video上的相对提升：加图相对纯文本NDCG@5提升121.9%（InternVL3）与9.6%（Sonnet），重排相对SASRec提升66.4%与71.0% NDCG@5、12.0%与14.1% α-NDCG@5，属离线相对指标而非线上A/B。"
+    },
+    "tags": [
+      "多模态重排",
+      "多样性",
+      "免训练提示",
+      "视频推荐",
+      "大模型重排"
+    ],
+    "institutions": [
+      "Amazon"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 8
   }
 }
