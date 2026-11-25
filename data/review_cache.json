@@ -726,5 +726,55 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 11
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.29094v1": {
+    "id": "2611.29094",
+    "title": "HME-PFD: Heterogeneous Mixture-of-Experts Privileged Feature Distillation",
+    "abstract": "Knowledge distillation (KD) is widely used to transfer knowledge from large teacher models to smaller student models, facilitating efficient serving of machine learning systems. In the context of ads recommendation, privileged features distillation (PFD) extends KD by allowing the teacher model to leverage privileged features, i.e., features available only during training, to enhance distillation performance. However, in real-world scenarios, privileged features often have limited coverage and exhibit heterogeneous distributions, resulting in training examples of varying importance for distillation and model learning. We propose Heterogeneous Mixture-of-Experts Privileged Feature Distillation (HME-PFD), a novel approach that incorporates privileged features into the routing module of a Mixture-of-Experts-based student model. Our method introduces both hard-coded and learnable routing modules, enabling the student to dynamically determine expert assignment based on the availability and values of privileged features. This design allows the student model to better handle the heterogeneous data scenario, where privileged features are partially observed, by differentiating between high- and low-signal samples. Extensive experiments on two post-click conversion prediction tasks demonstrate that HME-PFD consistently outperforms baseline methods. Our results show that leveraging privileged features for expert routing in the student model leads to improved model performance, even when privileged features are incomplete or sparse.",
+    "authors": [
+      "Wen Xu",
+      "Xiaomin Zhang",
+      "Yucheng Yang",
+      "Danny Liu",
+      "Xunlong Gui",
+      "Fei Huang",
+      "Sha Meng"
+    ],
+    "published": "2026-11-21T23:32:01Z",
+    "url": "https://arxiv.org/abs/2611.29094v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.29094v1",
+    "explanation": {
+      "problem": "训练期才有的特权特征常常缺失或分布不均，导致蒸馏时各样本的教师信号质量参差，学生模型难以区别对待。",
+      "method": "教师用常规特征加特权特征训练并给出软标签；学生主干只吃常规特征，另设一个仅训练期使用的专家混合辅助蒸馏任务，由特权特征的可用性与取值决定每个样本进入哪个专家，最后把各专家的蒸馏损失加权合并成一个标量；服务时只保留主任务，不访问特权特征。",
+      "application": "推测可把特权特征（如点击后停留时长）的缺失模式作为门控信号，在精排蒸馏中为高信号样本分配更强监督，并对比硬规则与线性门控。",
+      "caveat": "仅两个工业CVR数据集的离线NE对比，无线上A/B，增益幅度很小且未单独验证路由模块的端到端贡献。"
+    },
+    "title_zh": "异构专家混合特权特征蒸馏",
+    "summary": "提出HME-PFD，用特权特征（仅训练期可见）驱动学生模型MoE路由，以应对特权特征稀疏异构；在两个工业CVR数据集上离线NE相对Plain基线降低0.06%–0.42%，但无线上A/B。",
+    "reason": "为特权特征缺失下的蒸馏路由提供可借鉴设计，但仅离线NE、增益极小且无线上验证。",
+    "score": 66,
+    "rubric": {
+      "fit": 4,
+      "evidence": 2,
+      "action": 4
+    },
+    "primary_topic": "ranking",
+    "evidence": {
+      "page": 10,
+      "finding": "该页表1给出两个CVR数据集上各路由方式的离线NE相对Plain基线的差值，属离线评估而非线上A/B。"
+    },
+    "tags": [
+      "特权特征蒸馏",
+      "专家混合",
+      "路由",
+      "CVR预估",
+      "知识蒸馏"
+    ],
+    "institutions": [
+      "Meta",
+      "University of Toronto"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 17
   }
 }
