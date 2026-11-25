@@ -680,5 +680,51 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 17
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.25256v1": {
+    "id": "2611.25256",
+    "title": "LQ-Rec: Late Quantization for Sequential Recommendation",
+    "abstract": "Generative retrieval (GR) for sequential recommendation compresses each item into a short semantic ID and trains an autoregressive decoder to generate next-item codes from a user history. While appealing for cold-start handling and storage, au- toregressive GR suffers a structural scaling limit: typically, longer semantic IDs reduce quantization error in principle but degrade ranking quality and quadratic memory usage against semantic ID length. We propose Late Quantization (LQ), a non-autoregressive paradigm that confines discretization to the output (item) side of the pipeline. The encoder and scoring rule operate in continuous space, while items are stored and matched as semantic IDs produced by an end-to-end-trained residual quantizer. This architectural shift permits an additive error decomposition and a pairwise ordering theorem that jointly bound the quantization- induced ranking drop, a structural guarantee absent in prior semantic-ID recommenders. Across four public benchmarks, the resulting recommender, LQ-Rec, delivers three capabilities simultaneously: ranking quality improves monotonically with the semantic-ID length and outperforms existing baselines; a single trained model supports anytime compression, tuning ranking quality against inference cost without retraining; and LQ-Rec shows superior generalization on a memorization/generalization partition.",
+    "authors": [
+      "Satoshi Koide",
+      "Yueqi Wang",
+      "Julian McAuley"
+    ],
+    "published": "2026-11-18T22:41:09Z",
+    "url": "https://arxiv.org/abs/2611.25256v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.25256v1",
+    "explanation": {
+      "problem": "生成式检索把物品先压成离散编码再让模型读这些编码，导致编码越长排序反而越差、显存和推理开销越大。",
+      "method": "先让序列模型在连续物品向量上正常预测用户向量，再用残差量化器把物品向量压成多级离散编码，打分时用用户向量与量化后物品向量做内积。训练分两步：先软到硬地联合训练编码器与码本，再冻结编码器、按不同前缀长度微调码本，使一个模型可在推理时截断编码长度。",
+      "application": "推测：电商召回/重排可把语义ID只用于物品侧存储与倒排匹配，用户侧保持连续向量，从而按成本在线截断编码长度；但需验证非线性打分与多路融合下的收益。",
+      "caveat": "全部证据来自四个公开数据集的离线留一法评测，无线上A/B或仿真，理论保证仅适用于内积打分。"
+    },
+    "title_zh": "LQ-Rec：面向序列推荐的延迟量化",
+    "summary": "提出延迟量化框架：序列编码器与打分保持在连续空间，仅对物品侧做端到端训练的残差量化，从而得到可加误差分解与排序保持界；在四个公开基准上，排序质量随语义ID长度单调提升，单一模型支持推理时前缀截断，并在记忆/泛化划分上优于语义ID基线。",
+    "reason": "为生成式重排/语义ID检索提供“量化只放物品侧”的可分离设计，可迁移到大规模目录的召回与重排；但仅离线基准验证，无线上A/B，且理论依赖内积打分。",
+    "score": 73,
+    "rubric": {
+      "fit": 4,
+      "evidence": 3,
+      "action": 4
+    },
+    "primary_topic": "retrieval",
+    "evidence": {
+      "page": 7,
+      "finding": "表IV显示单一M=16检查点按前缀截断后，Recall@10随长度单调不降，且在L=4/8/16多数格子超过对应长度的TIGER、RPG、VQ-Rec基线，属离线基准对比。"
+    },
+    "tags": [
+      "语义ID",
+      "残差量化",
+      "生成式检索",
+      "序列推荐",
+      "任意长度压缩"
+    ],
+    "institutions": [
+      "Toyota Motor North America",
+      "UC San Diego"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 11
   }
 }
