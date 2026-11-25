@@ -901,6 +901,207 @@
         ]
       },
       "usage_incomplete": false
+    },
+    {
+      "date": "2026-11-25",
+      "candidates": 289,
+      "papers": [
+        {
+          "id": "2611.25256",
+          "title": "LQ-Rec: Late Quantization for Sequential Recommendation",
+          "abstract": "Generative retrieval (GR) for sequential recommendation compresses each item into a short semantic ID and trains an autoregressive decoder to generate next-item codes from a user history. While appealing for cold-start handling and storage, au- toregressive GR suffers a structural scaling limit: typically, longer semantic IDs reduce quantization error in principle but degrade ranking quality and quadratic memory usage against semantic ID length. We propose Late Quantization (LQ), a non-autoregressive paradigm that confines discretization to the output (item) side of the pipeline. The encoder and scoring rule operate in continuous space, while items are stored and matched as semantic IDs produced by an end-to-end-trained residual quantizer. This architectural shift permits an additive error decomposition and a pairwise ordering theorem that jointly bound the quantization- induced ranking drop, a structural guarantee absent in prior semantic-ID recommenders. Across four public benchmarks, the resulting recommender, LQ-Rec, delivers three capabilities simultaneously: ranking quality improves monotonically with the semantic-ID length and outperforms existing baselines; a single trained model supports anytime compression, tuning ranking quality against inference cost without retraining; and LQ-Rec shows superior generalization on a memorization/generalization partition.",
+          "authors": [
+            "Satoshi Koide",
+            "Yueqi Wang",
+            "Julian McAuley"
+          ],
+          "published": "2026-11-18T22:41:09Z",
+          "url": "https://arxiv.org/abs/2611.25256v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.25256v1",
+          "explanation": {
+            "problem": "生成式检索把物品先压成离散编码再让模型读这些编码，导致编码越长排序反而越差、显存和推理开销越大。",
+            "method": "先让序列模型在连续物品向量上正常预测用户向量，再用残差量化器把物品向量压成多级离散编码，打分时用用户向量与量化后物品向量做内积。训练分两步：先软到硬地联合训练编码器与码本，再冻结编码器、按不同前缀长度微调码本，使一个模型可在推理时截断编码长度。",
+            "application": "推测：电商召回/重排可把语义ID只用于物品侧存储与倒排匹配，用户侧保持连续向量，从而按成本在线截断编码长度；但需验证非线性打分与多路融合下的收益。",
+            "caveat": "全部证据来自四个公开数据集的离线留一法评测，无线上A/B或仿真，理论保证仅适用于内积打分。"
+          },
+          "title_zh": "LQ-Rec：面向序列推荐的延迟量化",
+          "summary": "提出延迟量化框架：序列编码器与打分保持在连续空间，仅对物品侧做端到端训练的残差量化，从而得到可加误差分解与排序保持界；在四个公开基准上，排序质量随语义ID长度单调提升，单一模型支持推理时前缀截断，并在记忆/泛化划分上优于语义ID基线。",
+          "reason": "为生成式重排/语义ID检索提供“量化只放物品侧”的可分离设计，可迁移到大规模目录的召回与重排；但仅离线基准验证，无线上A/B，且理论依赖内积打分。",
+          "score": 73,
+          "rubric": {
+            "fit": 4,
+            "evidence": 3,
+            "action": 4
+          },
+          "primary_topic": "retrieval",
+          "evidence": {
+            "page": 7,
+            "finding": "表IV显示单一M=16检查点按前缀截断后，Recall@10随长度单调不降，且在L=4/8/16多数格子超过对应长度的TIGER、RPG、VQ-Rec基线，属离线基准对比。"
+          },
+          "tags": [
+            "语义ID",
+            "残差量化",
+            "生成式检索",
+            "序列推荐",
+            "任意长度压缩"
+          ],
+          "institutions": [
+            "Toyota Motor North America",
+            "UC San Diego"
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 11
+        },
+        {
+          "id": "2611.23910",
+          "title": "MLE Agents: Autonomous ML Engineering in Large-scale Recommendation Systems",
+          "abstract": "The typical workflow for improving large-scale ranking and recommendation models is slow and tedious: an engineer forms a hypothesis, implements it as a code change, trains a model, and evaluates it both offline and online, often relying on their own intuition and experience along the way. Autonomous LLM agents promise to speed this up by running the loop on their own, but it is still unclear whether they can do this in industry-scale systems rather than on benchmarks or small proxy tasks. We build human-on-the-loop machine learning engineer (MLE) agents that propose, implement, train, and evaluate model changes on large-scale search rankers. Engineers retain control over objective design, search direction, and final-model review. We identify three obstacles that make this industry setting challenging: feedback takes hours per experiment, offline metrics do not always predict online impact, and improvements saturate after the early wins. We address these with parallel training runs, an objective calibrated to match online impact, and careful context engineering. In one campaign, the system ran 1,097 completed candidate experiments and accepted 325, a 29.6\\% acceptance rate compared with 15.6\\% in the earlier campaign under a different objective and search constraint. Its best model increases search volume by 0.23\\% in an A/B test of large scale. Several improvements were architectural changes the team had never tried, drawn from the broader industry and literature, suggesting that MLE agents can explore regions of the design space that human intuition overlooks. We find that the design of the harness around the model matters: intuition suggests that a stronger underlying model is enough, but in our experience, the design of the loop around it is just as critical. More broadly, our work shows that autonomous agents can do real machine-learning engineering in industry-scale systems.",
+          "authors": [
+            "Matthew Li",
+            "Albert Jiongqian Liang",
+            "Dilip Raj"
+          ],
+          "published": "2026-11-18T06:00:43Z",
+          "url": "https://arxiv.org/abs/2611.23910v2",
+          "pdf_url": "https://arxiv.org/pdf/2611.23910v2",
+          "explanation": {
+            "problem": "能否让LLM智能体在真实工业级排序系统上自主完成模型改进的提出、实现、训练与评估，并带来线上收益。",
+            "method": "智能体读取当前模型配置、历史实验和失败清单，先检索文献与代码提出架构想法，再为每个候选写一处连贯的代码改动，提交分布式训练，读取校准后的离线指标并与同轮方差探针比较，超过阈值才保留，拒绝项写入失败清单。",
+            "application": "推测可借鉴其校准离线目标、方差探针阈值、失败清单与并行候选机制，用于精排模型迭代的自动化实验管理。",
+            "caveat": "仅单次campaign、目标与搜索预算同时变化，非受控消融，且线上仅一个A/B结果。"
+          },
+          "title_zh": "MLE智能体：大规模推荐系统中的自主机器学习工程",
+          "summary": "构建人在环上的LLM智能体，自动提出、实现、训练并离线评估大规模搜索排序模型改动，单次campaign完成1097个候选实验、接受325个，最终模型在线A/B搜索会话量提升0.23%±0.15，但存在时延回退。",
+          "reason": "对精排价值建模与自动化实验闭环有直接借鉴，但仅单次campaign、离线在线口径与消融不完整，需谨慎迁移。",
+          "score": 73,
+          "rubric": {
+            "fit": 4,
+            "evidence": 3,
+            "action": 4
+          },
+          "primary_topic": "llm4rec",
+          "evidence": {
+            "page": 3,
+            "finding": "该页报告2.0 campaign离线累计加权NE改进-0.0224，并给出在线A/B搜索会话量+0.23%±0.15，同时注明时延护栏回退。"
+          },
+          "tags": [
+            "LLM智能体",
+            "自动化实验",
+            "排序模型",
+            "离线在线校准",
+            "A/B测试"
+          ],
+          "institutions": [
+            "Meta Platforms"
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 17
+        },
+        {
+          "id": "2611.28379",
+          "title": "Beyond Relevance: An Empirical Study of Multimodal LLMs for Diversity-Aware Recommendation Reranking",
+          "abstract": "Large language models (LLMs) have emerged as promising rerankers for recommendation, yet most existing approaches rely on textual item descriptions and primarily focus on relevance. In visually oriented domains such as video streaming, item images provide complementary signals that may also inform recommendation diversity. This raises two questions: when does visual information improve recommendation quality, and can multimodal LLMs (MLLMs) enhance relevance and diversity simultaneously? We investigate these questions through a training-free, diversity-aware multimodal reranking framework that jointly incorporates item images, textual metadata, and user interaction histories. We conduct an empirical study across three public Amazon Review datasets and an industrial Amazon Prime Video dataset, using both open-source and proprietary MLLMs. Our results reveal substantial domain-dependent effects: adding visual information yields up to 121.9% relative improvement in NDCG@5 on Prime Video, while producing limited or inconsistent gains on product recommendation datasets. Furthermore, MLLM-based reranking improves both relevance and category-diversity-sensitive ranking quality over a sequential recommendation baseline, achieving up to 71.0% improvement in NDCG@5 and 14.1% in $α$-NDCG@5 on Prime Video. These findings highlight the conditional value of visual information and the potential of training-free MLLMs for relevance- and diversity-aware recommendation reranking.",
+          "authors": [
+            "Chengkai Liu",
+            "Yan Fu",
+            "Huiyuan Chen",
+            "Sheikh Sarwar",
+            "Qilin Qi"
+          ],
+          "published": "2026-11-20T22:37:29Z",
+          "url": "https://arxiv.org/abs/2611.28379v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.28379v1",
+          "explanation": {
+            "problem": "想知道给推荐重排加入商品图片，究竟在什么场景下能同时提升相关性和多样性。",
+            "method": "把用户最近若干条交互的图片横向拼成一张长图，候选商品图片同样拼成一张，并按顺序配上编号标题，使图文一一对应。提示词中加入分析视觉风格、考虑兴趣随时间变化、平衡探索与利用、兼顾相关性与品类多样性四条准则，要求模型只输出候选编号的排序。模型全程不训练，直接对采样候选或召回列表重排，再用相关性指标和品类覆盖指标评估。",
+            "application": "推测可先在视频、封面图信息量大的场景做离线重排试验，用组合图提示替代逐图输入以控制成本，并以α-NDCG监控多样性副作用。",
+            "caveat": "全部为离线小候选集实验，无线上A/B，且未单独消融多样性指令的贡献。"
+          },
+          "title_zh": "超越相关性：多模态大语言模型用于多样性感知推荐重排的实证研究",
+          "summary": "提出免训练的多模态重排框架MMRerank，把用户历史与候选商品的图片拼成组合图、配标题和多样性指令交给预训练多模态大模型直接输出排序。在三个公开Amazon商品集与工业Prime Video集上，视频域加图相对纯文本NDCG@5最高提升121.9%，重排相对SASRec最高提升71.0% NDCG@5和14.1% α-NDCG@5，但商品域增益有限且因模型而异。",
+          "reason": "给出多模态大模型做多样性重排的域依赖证据与成本数据，可借鉴其组合图提示与α-NDCG评估，但仅离线小候选集实验、无线上A/B。",
+          "score": 68,
+          "rubric": {
+            "fit": 4,
+            "evidence": 3,
+            "action": 3
+          },
+          "primary_topic": "ranking",
+          "evidence": {
+            "page": 6,
+            "finding": "该页表2给出Prime Video上的相对提升：加图相对纯文本NDCG@5提升121.9%（InternVL3）与9.6%（Sonnet），重排相对SASRec提升66.4%与71.0% NDCG@5、12.0%与14.1% α-NDCG@5，属离线相对指标而非线上A/B。"
+          },
+          "tags": [
+            "多模态重排",
+            "多样性",
+            "免训练提示",
+            "视频推荐",
+            "大模型重排"
+          ],
+          "institutions": [
+            "Amazon"
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 8
+        }
+      ],
+      "usage_runs": [
+        {
+          "calls": 14,
+          "prompt_tokens": 226394,
+          "completion_tokens": 7205,
+          "total_tokens": 233599,
+          "prompt_cache_hit_tokens": 108032,
+          "prompt_cache_miss_tokens": 118362,
+          "missing_usage": 0,
+          "balance_before": [
+            {
+              "currency": "CNY",
+              "total_balance": "356.63"
+            }
+          ],
+          "balance_after": [
+            {
+              "currency": "CNY",
+              "total_balance": "356.63"
+            }
+          ],
+          "balance_change": [
+            {
+              "currency": "CNY",
+              "decrease": "0.00"
+            }
+          ]
+        }
+      ],
+      "usage": {
+        "calls": 14,
+        "prompt_tokens": 226394,
+        "completion_tokens": 7205,
+        "total_tokens": 233599,
+        "prompt_cache_hit_tokens": 108032,
+        "prompt_cache_miss_tokens": 118362,
+        "missing_usage": 0,
+        "balance_before": [
+          {
+            "currency": "CNY",
+            "total_balance": "356.63"
+          }
+        ],
+        "balance_after": [
+          {
+            "currency": "CNY",
+            "total_balance": "356.63"
+          }
+        ],
+        "balance_change": [
+          {
+            "currency": "CNY",
+            "decrease": "0.00"
+          }
+        ]
+      },
+      "usage_incomplete": false
     }
   ],
   "recommended_ids": [
@@ -911,17 +1112,21 @@
     "2611.22597",
     "2611.22788",
     "2611.22838",
+    "2611.23910",
     "2611.24006",
     "2611.24283",
     "2611.24757",
+    "2611.25256",
     "2611.25288",
     "2611.25527",
     "2611.25659",
     "2611.26096",
-    "2611.27514"
+    "2611.27514",
+    "2611.28379"
   ],
   "recommended_titles": [
     "betterrankersworseretrieversthehiddencostofrlposttrainingingenerativerecommendation",
+    "beyondrelevanceanempiricalstudyofmultimodalllmsfordiversityawarerecommendationreranking",
     "cotticontrastivetrainingandtimeawareinferenceforrobustindustrialrecommendationunderpromotionaldrift",
     "deepcrossdivisionnetworkforproductandratiofeatureinteractionsinindustrialranking",
     "dnaunlockingdepthscalinginctrmodels",
@@ -931,7 +1136,9 @@
     "intentgrenhancingintentforendtoendpersonalizedgenerativeretrievalinsearch",
     "learninggenerativerankingpoliciesforwholepageoptimization",
     "lostinthefunnelselectioninducedmiscalibrationinrankinganddecisionsystems",
+    "lqreclatequantizationforsequentialrecommendation",
     "marstechnicalreport",
+    "mleagentsautonomousmlengineeringinlargescalerecommendationsystems",
     "mmintentflowanintentdrivenrealtimemultimodalsearchsystemwithimagetextqueriesatxiaohongshu",
     "peetspreferenceawareembeddingswithexplicittreestructureforauxiliaryproductbundling",
     "varianceoptimalcounterfactualpolicydesignforsampleefficientonlineabtesting",
