@@ -776,5 +776,59 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 17
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.32590v1": {
+    "id": "2611.32590",
+    "title": "LazUnirec: Unifying Retrieval and Ranking in Multi-scenario Industrial Recommendation",
+    "abstract": "Modern industrial recommendation systems typically divide retrieval and ranking into two separate cascaded stages, leading to inconsistent optimization objectives, redundant encoding of user sequences, and a waste of computational resources. Previous efforts have investigated using Transformers to model both retrieval and ranking simultaneously. However, these studies still face two major limitations: (1) Since retrieval and ranking share a single Transformer backbone, the gradient conflict arises when the gradient directions of the two tasks are inconsistent. (2) When gradient conflict occurs, the model cannot determine a reliable direction for gradient updates. To this end, we propose a Unified Retrieval and Ranking approach for Multi-scenario Industrial Recommendation, termed as LazUnirec. Specifically, we construct task-shared and task-private parameters on the Transformer backbone to mitigate the gradient conflict. Wherein, for the attention components, we propose LoRA-modulated attention, enabling retrieval and ranking to share attention parameters while preserving task-private parameters. For the feed-forward networks (FFN), we present task-adaptive sparse mixture-of-experts (MoE) to mitigate gradient conflict by constructing task-shared and task-private experts. Moreover, we propose an uncertainty estimation that evaluates the gradient reliability of the retrieval and ranking, thereby guiding the model toward a more reliable gradient update direction when gradient conflict occurs. In addition, knowledge distillation from ranking to retrieval further enables cross-task knowledge transfer. Extensive offline experiments and online A/B testing demonstrate the effectiveness and superiority of LazUnirec. LazUnirec has been deployed in online multi-scenario industrial recommendation system and currently delivers significant gains for the platform.",
+    "authors": [
+      "Xiaodong Li",
+      "Junfeng Zhang",
+      "Shichao Nie",
+      "Ziyue Guo",
+      "Yiming Liu",
+      "Xinxin Xu",
+      "Xurong Li",
+      "Jinyuan Dang",
+      "Zhanming Ou",
+      "Jianan Yan",
+      "Tao Luo",
+      "Xiaoyi Zeng"
+    ],
+    "published": "2026-11-24T13:26:54Z",
+    "url": "https://arxiv.org/abs/2611.32590v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.32590v1",
+    "explanation": {
+      "problem": "召回和排序各用一套模型重复编码同一段用户行为，目标不一致还浪费算力，想合成一个模型又互相拖累。",
+      "method": "把用户行为序列、场景触发标记、多个召回查询和候选物品拼成一条序列输入共享Transformer；注意力层给召回和排序各加一组低秩私有参数，前馈层给每个任务配私有专家并稀疏调用共享专家；再按梯度方向的历史稳定性给两个任务的损失加权，并用排序输出蒸馏召回。输出同时给出召回打分和点击/转化预估。",
+      "application": "推测可借鉴其任务私有低秩参数加共享专家的做法，在电商召回排序一体化中控制梯度冲突，并用请求级候选列表做排序到召回的蒸馏。",
+      "caveat": "线上A/B是整体替换原召回与排序模型的结果，各模块贡献仅有离线消融，且仅一个平台一周10%流量。"
+    },
+    "title_zh": "LazUnirec：在多场景工业推荐中统一召回与排序",
+    "summary": "用一个Transformer主干统一多场景召回与排序，通过LoRA调制注意力、任务自适应稀疏MoE、梯度不确定性加权和排序到召回的蒸馏缓解梯度冲突。离线三场景AUC/HR均优于UniPinRec、UniR2、UniSGR、OneTrans-V2，线上10%流量一周A/B中免触发场景GMV+4.01%、触发场景+3.06%。",
+    "reason": "统一召回排序主干与梯度冲突缓解对精排/召回一体化有直接参考价值，但线上收益为整体替换两阶段模型所得，未单独归因各模块。",
+    "score": 88,
+    "rubric": {
+      "fit": 5,
+      "evidence": 4,
+      "action": 4
+    },
+    "primary_topic": "ranking",
+    "evidence": {
+      "page": 6,
+      "finding": "离线三场景中LazUnirec在排序AUC/GAUC和召回HR@100/500/1000上均优于Transformer、UniPinRec、UniR2、UniSGR、OneTrans-V2，属单一平台离线对比。"
+    },
+    "tags": [
+      "召回排序统一",
+      "梯度冲突",
+      "多场景推荐",
+      "稀疏MoE",
+      "知识蒸馏"
+    ],
+    "institutions": [
+      "Alibaba International Digital Commerce Group"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 10
   }
 }
