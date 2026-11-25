@@ -1,8 +1,7 @@
 name: Daily paper digest
 on:
   schedule:
-    - cron: '30 0 * * *' # 08:30 Asia/Shanghai
-    - cron: '17 1,2 * * *' # Retry at 09:17 and 10:17 Asia/Shanghai
+    - cron: '17 * * * *' # Prepare from 00:17 Shanghai; recover on later ticks.
   workflow_dispatch:
     inputs:
       refresh_existing:
@@ -21,8 +20,26 @@ concurrency:
   group: paper-digest
   cancel-in-progress: false
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      needed: ${{ steps.check.outputs.needed }}
+    steps:
+      - id: check
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          today=$(TZ=Asia/Shanghai date +%F)
+          needed=true
+          if [[ "$EVENT" == schedule ]] && curl -fsSL --max-time 20 \
+              "https://locusxt.github.io/arxiv-recs-digest/?date=$today" -o "$RUNNER_TEMP/digest.html" && \
+              grep -Fq "<h2>$today</h2>" "$RUNNER_TEMP/digest.html"; then
+            needed=false
+          fi
+          echo "needed=$needed" >> "$GITHUB_OUTPUT"
   digest:
-    if: github.ref == 'refs/heads/main'
+    needs: check
+    if: github.ref == 'refs/heads/main' && needs.check.outputs.needed == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
