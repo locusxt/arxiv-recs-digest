@@ -873,5 +873,59 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 33
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.28645v1": {
+    "id": "2611.28645",
+    "title": "PROSPER: LLMs as Sparse Retrievers for First-Stage Product Search",
+    "abstract": "Product search is a crucial component of large-scale e-commerce platforms, where first-stage retrieval should achieve high recall while ensuring efficient online deployment. Sparse retrieval remains attractive for this setting due to its interpretability and deployability, yet it suffers from severe vocabulary mismatch challenges, especially for short queries and product titles. Large language models (LLMs) offer strong semantic capabilities, but directly applying them to sparse retrieval in product search introduces new challenges: (i) semantic expansion may distort critical literal signals such as brand names and model identifiers; and (ii) learning meaningful sparse representations is difficult in the high-dimensional vocabulary space induced by LLMs.To address these challenges, we propose PROSPER, a framework that uses LLMs as sparse retrievers for product search while explicitly preserving lexical fidelity. PROSPER combines (i) a literal residual network that alleviates lexical expansion hallucination by reinforcing underweighted literal terms through a residual compensation mechanism; and (ii) a lexical focusing window that uses top-k selection for rapid early sparsification and effective training initialization. Extensive offline evaluations and large-scale online A/B tests demonstrate that PROSPER consistently improves over existing sparse retrievers, and provides revenue gains for industrial hybrid retrieval systems.",
+    "authors": [
+      "Hongru Song",
+      "Yu-An Liu",
+      "Ruqing Zhang",
+      "Jiafeng Guo",
+      "Maarten de Rijke",
+      "Sen Li",
+      "Wenjun Peng",
+      "Fuyu Lv",
+      "Xueqi Cheng"
+    ],
+    "published": "2026-11-21T08:14:41Z",
+    "url": "https://arxiv.org/abs/2611.28645v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.28645v1",
+    "explanation": {
+      "problem": "商品搜索的短查询和标题里品牌、型号等字面词很关键，但用大模型做稀疏检索时这些词权重被语义扩展淹没，还容易扩出无关词。",
+      "method": "先用大语言模型把查询和商品编码成词表维度上的稀疏权重；再用字面残差网络，以当前最大权重为参照，给查询和标题中原本出现的字面词补上可学习的加权，压住无关扩展；训练早期用词法聚焦窗口只保留权重最高的若干词，加快稀疏化，之后交给稀疏正则继续调整；最后用对比排序损失训练，输出可倒排检索的稀疏向量。",
+      "application": "推测可把字面残差补偿思路迁移到电商稀疏召回通道，用于保护品牌、型号等精确匹配信号；上线前需在自有数据上单独做模块消融和分通道归因。",
+      "caveat": "线上A/B只报告混合召回系统的整体业务指标，未单独验证各模块贡献，且仅覆盖约1%流量。"
+    },
+    "title_zh": "PROSPER：用大语言模型作为首阶段商品搜索的稀疏检索器",
+    "summary": "用大语言模型做稀疏检索，并加入字面残差网络和词法聚焦窗口，以保留品牌、型号等字面词。离线在Multi-CPR电商集上Hit@1000达93.9%，线上1%流量A/B测试中直接引导净GMV提升1.60%。",
+    "reason": "对做电商首阶段召回和稀疏检索的工程师有直接参考价值，但线上收益来自混合召回通道整体，未单独归因于各模块。",
+    "score": 80,
+    "rubric": {
+      "fit": 4,
+      "evidence": 4,
+      "action": 4
+    },
+    "primary_topic": "retrieval",
+    "evidence": {
+      "page": 6,
+      "finding": "离线主实验表明PROSPER在Multi-CPR电商集上Hit@1000为93.9%，高于BM25Qwen的83.7%、SPLADE-v2的89.6%和SPQwen-echoembedding的92.4%，但Hit@1仍低于BGE-large-zh-v1.5。"
+    },
+    "tags": [
+      "稀疏检索",
+      "商品搜索",
+      "大语言模型",
+      "字面词保留",
+      "首阶段召回"
+    ],
+    "institutions": [
+      "State Key Laboratory of AI Safety, Institute of Computing Technology, Chinese Academy of Sciences",
+      "University of Chinese Academy of Sciences",
+      "University of Amsterdam",
+      "Taobao & Tmall Group of Alibaba"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 11
   }
 }
