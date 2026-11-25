@@ -830,5 +830,48 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 10
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.32855v1": {
+    "id": "2611.32855",
+    "title": "Speculative Decoding for Semantic-ID-Based Generative Recommendations",
+    "abstract": "Generative recommender systems with Semantic IDs (SIDs) represent each item as a short sequence of $L$ discrete tokens and use a sequence model to predict the next item's tokens from a user's history. Industry-scale deployments typically use these models to retrieve multiple candidates per request with constrained beam search. However, this incurs a fixed cost of $L$ sequential model calls per request, and accuracy degrades as the SID generator becomes less sharp, without a guarantee on how close the output is to the exact top-$K$. Production systems therefore cannot detect degraded retrieval for individual requests. We propose SIDECAR, which uses approximate draft candidates and a tree-attention pass to score the entire draft in a single model call, memory permitting. This pass bounds the probability of every unexplored SID prefix and certifies the exact top-$K$ if the draft contains them. Otherwise, a branch-and-bound fallback expands only the parts of the trie that can still change the output, reaching certification within at most $L$ calls for any draft. Moreover, under a budget of $M$ tokens per call and $Y$ calls, which for $Y = L$ matches the resources of a beam search of width $M$, SIDECAR announces a factor $1 + δ$ within which its list will be exact at every rank. Depending on model sharpness, SIDECAR returns the exact top-$K$ using a fraction of beam search's calls or memory. Even when the budget is too small to recover the exact top-$K$, SIDECAR, unlike beam search, reports the announced factor, allowing the serving system to stop early once a quality target or latency limit is reached.",
+    "authors": [
+      "Harshal A. Chaudhari"
+    ],
+    "published": "2026-11-24T15:57:21Z",
+    "url": "https://arxiv.org/abs/2611.32855v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.32855v1",
+    "explanation": {
+      "problem": "生成式召回用束搜索逐层解码语义ID，每请求固定跑L次串行模型调用，且无法判断返回的列表是否就是模型真正的top-K。",
+      "method": "输入是用户历史和一份近似草稿（如批任务存下的用户序列或协同过滤结果）。把草稿的语义ID插成候选树，用一次带树掩码的前向同时算出草稿及其兄弟节点的精确概率，并给出未展开前缀的概率上界；若已得分第K名不低于该上界，就证明列表即精确top-K。否则只展开可能改变结果的前缀，最多L轮必然精确；在内存和轮数预算下，第一轮后即公布列表与精确解的近似倍数。",
+      "application": "推测：可把线上已有的粗排或多路召回结果当作草稿，替换生成式召回的束搜索解码，用证书决定是否提前返回或升级预算，并按离线覆盖率挑选草稿来源。",
+      "caveat": "仅在Amazon Beauty单数据集上做离线分布重放，无线上A/B、真实延迟与大规模目录验证。"
+    },
+    "title_zh": "面向基于语义ID的生成式推荐的推测解码",
+    "summary": "提出SIDECAR解码器：用近似草稿做一次树注意力打分，给出精确top-K的证书，证书不成立时只扩展仍可能改变结果的开放前缀，并在内存与轮数预算下提前公布近似因子。在Amazon Beauty上以离线重放验证：锐利模型下与束搜索列表一致但所需轮数不到一半，模型变平时束搜索需接近全目录宽度才精确，而SIDECAR所需内存低一个数量级以上。",
+    "reason": "对做生成式召回/重排线上解码的工程师有直接价值：把束搜索的固定L次串行调用换成草稿加证书与预算内保证，但证据仅来自单数据集离线重放，无线上A/B与延迟实测。",
+    "score": 73,
+    "rubric": {
+      "fit": 4,
+      "evidence": 3,
+      "action": 4
+    },
+    "primary_topic": "retrieval",
+    "evidence": {
+      "page": 9,
+      "finding": "实验为离线重放：对每个测试用户跑一次全目录树前向得到精确分布，各解码器在此分布上确定性重放，非线上A/B。"
+    },
+    "tags": [
+      "语义ID",
+      "推测解码",
+      "生成式召回",
+      "束搜索",
+      "精确性证书"
+    ],
+    "institutions": [
+      "Etsy Inc."
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 33
   }
 }
