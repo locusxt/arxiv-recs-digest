@@ -1316,6 +1316,216 @@
         ]
       },
       "usage_incomplete": false
+    },
+    {
+      "date": "2026-11-27",
+      "candidates": 283,
+      "papers": [
+        {
+          "id": "2611.33628",
+          "title": "Multi-Modal Causal Disentanglement for Multi-Domain Sequential Audio Recommendation",
+          "abstract": "Modern music platforms expose users to heterogeneous audio content domains such as songs, playlists, and podcasts. Multi-domain sequential recommendation (MDSR) seeks to exploit such cross-domain behavior, yet two obstacles persist in practice. First, joint optimization across heterogeneous domains is prone to negative transfer, with high-traffic domains dominating the shared parameter space and suppressing weaker domains. Second, conventional ID-based collaborative signals fail to bridge domains that are semantically related but exhibit little behavioral overlap. This paper presents CAMAR, a multi-modal causal disentanglement framework for multi-domain audio recommendation. From a causal perspective, user behavior is modeled as the joint outcome of a domain-invariant preference and domain-specific preferences. Guided by this view, CAMAR factorizes user representations into domain-invariant and domain-specific components and enforces domain adversarial invariance together with orthogonality, restricting cross-domain interaction to the invariant subspace and suppressing harmful transfer paths. To strengthen cross-domain semantic coupling, CAMAR derives trainable semantic-ID embeddings from pre-trained text, vision, and audio features through residual quantization, yielding an end-to-end multi-modal adaptation tailored to recommendation. A transfer network imputes user representations for inactive domains, mitigating cross-domain cold start. Experiments on both public and industrial datasets demonstrate consistent gains over strong baselines. In online A/B tests on NetEase Cloud Music, one of China's largest music streaming platforms, CAMAR delivers consistent gains across all three domains in their main traffic scenarios, validating its effectiveness in multi-domain audio recommendation at scale.",
+          "authors": [
+            "Yu Ren",
+            "Pengcheng Li",
+            "Weijun Xu",
+            "Hengzhong Zhou",
+            "Shufeng Ye",
+            "Qiang Xiao",
+            "Dongjing Wang",
+            "Chuanjiang Luo",
+            "Yong Li"
+          ],
+          "published": "2026-11-25T01:57:30Z",
+          "url": "https://arxiv.org/abs/2611.33628v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.33628v1",
+          "explanation": {
+            "problem": "多个内容域共享一套模型时，高流量域会压制低流量域，且缺少行为共现的用户难以跨域对齐。",
+            "method": "先用文本、图像、音频特征经残差量化得到跨域共享的语义编号，与各域ID融合后分别编码出每域用户表示；对无行为域用成对迁移网络补全。再把表示拆成域不变与域特有两部分，用正交约束分开、用域对抗去掉域身份信息，只让不变部分参与跨域注意力，最后门控融合打分。",
+            "application": "推测可把电商的搜索、推荐、直播等场景视为多域，用语义ID对齐无共现商品，用域对抗与正交约束保护低流量场景；迁移网络可补全新场景用户表示。",
+            "caveat": "线上A/B只测新增召回通道的整体增益，未单独验证解耦、语义ID、迁移网络各自的贡献。"
+          },
+          "title_zh": "面向多域序列音频推荐的多模态因果解耦",
+          "summary": "提出CAMAR，把多域用户表示拆成域不变与域特有分量，用正交约束、域对抗和受限跨域注意力抑制负迁移，并用多模态语义ID与迁移网络补全冷启动域表示。离线两个数据集均优于九个基线，网易云音乐两周线上A/B中歌曲播放时长+1.0%、歌单点赞率+3.0%、播客播放时长+1.6%。",
+          "reason": "多域负迁移与冷启动补全思路可迁移到电商多场景推荐，但线上仅验证新增召回通道的整体收益，未单独归因各模块。",
+          "score": 80,
+          "rubric": {
+            "fit": 4,
+            "evidence": 4,
+            "action": 4
+          },
+          "primary_topic": "recommendation",
+          "evidence": {
+            "page": 9,
+            "finding": "线上A/B为两周实验，实验组在原有分域召回管线基础上新增CAMAR召回通道，共享相同排序与重排模块，三个域指标均显著提升，但未拆分各模块贡献。"
+          },
+          "tags": [
+            "多域序列推荐",
+            "因果解耦",
+            "多模态语义ID",
+            "负迁移",
+            "冷启动"
+          ],
+          "institutions": [
+            "杭州电子科技大学",
+            "网易云音乐"
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 10
+        },
+        {
+          "id": "2611.31940",
+          "title": "MELODI: Similarity-Identity Decoupling for Lightweight Ranking",
+          "abstract": "For latency-constrained candidate ranking, we propose a similarity-identity decoupling framework that separates target-history compatibility from target-only information. We study two orders for computing pooled similarity, similarity-then-pool and pool-then-similarity, and identify linearity of the similarity operator in its history argument, for each fixed target, as sufficient for their equivalence, justifying the cheaper pool-then-similarity form. We instantiate the framework as multi-head efficient lightweight operator for decoupling identity and similarity (MELODI), whose similarity branch combines target-conditioned multi-head history pooling with a single residual-free cross layer that is linear in its pooled-history input and whose identity branch is problem-dependent. On public benchmark datasets, MELODI matches or surpasses the evaluated target-aware and target-agnostic baselines. On two large-scale industrial datasets, its area under the precision-recall curve (AUPRC), normalised discounted cumulative gain (NDCG), and recall values are equal to or higher than those of the evaluated target-aware baselines. Processor measurements show lower latency than the evaluated candidate-conditioned baselines at large candidate counts, further reduced by request-local history reuse.",
+          "authors": [
+            "Quoc Phong Nguyen",
+            "Vuong Le",
+            "Volodymyr Vaskovych",
+            "Julien Monteil"
+          ],
+          "published": "2026-11-24T04:44:33Z",
+          "url": "https://arxiv.org/abs/2611.31940v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.31940v1",
+          "explanation": {
+            "problem": "在候选多、时延紧的精排阶段，既要让每个候选按用户历史做个性化打分，又不想为每个候选重复编码整段历史。",
+            "method": "输入是用户历史序列和一批候选物品。先用共享投影和归一化处理，再让每个候选作为查询对历史做多头交叉注意力，得到按候选加权的历史汇总；随后用目标相关的门控专家把汇总历史与目标投影逐维相乘，得到显式相似性向量，另用一条只处理目标的分支保留目标自身信息，最后拼接打分。由于相似算子对历史是线性的，可以先汇总再算相似，从而每个请求只编码一次历史。",
+            "application": "推测：可在电商精排中把历史键值缓存为请求级共享张量，候选侧只做注意力打分与门控交叉，用于千级候选场景降时延；需自行验证与现有DIN类模型的线上收益。",
+            "caveat": "全部为离线公开与私有日志数据评估，无线上A/B，时延仅在单一CPU机型测得。"
+          },
+          "title_zh": "MELODI：面向轻量级排序的相似性—身份解耦",
+          "summary": "提出将用户—目标相似性与目标自身身份信号解耦的排序框架，并证明相似算子对历史线性时先池化后相似与先相似后池化等价，据此用多头交叉注意力加无残差门控交叉层实现MELODI；在两个公开数据集和两个工业数据集上离线指标不劣于或优于目标感知基线，且在1000候选时延低于候选条件基线。",
+          "reason": "为精排提供可复用历史、按请求共享计算的目标感知轻量结构，但仅有离线与单机时延证据，无线上A/B。",
+          "score": 73,
+          "rubric": {
+            "fit": 4,
+            "evidence": 3,
+            "action": 4
+          },
+          "primary_topic": "ranking",
+          "evidence": {
+            "page": 6,
+            "finding": "公开数据集三次种子平均下MELODI在全部指标上最高，但仅为离线采样负例评估，且部分对比为单次训练。"
+          },
+          "tags": [
+            "目标感知排序",
+            "相似性解耦",
+            "交叉注意力",
+            "推理时延",
+            "历史复用"
+          ],
+          "institutions": [
+            "Amazon International Machine Learning"
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 17
+        },
+        {
+          "id": "2611.31052",
+          "title": "From Head to Tail: LLM-Augmented Sequential Recommendation and Trade-off Optimization",
+          "abstract": "Recommender systems exhibit popularity bias, often under-serving long-tail and cold-start items with sparse interaction data. We propose a group-specific data augmentation approach that leverages LLMs to generate synthetic interactions, formulated as a constrained optimization problem, maximizing group-specific NDCG@20 and coverage while bounding overall NDCG@20 degradation within an acceptable threshold. Items are partitioned by interaction frequency to find the optimal augmentation strategy for each group. We further study combining the augmentation across groups simultaneously and find that while individual optimal strategies navigate the multi-group augmentation design, they are not simply additive. We further ablate on the LLM-based augmentation itself, comparing LLM scales, augmentation configuration under token constraints, finding that augmentation quality scales with contextual richness, albeit at a proportionally higher cost. Experiments with SASRec demonstrate the effectiveness of the proposed approach, achieving over 100% and 60% improvement in group-specific NDCG@20 for extreme and regular long-tail items, respectively, on our industrial dataset, and 40%, 25% for MovieLens-32M, while increasing their coverage without significant overall degradation.",
+          "authors": [
+            "Adeep Hande",
+            "Shaghayegh Agah",
+            "Neeraj Sharma",
+            "Karina Halevy",
+            "Sardar Hamidian"
+          ],
+          "published": "2026-11-23T17:15:58Z",
+          "url": "https://arxiv.org/abs/2611.31052v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.31052v1",
+          "explanation": {
+            "problem": "推荐系统偏爱热门物品，长尾和冷启动物品因交互太少而学不好表示，需要在不明显拖累整体排序的前提下给它们补充训练信号。",
+            "method": "先按物品被交互次数把目录分成冷启动、极端长尾、常规长尾和热门四组；对目标组随机抽一部分用户，用文本嵌入按相似度挑出十个候选物品，让大模型从中选一个最符合该用户口味的物品；把这个合成交互插到用户序列倒数第二个位置，再用增强后的数据从头训练序列推荐模型；最后改变增强比例，观察组内排序质量和整体排序质量之间的取舍曲线。",
+            "application": "推测可借鉴其按频次分组、组内候选池约束生成、以及以整体指标为护栏的调参框架，用于电商长尾商品和冷启商品的离线数据增强试验；但需先在自己的模型上验证整体指标不降。",
+            "caveat": "全部为离线重训实验，无线上A/B，且多数配置下整体NDCG@20下降，跨组最优策略不可加。",
+            "tags": [
+              "长尾推荐",
+              "冷启动",
+              "LLM数据增强",
+              "序列推荐",
+              "多目标权衡"
+            ]
+          },
+          "title_zh": "从头到尾：LLM增强的序列推荐与权衡优化",
+          "summary": "按交互频次把物品分为冷启动、极端长尾、常规长尾和热门四组，用LLM在组内候选池中为部分用户生成一条合成交互并插入序列，再重训SASRec，以组内NDCG@20和覆盖率为目标、整体NDCG@20下降为约束做权衡分析。在自有工业数据和MovieLens-32M上，极端长尾与常规长尾组的组内NDCG@20分别提升超过100%和60%（工业数据）、40%和25%（ML-32M），但整体NDCG@20在多数配置下下降，且各组最优策略不能简单叠加。",
+          "reason": "对做长尾与冷启动增强的精排/召回工程师有参考价值，但证据限于离线SASRec重训实验，无线上A/B，且整体指标普遍受损。",
+          "score": 73,
+          "rubric": {
+            "fit": 4,
+            "evidence": 3,
+            "action": 4
+          },
+          "primary_topic": "llm4rec",
+          "evidence": {
+            "page": 3,
+            "finding": "该页表3显示在PRD的G2组、5%增强比例下，随机候选加LLM重排使整体NDCG@20下降4.03%、组内提升24.87%，而嵌入候选加LLM重排整体下降2.09%、组内提升48.28%，说明增益伴随整体指标代价。"
+          },
+          "tags": [],
+          "institutions": [
+            "Applied AI Research, Comcast",
+            "Department of Computer Science, Carnegie Mellon University"
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 7
+        }
+      ],
+      "usage_runs": [
+        {
+          "calls": 13,
+          "prompt_tokens": 216098,
+          "completion_tokens": 7194,
+          "total_tokens": 223292,
+          "prompt_cache_hit_tokens": 98304,
+          "prompt_cache_miss_tokens": 117794,
+          "missing_usage": 0,
+          "balance_before": [
+            {
+              "currency": "CNY",
+              "total_balance": "356.17"
+            }
+          ],
+          "balance_after": [
+            {
+              "currency": "CNY",
+              "total_balance": "356.17"
+            }
+          ],
+          "balance_change": [
+            {
+              "currency": "CNY",
+              "decrease": "0.00"
+            }
+          ]
+        }
+      ],
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 216098,
+        "completion_tokens": 7194,
+        "total_tokens": 223292,
+        "prompt_cache_hit_tokens": 98304,
+        "prompt_cache_miss_tokens": 117794,
+        "missing_usage": 0,
+        "balance_before": [
+          {
+            "currency": "CNY",
+            "total_balance": "356.17"
+          }
+        ],
+        "balance_after": [
+          {
+            "currency": "CNY",
+            "total_balance": "356.17"
+          }
+        ],
+        "balance_change": [
+          {
+            "currency": "CNY",
+            "decrease": "0.00"
+          }
+        ]
+      },
+      "usage_incomplete": false
     }
   ],
   "recommended_ids": [
@@ -1338,8 +1548,11 @@
     "2611.27514",
     "2611.28379",
     "2611.28645",
+    "2611.31052",
+    "2611.31940",
     "2611.32590",
-    "2611.32855"
+    "2611.32855",
+    "2611.33628"
   ],
   "recommended_titles": [
     "betterrankersworseretrieversthehiddencostofrlposttrainingingenerativerecommendation",
@@ -1347,6 +1560,7 @@
     "cotticontrastivetrainingandtimeawareinferenceforrobustindustrialrecommendationunderpromotionaldrift",
     "deepcrossdivisionnetworkforproductandratiofeatureinteractionsinindustrialranking",
     "dnaunlockingdepthscalinginctrmodels",
+    "fromheadtotailllmaugmentedsequentialrecommendationandtradeoffoptimization",
     "fromrelevancetoutilityrubricalignmentinyuanbaosearch",
     "fromsessionstoservingintegratingllmbasedembeddingsintoretrievalforproductioncontentrecommendation",
     "intelligentembeddingpruningforlargescalerecommendationmodels",
@@ -1356,8 +1570,10 @@
     "lostinthefunnelselectioninducedmiscalibrationinrankinganddecisionsystems",
     "lqreclatequantizationforsequentialrecommendation",
     "marstechnicalreport",
+    "melodisimilarityidentitydecouplingforlightweightranking",
     "mleagentsautonomousmlengineeringinlargescalerecommendationsystems",
     "mmintentflowanintentdrivenrealtimemultimodalsearchsystemwithimagetextqueriesatxiaohongshu",
+    "multimodalcausaldisentanglementformultidomainsequentialaudiorecommendation",
     "peetspreferenceawareembeddingswithexplicittreestructureforauxiliaryproductbundling",
     "prosperllmsassparseretrieversforfirststageproductsearch",
     "speculativedecodingforsemanticidbasedgenerativerecommendations",
