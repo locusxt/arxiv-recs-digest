@@ -1017,5 +1017,54 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 17
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.31052v1": {
+    "id": "2611.31052",
+    "title": "From Head to Tail: LLM-Augmented Sequential Recommendation and Trade-off Optimization",
+    "abstract": "Recommender systems exhibit popularity bias, often under-serving long-tail and cold-start items with sparse interaction data. We propose a group-specific data augmentation approach that leverages LLMs to generate synthetic interactions, formulated as a constrained optimization problem, maximizing group-specific NDCG@20 and coverage while bounding overall NDCG@20 degradation within an acceptable threshold. Items are partitioned by interaction frequency to find the optimal augmentation strategy for each group. We further study combining the augmentation across groups simultaneously and find that while individual optimal strategies navigate the multi-group augmentation design, they are not simply additive. We further ablate on the LLM-based augmentation itself, comparing LLM scales, augmentation configuration under token constraints, finding that augmentation quality scales with contextual richness, albeit at a proportionally higher cost. Experiments with SASRec demonstrate the effectiveness of the proposed approach, achieving over 100% and 60% improvement in group-specific NDCG@20 for extreme and regular long-tail items, respectively, on our industrial dataset, and 40%, 25% for MovieLens-32M, while increasing their coverage without significant overall degradation.",
+    "authors": [
+      "Adeep Hande",
+      "Shaghayegh Agah",
+      "Neeraj Sharma",
+      "Karina Halevy",
+      "Sardar Hamidian"
+    ],
+    "published": "2026-11-23T17:15:58Z",
+    "url": "https://arxiv.org/abs/2611.31052v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.31052v1",
+    "explanation": {
+      "problem": "推荐系统偏爱热门物品，长尾和冷启动物品因交互太少而学不好表示，需要在不明显拖累整体排序的前提下给它们补充训练信号。",
+      "method": "先按物品被交互次数把目录分成冷启动、极端长尾、常规长尾和热门四组；对目标组随机抽一部分用户，用文本嵌入按相似度挑出十个候选物品，让大模型从中选一个最符合该用户口味的物品；把这个合成交互插到用户序列倒数第二个位置，再用增强后的数据从头训练序列推荐模型；最后改变增强比例，观察组内排序质量和整体排序质量之间的取舍曲线。",
+      "application": "推测可借鉴其按频次分组、组内候选池约束生成、以及以整体指标为护栏的调参框架，用于电商长尾商品和冷启商品的离线数据增强试验；但需先在自己的模型上验证整体指标不降。",
+      "caveat": "全部为离线重训实验，无线上A/B，且多数配置下整体NDCG@20下降，跨组最优策略不可加。",
+      "tags": [
+        "长尾推荐",
+        "冷启动",
+        "LLM数据增强",
+        "序列推荐",
+        "多目标权衡"
+      ]
+    },
+    "title_zh": "从头到尾：LLM增强的序列推荐与权衡优化",
+    "summary": "按交互频次把物品分为冷启动、极端长尾、常规长尾和热门四组，用LLM在组内候选池中为部分用户生成一条合成交互并插入序列，再重训SASRec，以组内NDCG@20和覆盖率为目标、整体NDCG@20下降为约束做权衡分析。在自有工业数据和MovieLens-32M上，极端长尾与常规长尾组的组内NDCG@20分别提升超过100%和60%（工业数据）、40%和25%（ML-32M），但整体NDCG@20在多数配置下下降，且各组最优策略不能简单叠加。",
+    "reason": "对做长尾与冷启动增强的精排/召回工程师有参考价值，但证据限于离线SASRec重训实验，无线上A/B，且整体指标普遍受损。",
+    "score": 73,
+    "rubric": {
+      "fit": 4,
+      "evidence": 3,
+      "action": 4
+    },
+    "primary_topic": "llm4rec",
+    "evidence": {
+      "page": 3,
+      "finding": "该页表3显示在PRD的G2组、5%增强比例下，随机候选加LLM重排使整体NDCG@20下降4.03%、组内提升24.87%，而嵌入候选加LLM重排整体下降2.09%、组内提升48.28%，说明增益伴随整体指标代价。"
+    },
+    "tags": [],
+    "institutions": [
+      "Applied AI Research, Comcast",
+      "Department of Computer Science, Carnegie Mellon University"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 7
   }
 }
