@@ -1066,5 +1066,57 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 7
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.33628v1": {
+    "id": "2611.33628",
+    "title": "Multi-Modal Causal Disentanglement for Multi-Domain Sequential Audio Recommendation",
+    "abstract": "Modern music platforms expose users to heterogeneous audio content domains such as songs, playlists, and podcasts. Multi-domain sequential recommendation (MDSR) seeks to exploit such cross-domain behavior, yet two obstacles persist in practice. First, joint optimization across heterogeneous domains is prone to negative transfer, with high-traffic domains dominating the shared parameter space and suppressing weaker domains. Second, conventional ID-based collaborative signals fail to bridge domains that are semantically related but exhibit little behavioral overlap. This paper presents CAMAR, a multi-modal causal disentanglement framework for multi-domain audio recommendation. From a causal perspective, user behavior is modeled as the joint outcome of a domain-invariant preference and domain-specific preferences. Guided by this view, CAMAR factorizes user representations into domain-invariant and domain-specific components and enforces domain adversarial invariance together with orthogonality, restricting cross-domain interaction to the invariant subspace and suppressing harmful transfer paths. To strengthen cross-domain semantic coupling, CAMAR derives trainable semantic-ID embeddings from pre-trained text, vision, and audio features through residual quantization, yielding an end-to-end multi-modal adaptation tailored to recommendation. A transfer network imputes user representations for inactive domains, mitigating cross-domain cold start. Experiments on both public and industrial datasets demonstrate consistent gains over strong baselines. In online A/B tests on NetEase Cloud Music, one of China's largest music streaming platforms, CAMAR delivers consistent gains across all three domains in their main traffic scenarios, validating its effectiveness in multi-domain audio recommendation at scale.",
+    "authors": [
+      "Yu Ren",
+      "Pengcheng Li",
+      "Weijun Xu",
+      "Hengzhong Zhou",
+      "Shufeng Ye",
+      "Qiang Xiao",
+      "Dongjing Wang",
+      "Chuanjiang Luo",
+      "Yong Li"
+    ],
+    "published": "2026-11-25T01:57:30Z",
+    "url": "https://arxiv.org/abs/2611.33628v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.33628v1",
+    "explanation": {
+      "problem": "多个内容域共享一套模型时，高流量域会压制低流量域，且缺少行为共现的用户难以跨域对齐。",
+      "method": "先用文本、图像、音频特征经残差量化得到跨域共享的语义编号，与各域ID融合后分别编码出每域用户表示；对无行为域用成对迁移网络补全。再把表示拆成域不变与域特有两部分，用正交约束分开、用域对抗去掉域身份信息，只让不变部分参与跨域注意力，最后门控融合打分。",
+      "application": "推测可把电商的搜索、推荐、直播等场景视为多域，用语义ID对齐无共现商品，用域对抗与正交约束保护低流量场景；迁移网络可补全新场景用户表示。",
+      "caveat": "线上A/B只测新增召回通道的整体增益，未单独验证解耦、语义ID、迁移网络各自的贡献。"
+    },
+    "title_zh": "面向多域序列音频推荐的多模态因果解耦",
+    "summary": "提出CAMAR，把多域用户表示拆成域不变与域特有分量，用正交约束、域对抗和受限跨域注意力抑制负迁移，并用多模态语义ID与迁移网络补全冷启动域表示。离线两个数据集均优于九个基线，网易云音乐两周线上A/B中歌曲播放时长+1.0%、歌单点赞率+3.0%、播客播放时长+1.6%。",
+    "reason": "多域负迁移与冷启动补全思路可迁移到电商多场景推荐，但线上仅验证新增召回通道的整体收益，未单独归因各模块。",
+    "score": 80,
+    "rubric": {
+      "fit": 4,
+      "evidence": 4,
+      "action": 4
+    },
+    "primary_topic": "recommendation",
+    "evidence": {
+      "page": 9,
+      "finding": "线上A/B为两周实验，实验组在原有分域召回管线基础上新增CAMAR召回通道，共享相同排序与重排模块，三个域指标均显著提升，但未拆分各模块贡献。"
+    },
+    "tags": [
+      "多域序列推荐",
+      "因果解耦",
+      "多模态语义ID",
+      "负迁移",
+      "冷启动"
+    ],
+    "institutions": [
+      "杭州电子科技大学",
+      "网易云音乐"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 10
   }
 }
