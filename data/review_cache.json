@@ -1213,5 +1213,54 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 7
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.28604v1": {
+    "id": "2611.28604",
+    "title": "MADRec: Reliable Multi-Agent Reasoning with Evidence-Grounded Debate for Recommendation",
+    "abstract": "Large Language Models (LLMs) are transforming recommender systems from conventional preference matching toward reasoning-driven and explainable decision-making. Multi-agent collaboration further advances this paradigm by distributing recommendation reasoning across specialized agents. However, existing frameworks rarely assess the reliability of intermediate reasoning during collaboration, allowing erroneous judgments to propagate across agents and ultimately degrade recommendation quality. To address this issue, we propose Multi-Agent Debate-based Recommendation (MADRec), an evidence-grounded multi-agent framework that enhances the reliability of multi-agent recommendation reasoning. MADRec consists of three coordinated modules. First, the Multi-Agent Debate (MAD) module enables an Interaction Agent and a Semantic Agent to analyze interaction signals and content-level semantic signals from complementary perspectives, generating diverse recommendation judgments through structured debate. Second, the Evidence-Grounded Retrieval-Augmented Reasoning (EG-RAR) module grounds the Semantic Agent's reasoning in item-level evidence and refines candidate scores by assessing how well the evidence supports the corresponding semantic claims. Third, the Judge-based Ranking Calibration (JRC) module leverages debate-derived reliability cues to adaptively calibrate interaction-based and semantic ranking results for the final recommendation. Extensive experiments on three real-world datasets demonstrate that MADRec consistently outperforms competitive baselines and enhances the reliability of multi-agent recommendation reasoning.",
+    "authors": [
+      "Zunlong Liu",
+      "Weijie Feng",
+      "Jingzhi Li",
+      "Lei Zhu",
+      "Zhiyong Cheng",
+      "Meng Wang"
+    ],
+    "published": "2026-11-21T06:31:16Z",
+    "url": "https://arxiv.org/abs/2611.28604v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.28604v1",
+    "explanation": {
+      "problem": "多智能体协作推荐时，前一个智能体的错误判断会被后续智能体直接沿用，最终把排序带偏。",
+      "method": "先用冻结的序列模型召回每个用户的候选集；再让看交互历史的智能体和看内容语义的智能体多轮互评、互相质疑并各自重排；语义侧为每个候选生成事实主张，从条目资料中检索证据，用独立校验器判断证据是否支持该主张并据此缩放语义分；最后由裁判智能体根据辩论过程估计两路可靠性权重，加权融合出最终排序。",
+      "application": "推测可借鉴到电商生成式重排：让行为序列智能体与商品内容智能体互评，并用商品标题/属性证据校验语义理由后再融合打分。",
+      "caveat": "仅三个公开数据集、每集2000测试用户的离线评测，无线上A/B，且辩论轮数与候选集规模只在单一数据集上做敏感性分析。"
+    },
+    "title_zh": "MADRec：面向推荐的可信多智能体推理与证据支撑辩论",
+    "summary": "提出交互智能体与语义智能体多轮互评辩论、用条目级证据校验语义主张并据此调分、再由裁判智能体按可靠性加权融合的两阶段重排框架。在三个数据集上Recall@10与NDCG@10优于对比基线，并通过受控扰动显示中间排序错误传递率更低。",
+    "reason": "多智能体辩论加证据校验抑制中间推理错误传播的思路，可迁移到生成式重排的可信度校准；但仅离线小样本评测、无线上A/B，且LLM多轮推理延迟成本高。",
+    "score": 68,
+    "rubric": {
+      "fit": 4,
+      "evidence": 3,
+      "action": 3
+    },
+    "primary_topic": "llm4rec",
+    "evidence": {
+      "page": 12,
+      "finding": "表2显示MADRec在三个数据集上Recall@10与NDCG@10均超过SASRec、MACF、TALLRec等基线，相对最强非MADRec基线提升约10%–33%，但均为离线留一法评测、每集仅2000采样用户。"
+    },
+    "tags": [
+      "多智能体辩论",
+      "证据校验",
+      "重排",
+      "错误传播",
+      "LLM推荐"
+    ],
+    "institutions": [
+      "Hefei University of Technology",
+      "Tongji University"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 28
   }
 }
