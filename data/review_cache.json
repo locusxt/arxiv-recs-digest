@@ -1262,5 +1262,52 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 28
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.31175v1": {
+    "id": "2611.31175",
+    "title": "Needwise: Generation-Free Conversational Recommendation from Need-Level Typed Decisions",
+    "abstract": "Conversational recommenders must rank items against needs that catalogs record only in part, while users add, withdraw and reverse needs and switch between requests. LLM rankers re-read the dialogue at every turn: they are slow, and their ordering does not show which needs an item meets. We show that a conversational recommender can be built from typed decisions instead: named questions over fixed options, answered with option probabilities rather than generated text. On each turn, one typed request maps the message onto the catalog's fields, keeps what no field expresses in the user's words, and decides how the turn changes each earlier need. Needwise then ranks candidates must-first: the needs on the kind of item, its place and its price form a tier, and within it one holistic decision and need-level verdicts (supported, contradicted or unknown) are combined with equal weight (Needwise-HF). With the graded attributes withheld from the records, so that needs must be inferred from names, descriptions and reviews, Needwise-HF ranks Google Local requests significantly better than GPT-6 Sol (0.383 against 0.343 nDCG@10) and is not significantly different from the strongest LLM ranker on Google Local and Yelp; these comparisons keep their sign under every treatment of unrecorded attributes we test. It costs a fraction of GPT-6 Sol's API price and answers in 2.5 s at the median on Google Local, against 5.6 s for GPT-6 Sol. In conversations, the typed state keeps the ranking across switches and returns, but it recognizes only 19-27% of withdrawn needs.",
+    "authors": [
+      "Sungchul Kim",
+      "Weixiao Huang",
+      "Mekala Raja Sekhar Reddy",
+      "Amrutha Srinivasan"
+    ],
+    "published": "2026-11-23T18:32:04Z",
+    "url": "https://arxiv.org/abs/2611.31175v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.31175v1",
+    "explanation": {
+      "problem": "对话推荐里用户需求常超出商品目录字段，且会反复增删改，用大模型每轮重读全部对话又慢又贵，还看不出商品满足了哪条需求。",
+      "method": "先把消息切成分句，用向量检索从目录字段值中找候选，再用一次类型化决策请求判断每句是想要、排除还是无关；无法映射到字段的需求保留用户原话作为待验证特征。然后对每个候选逐条需求问“支持、矛盾、证据不足”三选一，取支持概率减矛盾概率作为证据分；另有一个整体判断问题。排序时先按品类、地点、价格等硬条件分层，层内把整体分与需求证据均值等权相加。",
+      "application": "推测可借鉴其“硬条件分层+需求级证据+整体判断”的无生成排序结构，用于电商搜索/推荐的精排或对话式导购，把用户原话转成可核验的需求项并保留证据展示；但需自建字段词表与撤回识别，不能直接照搬其闭世界标注。",
+      "caveat": "实验基于合成请求与合成对话、闭世界属性标注，撤回识别率仅19%–27%，产品搜索场景明显落后于LLM排序器。"
+    },
+    "title_zh": "Needwise：基于需求级类型化决策的无生成对话推荐",
+    "summary": "用类型化决策模型（对固定选项输出概率、不生成文本）把每轮消息映射到目录字段、保留无法映射的用户原话，并按硬性条件分层、结合整体判断与需求级证据排序；在Google Local上nDCG@10为0.383，显著高于GPT-6 Sol的0.343，在Yelp上与最强LLM排序器无显著差异，但撤回需求识别率仅19%–27%。",
+    "reason": "展示了用低成本类型化决策替代LLM逐轮重读对话的可行路径，但撤回识别弱、硬谓词易错，且实验为合成对话与闭世界标注。",
+    "score": 73,
+    "rubric": {
+      "fit": 4,
+      "evidence": 3,
+      "action": 4
+    },
+    "primary_topic": "llm4rec",
+    "evidence": {
+      "page": 6,
+      "finding": "单请求实验中Needwise-HF在Google Local上nDCG@10为0.383，显著高于GPT-6 Sol的0.343，在Yelp上与最强基线无显著差异；这是离线重排实验，非线上A/B。"
+    },
+    "tags": [
+      "对话推荐",
+      "类型化决策",
+      "需求级证据",
+      "无生成排序",
+      "状态跟踪"
+    ],
+    "institutions": [
+      "Adobe Research",
+      "Adobe Inc."
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 19
   }
 }
