@@ -1118,5 +1118,53 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 10
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.29613v1": {
+    "id": "2611.29613",
+    "title": "Weight Coding: Evolving Web-Scale Recommenders through Direct Weight Edits with LLM Agents",
+    "abstract": "Web-scale recommender models evolve primarily through retraining or fine-tuning. We propose \\emph{weight coding}, a methodology for model evolution through direct, executable weight edits. A large language model (LLM) agent inspects model structure and parameters, formulates hypotheses, and implements edits using evaluation feedback. The loop progresses from localized changes to targeted searches and composition, allowing edited components to adapt to one another. A cached engine enables rapid forward evaluation without backpropagation. On Pinterest's 147M-parameter Image Search two-tower retriever, weight coding improves held-out recall@10 of production model by up to 15.0 percentage points (+24\\% relative) with few edits in about 1/4 GPU hours of a full post-training finetune, while a common launch only improves around 1\\%. After reinitializing the entire 13.6M-parameter interaction module randomly while retaining the surrounding trained model, searching 2,448 mixing and normalization parameters yields 9.8 points above production. Offline gains span the full funnel including dense retrieval, generative retrieval and ranking, with up to 1.37B learnable parameters and different edits for each architecture. Steering edits provide explicit control of model performance over segments like freshness and product. Weight coding requires no serving change and online A/B tests increase saves per user from the edited retrieval source by 8.4\\% to 10.7\\%, aligned with the target business objectives. Our results establish weight coding as a practical and useful tool for model development and and behavioral control in a real web-scale production system, with potential to extend to both pre-training and post-training stages across the funnel.",
+    "authors": [
+      "Junpeng Hou",
+      "Jiaxing Qu",
+      "Derek Cheng",
+      "Jaewon Yang",
+      "Abhinav Naikawadi",
+      "Karthik Subbian"
+    ],
+    "published": "2026-11-22T17:11:38Z",
+    "url": "https://arxiv.org/abs/2611.29613v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.29613v1",
+    "explanation": {
+      "problem": "训练好的大模型想继续变好或按业务目标调行为，通常只能重训或微调，代价高、周期长。",
+      "method": "先让大语言模型智能体读模型结构和权重，提出并执行局部改动（缩放、重置、置零、插值、沿方向加偏置等）；用缓存中间结果的前向引擎快速评估，再用进化策略在选定张量上搜索数值；改动先在开发日筛选、跨日过滤，最后在留出日和生产评估器上验证，人工审核后上线。",
+      "application": "推测：电商推荐可对精排/召回模型的归一化增益、共享偏置、专家分支强度做小规模直接编辑，用固定留出日与线上指标做验证，快速试出面向收藏、曝光结构等目标的调参方向。",
+      "caveat": "主要证据来自Pinterest内部模型与评估器，编辑跨模型不通用，离线增益到线上有衰减，且未与完整重训做同预算对照。"
+    },
+    "title_zh": "权重编码：用LLM智能体直接编辑权重来演化网页级推荐模型",
+    "summary": "提出权重编码：由LLM智能体检查模型结构与权重、提出假设并直接改写选定参数，配合缓存前向评估引擎与进化策略搜索，在Pinterest图像搜索双塔检索模型上离线recall@10最高提升15.0个百分点，线上A/B使被编辑检索源的收藏每用户提升8.4%–10.7%。",
+    "reason": "为精排/召回模型提供免梯度、免重训的权重直接编辑与业务目标调控范式，且有线上A/B支撑；但编辑高度模型特异、离线到线上存在衰减，需自建评估与验证协议。",
+    "score": 80,
+    "rubric": {
+      "fit": 4,
+      "evidence": 4,
+      "action": 4
+    },
+    "primary_topic": "ranking",
+    "evidence": {
+      "page": 7,
+      "finding": "线上A/B显示面向收藏目标的三个编辑臂使被编辑检索源的每用户收藏提升8.4%–10.7%，但长点击和商品占比下降，且排序器会抬高被编辑源导致挤占其他召回源曝光。"
+    },
+    "tags": [
+      "权重直接编辑",
+      "LLM智能体",
+      "免梯度优化",
+      "检索与排序",
+      "线上A/B"
+    ],
+    "institutions": [
+      "Pinterest, Inc."
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 10
   }
 }
