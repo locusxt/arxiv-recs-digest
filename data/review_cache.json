@@ -971,5 +971,51 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 27
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.31940v1": {
+    "id": "2611.31940",
+    "title": "MELODI: Similarity-Identity Decoupling for Lightweight Ranking",
+    "abstract": "For latency-constrained candidate ranking, we propose a similarity-identity decoupling framework that separates target-history compatibility from target-only information. We study two orders for computing pooled similarity, similarity-then-pool and pool-then-similarity, and identify linearity of the similarity operator in its history argument, for each fixed target, as sufficient for their equivalence, justifying the cheaper pool-then-similarity form. We instantiate the framework as multi-head efficient lightweight operator for decoupling identity and similarity (MELODI), whose similarity branch combines target-conditioned multi-head history pooling with a single residual-free cross layer that is linear in its pooled-history input and whose identity branch is problem-dependent. On public benchmark datasets, MELODI matches or surpasses the evaluated target-aware and target-agnostic baselines. On two large-scale industrial datasets, its area under the precision-recall curve (AUPRC), normalised discounted cumulative gain (NDCG), and recall values are equal to or higher than those of the evaluated target-aware baselines. Processor measurements show lower latency than the evaluated candidate-conditioned baselines at large candidate counts, further reduced by request-local history reuse.",
+    "authors": [
+      "Quoc Phong Nguyen",
+      "Vuong Le",
+      "Volodymyr Vaskovych",
+      "Julien Monteil"
+    ],
+    "published": "2026-11-24T04:44:33Z",
+    "url": "https://arxiv.org/abs/2611.31940v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.31940v1",
+    "explanation": {
+      "problem": "在候选多、时延紧的精排阶段，既要让每个候选按用户历史做个性化打分，又不想为每个候选重复编码整段历史。",
+      "method": "输入是用户历史序列和一批候选物品。先用共享投影和归一化处理，再让每个候选作为查询对历史做多头交叉注意力，得到按候选加权的历史汇总；随后用目标相关的门控专家把汇总历史与目标投影逐维相乘，得到显式相似性向量，另用一条只处理目标的分支保留目标自身信息，最后拼接打分。由于相似算子对历史是线性的，可以先汇总再算相似，从而每个请求只编码一次历史。",
+      "application": "推测：可在电商精排中把历史键值缓存为请求级共享张量，候选侧只做注意力打分与门控交叉，用于千级候选场景降时延；需自行验证与现有DIN类模型的线上收益。",
+      "caveat": "全部为离线公开与私有日志数据评估，无线上A/B，时延仅在单一CPU机型测得。"
+    },
+    "title_zh": "MELODI：面向轻量级排序的相似性—身份解耦",
+    "summary": "提出将用户—目标相似性与目标自身身份信号解耦的排序框架，并证明相似算子对历史线性时先池化后相似与先相似后池化等价，据此用多头交叉注意力加无残差门控交叉层实现MELODI；在两个公开数据集和两个工业数据集上离线指标不劣于或优于目标感知基线，且在1000候选时延低于候选条件基线。",
+    "reason": "为精排提供可复用历史、按请求共享计算的目标感知轻量结构，但仅有离线与单机时延证据，无线上A/B。",
+    "score": 73,
+    "rubric": {
+      "fit": 4,
+      "evidence": 3,
+      "action": 4
+    },
+    "primary_topic": "ranking",
+    "evidence": {
+      "page": 6,
+      "finding": "公开数据集三次种子平均下MELODI在全部指标上最高，但仅为离线采样负例评估，且部分对比为单次训练。"
+    },
+    "tags": [
+      "目标感知排序",
+      "相似性解耦",
+      "交叉注意力",
+      "推理时延",
+      "历史复用"
+    ],
+    "institutions": [
+      "Amazon International Machine Learning"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 17
   }
 }
