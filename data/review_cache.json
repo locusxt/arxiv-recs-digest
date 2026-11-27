@@ -927,5 +927,49 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 11
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.33240v1": {
+    "id": "2611.33240",
+    "title": "Learning the Platform, Not the Learner: Sequencing Shortcuts in the Offline Evaluation of Educational Recommender Systems and LLM Rankers",
+    "abstract": "Educational recommenders are usually compared offline, by how well they predict the next activity in logs of tutoring systems, learning applications and MOOCs, where the next activity is largely decided by the platform: teachers assign problem sets, tutors draw problems until mastery, engines select questions. On eight public datasets from five platforms, we compare four structural predictors, which use nothing about the learner beyond the last activity, with ten personalised recommenders and with open-weight LLM rankers from 0.5 to 7 billion parameters, under two protocols. The structural predictors reach between 0.81 and 1.00 of the best accuracy of any method (median 0.95), mostly through population transitions rather than the course order; the best personalised recommender is significantly better on five datasets, by 0.007 to 0.102 NDCG@10, and on Eedi in three of four training runs. Every method is far less accurate on steps along transitions never seen in training and on steps chosen by learners. LLM rankers look competent with random negatives but are never much better than a word-matching baseline, and with negatives that are plausible under the course structure they stay close to random or well behind the transition heuristic, whatever their size. In a simulation with known learner needs, the structural share tracks the share of steps decided by the platform, and offline accuracy ranks an oracle of the learners' needs below imitators of the platform. Weighting test steps by how unlikely the structure makes them restores much of the link with usefulness and, on the real data, reveals a significant personalisation signal on seven of the eight datasets. We propose a syllabus-aware evaluation checklist and release a Python package that reports the lift of any recommender over the structure.",
+    "authors": [
+      "Youssef Jdidou"
+    ],
+    "published": "2026-11-24T13:48:16Z",
+    "url": "https://arxiv.org/abs/2611.33240v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.33240v1",
+    "explanation": {
+      "problem": "离线评估中，模型分数高可能只是学会了平台安排下一步的固定套路，而非真正理解用户。",
+      "method": "先定义只依赖上一步活动和全体用户统计的结构预测器（热度、课程顺序、同容器延续、群体转移频率），在相同测试样本上算出结构基线；再用个性化模型和LLM排序器与基线比较，得到提升量和结构占比；最后按是否见过该转移、是否离开容器、由平台还是学习者发起拆分结果，并用逆转移概率加权修正评估。",
+      "application": "推测：电商精排可把“上一物品转移频率+类目延续+热度”作为零训练基线，报告模型相对基线的提升，并按曝光来源（系统推荐/用户主动搜索）和是否跨类目拆分评估，避免把系统曝光策略误当个性化能力。",
+      "caveat": "全部为离线观察性证据，无线上A/B或真实学习收益验证，LLM仅测到7B且部分仅100例。"
+    },
+    "title_zh": "学到的是平台而非学习者：教育推荐系统与LLM排序器离线评估中的序列捷径",
+    "summary": "在8个教育数据集上，用只依赖上一步活动的结构预测器对比10个个性化推荐器和0.5B–7B开源LLM排序器，发现结构预测器已达最佳NDCG@10的0.81–1.00（中位0.95），个性化提升仅0.007–0.102；LLM在随机负样本下看似可用，但不如词匹配基线，在结构合理负样本下接近随机。",
+    "reason": "提供“结构基线+提升量+结构占比”的评估框架和按步类型拆分的做法，可迁移到电商精排与生成式重排的离线评估；但证据限于教育日志的离线观察，无线上A/B。",
+    "score": 72,
+    "rubric": {
+      "fit": 3,
+      "evidence": 4,
+      "action": 4
+    },
+    "primary_topic": "ranking",
+    "evidence": {
+      "page": 10,
+      "finding": "P1协议下结构预测器MC在8个数据集中的7个为最佳结构方法，结构占比0.81–1.00（中位0.95），最佳个性化方法仅在5个数据集上显著更优，提升0.007–0.102 NDCG@10。"
+    },
+    "tags": [
+      "离线评估",
+      "结构基线",
+      "序列推荐",
+      "LLM排序",
+      "曝光偏差"
+    ],
+    "institutions": [
+      "École Nationale Supérieure d’Art et de Design (ENSAD)",
+      "Hassan II University of Casablanca, Morocco"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 27
   }
 }
