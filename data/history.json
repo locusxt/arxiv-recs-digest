@@ -1526,6 +1526,213 @@
         ]
       },
       "usage_incomplete": false
+    },
+    {
+      "date": "2026-11-28",
+      "candidates": 269,
+      "papers": [
+        {
+          "id": "2611.29613",
+          "title": "Weight Coding: Evolving Web-Scale Recommenders through Direct Weight Edits with LLM Agents",
+          "abstract": "Web-scale recommender models evolve primarily through retraining or fine-tuning. We propose \\emph{weight coding}, a methodology for model evolution through direct, executable weight edits. A large language model (LLM) agent inspects model structure and parameters, formulates hypotheses, and implements edits using evaluation feedback. The loop progresses from localized changes to targeted searches and composition, allowing edited components to adapt to one another. A cached engine enables rapid forward evaluation without backpropagation. On Pinterest's 147M-parameter Image Search two-tower retriever, weight coding improves held-out recall@10 of production model by up to 15.0 percentage points (+24\\% relative) with few edits in about 1/4 GPU hours of a full post-training finetune, while a common launch only improves around 1\\%. After reinitializing the entire 13.6M-parameter interaction module randomly while retaining the surrounding trained model, searching 2,448 mixing and normalization parameters yields 9.8 points above production. Offline gains span the full funnel including dense retrieval, generative retrieval and ranking, with up to 1.37B learnable parameters and different edits for each architecture. Steering edits provide explicit control of model performance over segments like freshness and product. Weight coding requires no serving change and online A/B tests increase saves per user from the edited retrieval source by 8.4\\% to 10.7\\%, aligned with the target business objectives. Our results establish weight coding as a practical and useful tool for model development and and behavioral control in a real web-scale production system, with potential to extend to both pre-training and post-training stages across the funnel.",
+          "authors": [
+            "Junpeng Hou",
+            "Jiaxing Qu",
+            "Derek Cheng",
+            "Jaewon Yang",
+            "Abhinav Naikawadi",
+            "Karthik Subbian"
+          ],
+          "published": "2026-11-22T17:11:38Z",
+          "url": "https://arxiv.org/abs/2611.29613v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.29613v1",
+          "explanation": {
+            "problem": "训练好的大模型想继续变好或按业务目标调行为，通常只能重训或微调，代价高、周期长。",
+            "method": "先让大语言模型智能体读模型结构和权重，提出并执行局部改动（缩放、重置、置零、插值、沿方向加偏置等）；用缓存中间结果的前向引擎快速评估，再用进化策略在选定张量上搜索数值；改动先在开发日筛选、跨日过滤，最后在留出日和生产评估器上验证，人工审核后上线。",
+            "application": "推测：电商推荐可对精排/召回模型的归一化增益、共享偏置、专家分支强度做小规模直接编辑，用固定留出日与线上指标做验证，快速试出面向收藏、曝光结构等目标的调参方向。",
+            "caveat": "主要证据来自Pinterest内部模型与评估器，编辑跨模型不通用，离线增益到线上有衰减，且未与完整重训做同预算对照。"
+          },
+          "title_zh": "权重编码：用LLM智能体直接编辑权重来演化网页级推荐模型",
+          "summary": "提出权重编码：由LLM智能体检查模型结构与权重、提出假设并直接改写选定参数，配合缓存前向评估引擎与进化策略搜索，在Pinterest图像搜索双塔检索模型上离线recall@10最高提升15.0个百分点，线上A/B使被编辑检索源的收藏每用户提升8.4%–10.7%。",
+          "reason": "为精排/召回模型提供免梯度、免重训的权重直接编辑与业务目标调控范式，且有线上A/B支撑；但编辑高度模型特异、离线到线上存在衰减，需自建评估与验证协议。",
+          "score": 80,
+          "rubric": {
+            "fit": 4,
+            "evidence": 4,
+            "action": 4
+          },
+          "primary_topic": "ranking",
+          "evidence": {
+            "page": 7,
+            "finding": "线上A/B显示面向收藏目标的三个编辑臂使被编辑检索源的每用户收藏提升8.4%–10.7%，但长点击和商品占比下降，且排序器会抬高被编辑源导致挤占其他召回源曝光。"
+          },
+          "tags": [
+            "权重直接编辑",
+            "LLM智能体",
+            "免梯度优化",
+            "检索与排序",
+            "线上A/B"
+          ],
+          "institutions": [
+            "Pinterest, Inc."
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 10
+        },
+        {
+          "id": "2611.31175",
+          "title": "Needwise: Generation-Free Conversational Recommendation from Need-Level Typed Decisions",
+          "abstract": "Conversational recommenders must rank items against needs that catalogs record only in part, while users add, withdraw and reverse needs and switch between requests. LLM rankers re-read the dialogue at every turn: they are slow, and their ordering does not show which needs an item meets. We show that a conversational recommender can be built from typed decisions instead: named questions over fixed options, answered with option probabilities rather than generated text. On each turn, one typed request maps the message onto the catalog's fields, keeps what no field expresses in the user's words, and decides how the turn changes each earlier need. Needwise then ranks candidates must-first: the needs on the kind of item, its place and its price form a tier, and within it one holistic decision and need-level verdicts (supported, contradicted or unknown) are combined with equal weight (Needwise-HF). With the graded attributes withheld from the records, so that needs must be inferred from names, descriptions and reviews, Needwise-HF ranks Google Local requests significantly better than GPT-6 Sol (0.383 against 0.343 nDCG@10) and is not significantly different from the strongest LLM ranker on Google Local and Yelp; these comparisons keep their sign under every treatment of unrecorded attributes we test. It costs a fraction of GPT-6 Sol's API price and answers in 2.5 s at the median on Google Local, against 5.6 s for GPT-6 Sol. In conversations, the typed state keeps the ranking across switches and returns, but it recognizes only 19-27% of withdrawn needs.",
+          "authors": [
+            "Sungchul Kim",
+            "Weixiao Huang",
+            "Mekala Raja Sekhar Reddy",
+            "Amrutha Srinivasan"
+          ],
+          "published": "2026-11-23T18:32:04Z",
+          "url": "https://arxiv.org/abs/2611.31175v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.31175v1",
+          "explanation": {
+            "problem": "对话推荐里用户需求常超出商品目录字段，且会反复增删改，用大模型每轮重读全部对话又慢又贵，还看不出商品满足了哪条需求。",
+            "method": "先把消息切成分句，用向量检索从目录字段值中找候选，再用一次类型化决策请求判断每句是想要、排除还是无关；无法映射到字段的需求保留用户原话作为待验证特征。然后对每个候选逐条需求问“支持、矛盾、证据不足”三选一，取支持概率减矛盾概率作为证据分；另有一个整体判断问题。排序时先按品类、地点、价格等硬条件分层，层内把整体分与需求证据均值等权相加。",
+            "application": "推测可借鉴其“硬条件分层+需求级证据+整体判断”的无生成排序结构，用于电商搜索/推荐的精排或对话式导购，把用户原话转成可核验的需求项并保留证据展示；但需自建字段词表与撤回识别，不能直接照搬其闭世界标注。",
+            "caveat": "实验基于合成请求与合成对话、闭世界属性标注，撤回识别率仅19%–27%，产品搜索场景明显落后于LLM排序器。"
+          },
+          "title_zh": "Needwise：基于需求级类型化决策的无生成对话推荐",
+          "summary": "用类型化决策模型（对固定选项输出概率、不生成文本）把每轮消息映射到目录字段、保留无法映射的用户原话，并按硬性条件分层、结合整体判断与需求级证据排序；在Google Local上nDCG@10为0.383，显著高于GPT-6 Sol的0.343，在Yelp上与最强LLM排序器无显著差异，但撤回需求识别率仅19%–27%。",
+          "reason": "展示了用低成本类型化决策替代LLM逐轮重读对话的可行路径，但撤回识别弱、硬谓词易错，且实验为合成对话与闭世界标注。",
+          "score": 73,
+          "rubric": {
+            "fit": 4,
+            "evidence": 3,
+            "action": 4
+          },
+          "primary_topic": "llm4rec",
+          "evidence": {
+            "page": 6,
+            "finding": "单请求实验中Needwise-HF在Google Local上nDCG@10为0.383，显著高于GPT-6 Sol的0.343，在Yelp上与最强基线无显著差异；这是离线重排实验，非线上A/B。"
+          },
+          "tags": [
+            "对话推荐",
+            "类型化决策",
+            "需求级证据",
+            "无生成排序",
+            "状态跟踪"
+          ],
+          "institutions": [
+            "Adobe Research",
+            "Adobe Inc."
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 19
+        },
+        {
+          "id": "2611.28604",
+          "title": "MADRec: Reliable Multi-Agent Reasoning with Evidence-Grounded Debate for Recommendation",
+          "abstract": "Large Language Models (LLMs) are transforming recommender systems from conventional preference matching toward reasoning-driven and explainable decision-making. Multi-agent collaboration further advances this paradigm by distributing recommendation reasoning across specialized agents. However, existing frameworks rarely assess the reliability of intermediate reasoning during collaboration, allowing erroneous judgments to propagate across agents and ultimately degrade recommendation quality. To address this issue, we propose Multi-Agent Debate-based Recommendation (MADRec), an evidence-grounded multi-agent framework that enhances the reliability of multi-agent recommendation reasoning. MADRec consists of three coordinated modules. First, the Multi-Agent Debate (MAD) module enables an Interaction Agent and a Semantic Agent to analyze interaction signals and content-level semantic signals from complementary perspectives, generating diverse recommendation judgments through structured debate. Second, the Evidence-Grounded Retrieval-Augmented Reasoning (EG-RAR) module grounds the Semantic Agent's reasoning in item-level evidence and refines candidate scores by assessing how well the evidence supports the corresponding semantic claims. Third, the Judge-based Ranking Calibration (JRC) module leverages debate-derived reliability cues to adaptively calibrate interaction-based and semantic ranking results for the final recommendation. Extensive experiments on three real-world datasets demonstrate that MADRec consistently outperforms competitive baselines and enhances the reliability of multi-agent recommendation reasoning.",
+          "authors": [
+            "Zunlong Liu",
+            "Weijie Feng",
+            "Jingzhi Li",
+            "Lei Zhu",
+            "Zhiyong Cheng",
+            "Meng Wang"
+          ],
+          "published": "2026-11-21T06:31:16Z",
+          "url": "https://arxiv.org/abs/2611.28604v1",
+          "pdf_url": "https://arxiv.org/pdf/2611.28604v1",
+          "explanation": {
+            "problem": "多智能体协作推荐时，前一个智能体的错误判断会被后续智能体直接沿用，最终把排序带偏。",
+            "method": "先用冻结的序列模型召回每个用户的候选集；再让看交互历史的智能体和看内容语义的智能体多轮互评、互相质疑并各自重排；语义侧为每个候选生成事实主张，从条目资料中检索证据，用独立校验器判断证据是否支持该主张并据此缩放语义分；最后由裁判智能体根据辩论过程估计两路可靠性权重，加权融合出最终排序。",
+            "application": "推测可借鉴到电商生成式重排：让行为序列智能体与商品内容智能体互评，并用商品标题/属性证据校验语义理由后再融合打分。",
+            "caveat": "仅三个公开数据集、每集2000测试用户的离线评测，无线上A/B，且辩论轮数与候选集规模只在单一数据集上做敏感性分析。"
+          },
+          "title_zh": "MADRec：面向推荐的可信多智能体推理与证据支撑辩论",
+          "summary": "提出交互智能体与语义智能体多轮互评辩论、用条目级证据校验语义主张并据此调分、再由裁判智能体按可靠性加权融合的两阶段重排框架。在三个数据集上Recall@10与NDCG@10优于对比基线，并通过受控扰动显示中间排序错误传递率更低。",
+          "reason": "多智能体辩论加证据校验抑制中间推理错误传播的思路，可迁移到生成式重排的可信度校准；但仅离线小样本评测、无线上A/B，且LLM多轮推理延迟成本高。",
+          "score": 68,
+          "rubric": {
+            "fit": 4,
+            "evidence": 3,
+            "action": 3
+          },
+          "primary_topic": "llm4rec",
+          "evidence": {
+            "page": 12,
+            "finding": "表2显示MADRec在三个数据集上Recall@10与NDCG@10均超过SASRec、MACF、TALLRec等基线，相对最强非MADRec基线提升约10%–33%，但均为离线留一法评测、每集仅2000采样用户。"
+          },
+          "tags": [
+            "多智能体辩论",
+            "证据校验",
+            "重排",
+            "错误传播",
+            "LLM推荐"
+          ],
+          "institutions": [
+            "Hefei University of Technology",
+            "Tongji University"
+          ],
+          "source_type": "pdf_fulltext",
+          "pdf_pages": 28
+        }
+      ],
+      "usage_runs": [
+        {
+          "calls": 12,
+          "prompt_tokens": 204627,
+          "completion_tokens": 6688,
+          "total_tokens": 211315,
+          "prompt_cache_hit_tokens": 103936,
+          "prompt_cache_miss_tokens": 100691,
+          "missing_usage": 0,
+          "balance_before": [
+            {
+              "currency": "CNY",
+              "total_balance": "356.02"
+            }
+          ],
+          "balance_after": [
+            {
+              "currency": "CNY",
+              "total_balance": "356.02"
+            }
+          ],
+          "balance_change": [
+            {
+              "currency": "CNY",
+              "decrease": "0.00"
+            }
+          ]
+        }
+      ],
+      "usage": {
+        "calls": 12,
+        "prompt_tokens": 204627,
+        "completion_tokens": 6688,
+        "total_tokens": 211315,
+        "prompt_cache_hit_tokens": 103936,
+        "prompt_cache_miss_tokens": 100691,
+        "missing_usage": 0,
+        "balance_before": [
+          {
+            "currency": "CNY",
+            "total_balance": "356.02"
+          }
+        ],
+        "balance_after": [
+          {
+            "currency": "CNY",
+            "total_balance": "356.02"
+          }
+        ],
+        "balance_change": [
+          {
+            "currency": "CNY",
+            "decrease": "0.00"
+          }
+        ]
+      },
+      "usage_incomplete": false
     }
   ],
   "recommended_ids": [
@@ -1547,8 +1754,11 @@
     "2611.26096",
     "2611.27514",
     "2611.28379",
+    "2611.28604",
     "2611.28645",
+    "2611.29613",
     "2611.31052",
+    "2611.31175",
     "2611.31940",
     "2611.32590",
     "2611.32855",
@@ -1569,15 +1779,18 @@
     "learninggenerativerankingpoliciesforwholepageoptimization",
     "lostinthefunnelselectioninducedmiscalibrationinrankinganddecisionsystems",
     "lqreclatequantizationforsequentialrecommendation",
+    "madrecreliablemultiagentreasoningwithevidencegroundeddebateforrecommendation",
     "marstechnicalreport",
     "melodisimilarityidentitydecouplingforlightweightranking",
     "mleagentsautonomousmlengineeringinlargescalerecommendationsystems",
     "mmintentflowanintentdrivenrealtimemultimodalsearchsystemwithimagetextqueriesatxiaohongshu",
     "multimodalcausaldisentanglementformultidomainsequentialaudiorecommendation",
+    "needwisegenerationfreeconversationalrecommendationfromneedleveltypeddecisions",
     "peetspreferenceawareembeddingswithexplicittreestructureforauxiliaryproductbundling",
     "prosperllmsassparseretrieversforfirststageproductsearch",
     "speculativedecodingforsemanticidbasedgenerativerecommendations",
     "varianceoptimalcounterfactualpolicydesignforsampleefficientonlineabtesting",
+    "weightcodingevolvingwebscalerecommendersthroughdirectweighteditswithllmagents",
     "xsplitarguslearningreusablehistorytokensforefficientctrprediction"
   ]
 }

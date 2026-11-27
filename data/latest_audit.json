@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-27",
+  "date": "2026-11-28",
   "candidates": [
     {
       "id": "2611.33950",
@@ -171,19 +171,6 @@
       ]
     },
     {
-      "id": "2611.33628",
-      "title": "Multi-Modal Causal Disentanglement for Multi-Domain Sequential Audio Recommendation",
-      "abstract": "Modern music platforms expose users to heterogeneous audio content domains such as songs, playlists, and podcasts. Multi-domain sequential recommendation (MDSR) seeks to exploit such cross-domain behavior, yet two obstacles persist in practice. First, joint optimization across heterogeneous domains is prone to negative transfer, with high-traffic domains dominating the shared parameter space and suppressing weaker domains. Second, conventional ID-based collaborative signals fail to bridge domains that are semantically related but exhibit little behavioral overlap. This paper presents CAMAR, a multi-modal causal disentanglement framework for multi-domain audio recommendation. From a causal perspective, user behavior is modeled as the joint outcome of a domain-invariant preference and domain-specific preferences. Guided by this view, CAMAR factorizes user representations into domain-invariant and domain-specific components and enforces domain adversarial invariance together with orthogonality, restricting cross-domain interaction to the invariant subspace and suppressing harmful transfer paths. To strengthen cross-domain semantic coupling, CAMAR derives trainable semantic-ID embeddings from pre-trained text, vision, and audio features through residual quantization, yielding an end-to-end multi-modal adaptation tailored to recommendation. A transfer network imputes user representations for inactive domains, mitigating cross-domain cold start. Experiments on both public and industrial datasets demonstrate consistent gains over strong baselines. In online A/B tests on NetEase Cloud Music, one of China's largest music streaming platforms, CAMAR delivers consistent gains across all three domains in their main traffic scenarios, validating its effectiveness in multi-domain audio recommendation at scale.",
-      "published": "2026-11-25T01:57:30Z",
-      "keyword_score": 24,
-      "topics": [
-        "causal",
-        "recommendation",
-        "retrieval",
-        "training"
-      ]
-    },
-    {
       "id": "2611.33594",
       "title": "Aligned Machine: A Benchmark for Evaluating Multimodal Embedding Similarity via Human Comparative Judgements",
       "abstract": "Embedding models increasingly inform how people search, recommend, and retrieve information, yet we lack credible ways to test whether these similarity judgments reflect how humans understand meaning. Existing benchmarks typically rely on static, expert-labeled pairs with coarse Likert-style annotations, limiting scalability and making it difficult to obtain consistent, high-confidence annotations. We introduce Aligned Machine, an interactive, public-facing platform that transforms broad participation into a continuously growing Human-Aligned Similarity Benchmark (HASB) for evaluating semantic alignment in embedding-based systems. Participants complete a cognitively-natural, forced-choice task, comparing two pairs of items (text or images) and selecting which pair is more similar. This comparative design is accessible to non-experts, yields clean preference data, and supports robust aggregation. We report results from an initial deployment with 115 participants contributing 2,875 total labeled pairs and 872 unique pairs. Using HASB, we evaluated 12 widely used embedding models and found only partial alignment between embedding similarity and human judgments. Text-only models consistently achieve higher overall agreement than multimodal models, while multimodal performance varies systematically by task type: alignment is strongest for image-image comparisons, weaker for image-text comparisons, and lowest for text-text comparisons. Aligned Machine is designed to evolve over time as participation grows, supporting longitudinal analysis, domain-specific studies, bias detection, and measurement of concept drift across model versions. By combining accessible public participation with rigorous comparative evaluation, HASB provides a scalable and accountable framework for auditing semantic alignment in embedding models.",
@@ -342,17 +329,6 @@
       "published": "2026-11-23T17:52:37Z",
       "keyword_score": 0,
       "topics": []
-    },
-    {
-      "id": "2611.31052",
-      "title": "From Head to Tail: LLM-Augmented Sequential Recommendation and Trade-off Optimization",
-      "abstract": "Recommender systems exhibit popularity bias, often under-serving long-tail and cold-start items with sparse interaction data. We propose a group-specific data augmentation approach that leverages LLMs to generate synthetic interactions, formulated as a constrained optimization problem, maximizing group-specific NDCG@20 and coverage while bounding overall NDCG@20 degradation within an acceptable threshold. Items are partitioned by interaction frequency to find the optimal augmentation strategy for each group. We further study combining the augmentation across groups simultaneously and find that while individual optimal strategies navigate the multi-group augmentation design, they are not simply additive. We further ablate on the LLM-based augmentation itself, comparing LLM scales, augmentation configuration under token constraints, finding that augmentation quality scales with contextual richness, albeit at a proportionally higher cost. Experiments with SASRec demonstrate the effectiveness of the proposed approach, achieving over 100% and 60% improvement in group-specific NDCG@20 for extreme and regular long-tail items, respectively, on our industrial dataset, and 40%, 25% for MovieLens-32M, while increasing their coverage without significant overall degradation.",
-      "published": "2026-11-23T17:15:58Z",
-      "keyword_score": 19,
-      "topics": [
-        "recommendation",
-        "training"
-      ]
     },
     {
       "id": "2611.31044",
@@ -561,35 +537,6 @@
       "keyword_score": 3,
       "topics": [
         "recommendation"
-      ]
-    },
-    {
-      "id": "2611.27894",
-      "title": "FairITR: Fairness-Aware Learning of Multicategory Individualized Treatment Rules",
-      "abstract": "Individualized treatment rules (ITRs) recommend treatment decisions based on individual characteristics and can improve treatment outcomes beyond traditional one-size-fits-all strategies. However, similar to other commonly used algorithmic decision-making methods, ITRs without considering model fairness may result in unfair decisions across groups defined by sensitive attributes, such as race or gender. Although extensive methods have been developed for ITR estimation, most focus solely on optimizing treatment outcomes, while research on fairness-aware ITRs remains limited. Moreover, the practical scenario of multicategory treatments is rarely considered in existing fair ITR studies. To address these gaps, we introduce a fairness notion for multicategory ITRs that requires treatment decisions to be independent of sensitive attributes, and then formulate the corresponding problem of estimating fair ITRs. To solve this problem, we further propose FairITR, a fairness-aware learning framework that jointly optimizes treatment outcomes and fairness. FairITR builds on angle-based classification for multicategory ITR learning and integrates adversarial learning with covariance-based regularization to mitigate unfairness in treatment decisions. A theoretical justification for the fairness properties induced by the adversarial debiasing mechanism is also provided. Extensive experiments on real-world datasets show that FairITR substantially reduces unfairness in ITRs while maintaining competitive treatment values relative to existing baselines.",
-      "published": "2026-11-20T17:35:49Z",
-      "keyword_score": 0,
-      "topics": []
-    },
-    {
-      "id": "2611.27826",
-      "title": "Graph Signal Generation via Graph-Aware Diffusion Models",
-      "abstract": "Many signals are defined on the nodes of a graph, such as traffic flow at road sensors or user purchases of related products. They are often partly observed, and learning their distribution enables imputing missing values and forecasting future ones. Diffusion models learn such distributions, but their forward noise is independent across nodes and does not depend on the graph. We introduce graph-aware diffusion (GAD), whose forward process is a heat diffusion on the graph driven by Gaussian noise. In the graph Fourier basis, the forward transition is a scalar Gaussian channel at each frequency. With a shared diffusion rate, high graph frequencies are attenuated faster than low ones. We propose Mode-Adaptive SNR Scheduling (MASS), which assigns each graph frequency its own diffusion rate and keeps all of them at the same SNR. For graph-stationary signals, MASS equalizes the normalized error of the optimal linear denoiser across frequencies. We bound reverse-SDE stiffness as a function of the (shifted) Laplacian's condition number, with a logarithmic upper bound for MASS and a linear lower bound for shared rates. GAD with MASS improves recommendation accuracy by 5-19%, reduces traffic-imputation RMSE by up to 7.8% with half as many reverse steps, and improves forecasting MAE and RMSE using only 3 reverse steps.",
-      "published": "2026-11-20T16:47:39Z",
-      "keyword_score": 3,
-      "topics": [
-        "recommendation"
-      ]
-    },
-    {
-      "id": "2611.27007",
-      "title": "Scalable Evaluation of Medical AI using Evidence-based Practice Recommendations",
-      "abstract": "Rigorously evaluating medical artificial intelligence (AI) requires testing open-ended clinical management across diverse presentations and stages of care. However, existing benchmarks rely on manual expert authoring, limiting coverage across conditions, conditional care pathways, and evolving guidelines. We develop an automated pipeline that extracts and verifies structured clinical criteria and branching decision trees from practice recommendations to generate scenarios spanning the care continuum, including nuanced presentations and practice variations across regions and guideline editions. Applied to 436 BMJ Best Practice clinical monographs (354 US, 82 International), this yields 3,200 scenarios spanning differential diagnosis, investigations, treatment, and complications, plus targeted suites for regional specificity (731 US/International pairs) and temporal freshness (630 scenarios). To grade responses, we develop a clinician-calibrated autorater that scores management plans on a 4-point rubric stratifying deviations by clinical severity. Across Gemini models, scaling improves adherence, while web search (+0.8 percentage points [pp] on average) and multi-sample synthesis (+2.2 pp) combine additively (+2.8 pp). In context, full monographs consistently trail condensed excerpts. On targeted suites, web search narrows international performance gaps (+4.2 pp) and improves adherence to newly updated guidance (+4.6 pp). In a study with Primary Care Physicians (n = 9) across 200 scenarios, AI assistance raises adherence from 50.5% to 70.0%, driven largely by fewer clinical omissions. Overall, our results demonstrate a scalable evaluation setup using an evidence-based corpus originally written to guide human clinical decision-making, and demonstrate its viability to assess medical AI and its assistance on clinician decision-making.",
-      "published": "2026-11-20T02:36:36Z",
-      "keyword_score": 12,
-      "topics": [
-        "recommendation",
-        "search"
       ]
     },
     {
@@ -1331,18 +1278,6 @@
       "published": "2026-11-24T05:43:51Z",
       "keyword_score": 0,
       "topics": []
-    },
-    {
-      "id": "2611.31940",
-      "title": "MELODI: Similarity-Identity Decoupling for Lightweight Ranking",
-      "abstract": "For latency-constrained candidate ranking, we propose a similarity-identity decoupling framework that separates target-history compatibility from target-only information. We study two orders for computing pooled similarity, similarity-then-pool and pool-then-similarity, and identify linearity of the similarity operator in its history argument, for each fixed target, as sufficient for their equivalence, justifying the cheaper pool-then-similarity form. We instantiate the framework as multi-head efficient lightweight operator for decoupling identity and similarity (MELODI), whose similarity branch combines target-conditioned multi-head history pooling with a single residual-free cross layer that is linear in its pooled-history input and whose identity branch is problem-dependent. On public benchmark datasets, MELODI matches or surpasses the evaluated target-aware and target-agnostic baselines. On two large-scale industrial datasets, its area under the precision-recall curve (AUPRC), normalised discounted cumulative gain (NDCG), and recall values are equal to or higher than those of the evaluated target-aware baselines. Processor measurements show lower latency than the evaluated candidate-conditioned baselines at large candidate counts, further reduced by request-local history reuse.",
-      "published": "2026-11-24T04:44:33Z",
-      "keyword_score": 19,
-      "topics": [
-        "ranking",
-        "retrieval",
-        "systems"
-      ]
     },
     {
       "id": "2611.31882",
@@ -2423,41 +2358,6 @@
       "topics": []
     },
     {
-      "id": "2611.28241",
-      "title": "Variable Importance Recovery in Tabular Foundation Models: A Simulation Study",
-      "abstract": "In machine learning, identifying which variables contribute predictive information can be as important as predictive accuracy. Tabular foundation models have matched or exceeded the predictive performance of tuned gradient boosting trees on many small- and medium-sized tabular datasets. Yet their ability to recover population-level variable importance has received little attention. We design and conduct a Monte Carlo simulation study to compare variable importance recovery across tabular foundation models and established machine learning baselines. Our framework distinguishes multiple population estimands, pairs each one with an aligned model-agnostic importance estimator, and evaluates recovery in terms of ranking, support, and relative magnitude. Our results show that tabular foundation models are generally competitive with established machine-learning baselines in recovering population variable importance, and often more accurate. We thus extend the evidence for their capabilities to a previously underexamined dimension, further strengthening their appeal.",
-      "published": "2026-11-20T19:17:14Z",
-      "keyword_score": 4,
-      "topics": [
-        "ranking"
-      ]
-    },
-    {
-      "id": "2611.28233",
-      "title": "DM-Lab at TREC 2026 RAG: Multi-Query Retrieval, Ensemble Judging, and Claim-Pack Generation",
-      "abstract": "We present DM-Lab-RAG-2026, a framework developed for the TREC 2026 Retrieval-Augmented Generation (RAG) track. The framework integrates large-scale evidence retrieval and citation-grounded answer generation over the 553-million-document ClimbMix-400B corpus. The retrieval architecture combines multi-query BM25, reciprocal rank fusion, ensemble relevance assessment, listwise reranking, and adaptive retrieval depth. The generation pipeline employs a claim-first strategy to extract evidence-linked atomic claims, construct cited responses, and verify source support. Across 22 development topics, the retrieval system achieved a mean nDCG@30 of 0.604. In the official evaluation, it attained a set precision of 0.455 and a manual nugget gain of 0.910. Additional experiments examine the influence of reranking, evidence selection, and citation verification on system performance. The evaluation demonstrates the potential of diversified lexical retrieval and language-model-based relevance assessment for large-scale evidence discovery. It further identifies evidence preservation and structured answer construction as key considerations for reliable RAG. This work provides a reproducible framework for investigating retrieval effectiveness and evidence-grounded generation.",
-      "published": "2026-11-20T19:07:10Z",
-      "keyword_score": 35,
-      "topics": [
-        "ranking",
-        "retrieval",
-        "search",
-        "systems"
-      ]
-    },
-    {
-      "id": "2611.28231",
-      "title": "Evaluating Memanto on DolphinBench for AI Agents",
-      "abstract": "Memory benchmarks built on question answering tell an agent which fact to recall. Workplace requests often leave that need implicit: to post an update in the team's channel, an agent must work out which channel from earlier interactions and use it in a tool call. We evaluate Memanto, a memory agent that ranks memories with an information-theoretic relevance score, on DolphinBench, which tests memory through 600 simulated workplace tasks, each validated as requiring memory. Running in the Hermes agent harness with GPT-6-Luna and at most 6 iterations per conversation, Memanto completes 503 tasks (83.83%). The strongest configuration reported by the benchmark's authors, Mem0 with GPT-5.6-Luna and up to 60 iterations, completes 424 (70.67%). Memanto's run also has the lowest total cost ($10.86, against $61.48 for the cheapest reported run) and the shortest median task latency (15.32s). Grading uses the benchmark's own judge, but the agent model differs, so these results compare complete systems. The memory system affects both whether an agent completes such tasks and what completion costs.",
-      "published": "2026-11-20T19:06:26Z",
-      "keyword_score": 8,
-      "topics": [
-        "retrieval",
-        "search",
-        "systems"
-      ]
-    },
-    {
       "id": "2611.34576",
       "title": "Procedure Inference as Memory: Learning Recruiter Decision Procedures from OKF-Structured Episodes in Multi-Session Hiring Assistants",
       "abstract": "Multi-session hiring assistants must infer evolving recruiter preferences and decision patterns across projects and time. We introduce Open Knowledge Format (OKF)-indexed episodic memory to organize interactions and retrieve related events through their lineage. We also introduce Procedure Memory, which learns reusable decision procedures from these episodes through prompted reflection or reinforcement learning. We compare these approaches with no memory, full-history context, and conversation search, and evaluate Jev-class models for index navigation and GPT-5.6 Luna as a lower-cost alternative to GPT-5.4. In our evaluation, OKF-indexed retrieval achieves low-priority preference F1 scores of 0.93-0.95 at medium and high preference overlap between hiring projects. It significantly outperforms full-history context and conversation search in both settings, and no memory at high overlap, while using 69% fewer context tokens than full history. Procedure Memory reduces conversational turns by up to 39% relative to no memory. Qualitative and long-horizon evaluations provide evidence of temporal reasoning, with RL-learned procedures achieving 60% on both correct abstention and exact-field identification. Jev-class models improve conversational efficiency but more frequently miss temporally relevant evidence, highlighting the importance of evidence selection. On PersonaMem-v2, Procedure Memory with OKF retrieval achieves 50.2% accuracy versus 48.6% for full-history context and 29.0% for no memory, using 90.5% fewer reader input tokens than full history. GPT-5.6 Luna performs comparably to GPT-5.4 at lower cost. These findings highlight the value of structured episodic memory and learned decision procedures for efficient personalization and temporal reasoning.",
@@ -2826,76 +2726,15 @@
       "topics": [
         "retrieval"
       ]
-    },
-    {
-      "id": "2611.27931",
-      "title": "DiTraR: Diverse Scorers and Transcript-Guided Re-ranking for Video Corpus Moment Retrieval",
-      "abstract": "Video corpus moment retrieval asks a system to find, in a large collection of untrimmed videos with subtitles, the video and the time interval that a natural-language query describes. We find that most top-ranked errors of a strong corpus-level scorer come from choosing the wrong video, not from imprecise boundaries, and that re-weighting the evidence the scorer already uses does not fix them. We present DiTraR, which addresses video selection from two complementary directions. A witness-interval scorer decomposes the query into probes and scores every candidate interval of every corpus video exactly; a multi-scorer energy ensemble averages the energies of independently trained scorers before one exhaustive search; and a transcript verifier, a frozen language model that reads the time-stamped dialogue of the highest-ranked videos, re-orders the moments without changing their boundaries. With all settings frozen on development data and a single evaluation, DiTraR reaches 24.36 and 13.55 R@1 at IoU 0.5 and 0.7 on the TVR validation split. The ensemble improves queries about visual content, the verifier improves queries about dialogue, and their gains largely add up.",
-      "published": "2026-11-20T18:08:03Z",
-      "keyword_score": 35,
-      "topics": [
-        "ranking",
-        "retrieval",
-        "search"
-      ]
-    },
-    {
-      "id": "2611.27910",
-      "title": "Decision Columns as an Index: Interpretable Embeddings for Explainable Entity Matching and Search",
-      "abstract": "Business data systems must determine whether records refer to the same entity and retrieve records satisfying requests whose decisive properties are implicit. As agents act on these records, both tasks require auditable reasons. Dense embeddings perform well but offer opaque coordinates, cannot be filtered by meaning, and require corpus re-encoding to add new properties. We propose interpretable embeddings built from decision columns: each column stores a decision model's calibrated answer to a natural-language question, with outcomes yes, no, or not stated. A record's embedding is its answers across an ordered set of questions. Similarity decomposes exactly into per-question contributions, and new questions add coordinates without altering existing ones. On public product benchmarks, question-space retrieval matches dense candidate generation statistically in a retrieve-then-verify entity matcher, while providing exact explanations for accepted matches. Questions derived from retrieval failures triple mean reciprocal rank without re-encoding prior answers. For search, inferring the attributes of a suitable result outperforms encoding only the literal request, and combining question-space and dense scores improves retrieval, though not at our prespecified confidence threshold. A single small neural network predicts the full interpretable vector from an existing dense embedding, enabling corpus backfilling from a few thousand labeled rows at roughly 1/200 the cost. We position interpretable embeddings as a complementary, readable retrieval channel for explaining matches, filtering on attributes, and extending indexes as failures expose missing facts.",
-      "published": "2026-11-20T17:48:55Z",
-      "keyword_score": 19,
-      "topics": [
-        "ranking",
-        "retrieval",
-        "search"
-      ]
-    },
-    {
-      "id": "2611.27743",
-      "title": "Pre-Crawl Prioritization and Seed Classification for Large-Scale Web Archiving",
-      "abstract": "Pre-crawl prioritization systems decide which pages to fetch first before indexing, aiming to improve crawl efficiency and coverage. Existing approaches based on page popularity and relevance are unsuited to web-archival crawlers that prioritize comprehensive coverage over selective retrieval. We explore prioritization techniques tailored to web archival operations using URL lexical analysis, dynamic domain reputation systems, and HTTP response analysis to inform crawl scheduling decisions. By incorporating predictive models that estimate content change and disappearance probabilities, we improve crawl completeness while reducing redundant visits to stable resources. Through large-scale experiments, we demonstrate that our methods improve archival effectiveness and resource utilization compared to undirected crawling.",
-      "published": "2026-11-20T15:37:26Z",
-      "keyword_score": 12,
-      "topics": [
-        "retrieval",
-        "search",
-        "systems"
-      ]
-    },
-    {
-      "id": "2611.27490",
-      "title": "Which Dwarf Is This? Doppeldwarf-306 and Near-Identical Instance Retrieval",
-      "abstract": "Most established instance-retrieval benchmarks emphasise landmarks; small sculptures from visually similar series offer a complementary challenge. We introduce Doppeldwarf-306: 1,691 openly licensed photographs of 306 bronze dwarf statues in Wrocław, Poland, many made in themed series that share one style, with the photographer of each image recorded. With no training, nearest-neighbour search over frozen DINOv2 features names the right statue first for 93.1% of leave-one-out queries, and the best of thirteen backbones from seven pretraining paradigms reaches 94.7%. Accuracy falls slowly as candidates are added: for DINOv2, by about 0.8 points each time their number doubles. A natural design for a phone guide compares a photograph only with statues near the user. In simulation this helps, but less than an equal number of randomly chosen statues does, so random subsampling overstates its value; a permutation test ties the penalty to the real layout (p = 0.005). Used as a weight instead of a filter, location raises DINOv2 from 93.4% to 98.7% for a simulated user 25 m from the statue. With the query's photographer withheld, learned local-feature matching raises DINOv2 accuracy from 81.8% to 85.5% and also improves DINOv3. Comparing the two best candidates cuts DINOv2's false acceptance of unknown statues from 38.3% to 19.6% at 90% known acceptance.",
-      "published": "2026-11-20T11:36:19Z",
-      "keyword_score": 15,
-      "topics": [
-        "retrieval",
-        "search"
-      ]
-    },
-    {
-      "id": "2611.27211",
-      "title": "Explicit Style Extraction for Personalized Long-Form Text Generation",
-      "abstract": "Personalized long-form generation asks a language model to write new text the way a specific user would. The standard recipe, retrieval-augmented generation, places a few of the user's past texts in the prompt but leaves the model to decide what to take from them. We introduce StylePrism, a taxonomy of 28 stylistic aspects in seven categories, and SP-Refine, an inference-time method that makes style extraction an explicit step: the model first fills StylePrism with the user's patterns, quoted evidence, and habits to avoid, then drafts from the user's samples and revises the draft twice against this profile, guided by its own style scores. On the three long-form tasks of LongLaMP with three LLMs, SP-Refine outperforms LongLaMP's retrieval-augmented baseline in 25 of 27 ROUGE and METEOR comparisons, by 10.2% on average and by up to 35.8%. Annotating users' own texts with the extracted profiles shows that StylePrism captures concrete, checkable habits, from the order of rhetorical moves to a reviewer's sign-off. Ablations show that the profile helps as revision guidance, not as a replacement for the samples: writing from the profile alone is worse in all 27 comparisons, while a single implicit-inference call is a cheaper alternative that comes close. Oracle variants that let the reviser see the reference, together with reference-free controls, show that larger refinement gains require information unavailable at inference time.",
-      "published": "2026-11-20T06:52:18Z",
-      "keyword_score": 12,
-      "topics": [
-        "recommendation",
-        "retrieval"
-      ]
     }
   ],
   "prefilter": [
     "2611.33653",
     "2611.32917",
     "2611.29613",
-    "2611.28233",
-    "2611.27931",
     "2611.32125",
     "2611.30142",
     "2611.33036",
-    "2611.33628",
     "2611.31344",
     "2611.29462",
     "2611.34366",
@@ -2904,11 +2743,8 @@
     "2611.31656",
     "2611.32780",
     "2611.33240",
-    "2611.31940",
-    "2611.31052",
     "2611.29966",
     "2611.29948",
-    "2611.27910",
     "2611.33497",
     "2611.30243",
     "2611.29697",
@@ -2924,7 +2760,6 @@
     "2611.32118",
     "2611.31185",
     "2611.29206",
-    "2611.27490",
     "2611.33542",
     "2611.33322",
     "2611.30423",
@@ -2940,17 +2775,31 @@
     "2611.31767",
     "2611.30156",
     "2611.28418",
-    "2611.27743",
-    "2611.27211",
-    "2611.27007",
+    "2611.34330",
+    "2611.32200",
+    "2611.34707",
+    "2611.30715",
     "2611.31319",
+    "2611.29340",
+    "2611.34576",
+    "2611.33627",
+    "2611.31882",
+    "2611.31065",
     "2611.28331",
     "2611.28946",
-    "2611.30111"
+    "2611.30111",
+    "2611.28929"
   ],
   "reviews": [
     {
       "id": "2611.29613",
+      "cached": false,
+      "status": "eligible",
+      "score": 80,
+      "reason": "为精排/召回模型提供免梯度、免重训的权重直接编辑与业务目标调控范式，且有线上A/B支撑；但编辑高度模型特异、离线到线上存在衰减，需自建评估与验证协议。"
+    },
+    {
+      "id": "2611.32125",
       "status": "error",
       "error": "Review failed after retry: Evidence excerpt absent from cited page"
     },
@@ -2962,42 +2811,35 @@
       "reason": "为特权特征缺失下的蒸馏路由提供可借鉴设计，但仅离线NE、增益极小且无线上验证。"
     },
     {
-      "id": "2611.33240",
-      "cached": false,
-      "status": "eligible",
-      "score": 72,
-      "reason": "提供“结构基线+提升量+结构占比”的评估框架和按步类型拆分的做法，可迁移到电商精排与生成式重排的离线评估；但证据限于教育日志的离线观察，无线上A/B。"
-    },
-    {
       "id": "2611.31951",
       "status": "error",
       "error": "Review failed after retry: Evidence excerpt absent from cited page"
     },
     {
-      "id": "2611.31940",
+      "id": "2611.34407",
       "cached": false,
       "status": "eligible",
-      "score": 73,
-      "reason": "为精排提供可复用历史、按请求共享计算的目标感知轻量结构，但仅有离线与单机时延证据，无线上A/B。"
+      "score": 53,
+      "reason": "其“显式请求+浏览行为推断当前目标并写入持久记忆”的思路可迁移到生成式重排与意图理解，但证据仅来自模拟轨迹和模型裁判，需真实流量验证。"
     },
     {
-      "id": "2611.32125",
+      "id": "2611.28604",
+      "cached": false,
+      "status": "eligible",
+      "score": 68,
+      "reason": "多智能体辩论加证据校验抑制中间推理错误传播的思路，可迁移到生成式重排的可信度校准；但仅离线小样本评测、无线上A/B，且LLM多轮推理延迟成本高。"
+    },
+    {
+      "id": "2611.34436",
       "status": "error",
       "error": "Review failed after retry: Evidence excerpt absent from cited page"
     },
     {
-      "id": "2611.31052",
+      "id": "2611.31175",
       "cached": false,
       "status": "eligible",
       "score": 73,
-      "reason": "对做长尾与冷启动增强的精排/召回工程师有参考价值，但证据限于离线SASRec重训实验，无线上A/B，且整体指标普遍受损。"
-    },
-    {
-      "id": "2611.33628",
-      "cached": false,
-      "status": "eligible",
-      "score": 80,
-      "reason": "多域负迁移与冷启动补全思路可迁移到电商多场景推荐，但线上仅验证新增召回通道的整体收益，未单独归因各模块。"
+      "reason": "展示了用低成本类型化决策替代LLM逐轮重读对话的可行路径，但撤回识别弱、硬谓词易错，且实验为合成对话与闭世界标注。"
     }
   ],
   "abstract_candidates": [
@@ -3007,47 +2849,47 @@
     },
     {
       "id": "2611.32125",
-      "score": 76
-    },
-    {
-      "id": "2611.33628",
-      "score": 74
-    },
-    {
-      "id": "2611.29462",
-      "score": 70
+      "score": 82
     },
     {
       "id": "2611.33844",
-      "score": 68
+      "score": 65
     },
     {
       "id": "2611.33240",
-      "score": 80
-    },
-    {
-      "id": "2611.31940",
-      "score": 78
-    },
-    {
-      "id": "2611.31052",
-      "score": 76
-    },
-    {
-      "id": "2611.34407",
-      "score": 72
-    },
-    {
-      "id": "2611.29094",
-      "score": 88
-    },
-    {
-      "id": "2611.34436",
       "score": 68
     },
     {
+      "id": "2611.34407",
+      "score": 74
+    },
+    {
+      "id": "2611.28604",
+      "score": 72
+    },
+    {
+      "id": "2611.31185",
+      "score": 66
+    },
+    {
+      "id": "2611.29094",
+      "score": 82
+    },
+    {
+      "id": "2611.31175",
+      "score": 70
+    },
+    {
+      "id": "2611.34436",
+      "score": 72
+    },
+    {
       "id": "2611.31951",
-      "score": 80
+      "score": 78
+    },
+    {
+      "id": "2611.30156",
+      "score": 68
     }
   ],
   "shortlist": [
@@ -3056,35 +2898,45 @@
       "score": 88
     },
     {
-      "id": "2611.29094",
-      "score": 88
+      "id": "2611.32125",
+      "score": 82
     },
     {
-      "id": "2611.33240",
-      "score": 80
+      "id": "2611.29094",
+      "score": 82
     },
     {
       "id": "2611.31951",
-      "score": 80
-    },
-    {
-      "id": "2611.31940",
       "score": 78
     },
     {
-      "id": "2611.32125",
-      "score": 76
-    },
-    {
-      "id": "2611.31052",
-      "score": 76
-    },
-    {
-      "id": "2611.33628",
+      "id": "2611.34407",
       "score": 74
+    },
+    {
+      "id": "2611.28604",
+      "score": 72
+    },
+    {
+      "id": "2611.34436",
+      "score": 72
+    },
+    {
+      "id": "2611.31175",
+      "score": 70
     }
   ],
   "eligible": [
+    {
+      "id": "2611.29613",
+      "rubric": {
+        "fit": 4,
+        "evidence": 4,
+        "action": 4
+      },
+      "primary_topic": "ranking",
+      "score": 80
+    },
     {
       "id": "2611.29094",
       "rubric": {
@@ -3096,27 +2948,27 @@
       "score": 66
     },
     {
-      "id": "2611.33240",
+      "id": "2611.34407",
       "rubric": {
         "fit": 3,
-        "evidence": 4,
-        "action": 4
+        "evidence": 2,
+        "action": 3
       },
-      "primary_topic": "ranking",
-      "score": 72
+      "primary_topic": "llm4rec",
+      "score": 53
     },
     {
-      "id": "2611.31940",
+      "id": "2611.28604",
       "rubric": {
         "fit": 4,
         "evidence": 3,
-        "action": 4
+        "action": 3
       },
-      "primary_topic": "ranking",
-      "score": 73
+      "primary_topic": "llm4rec",
+      "score": 68
     },
     {
-      "id": "2611.31052",
+      "id": "2611.31175",
       "rubric": {
         "fit": 4,
         "evidence": 3,
@@ -3124,16 +2976,6 @@
       },
       "primary_topic": "llm4rec",
       "score": 73
-    },
-    {
-      "id": "2611.33628",
-      "rubric": {
-        "fit": 4,
-        "evidence": 4,
-        "action": 4
-      },
-      "primary_topic": "recommendation",
-      "score": 80
     }
   ],
   "recent_topics": [
@@ -3154,11 +2996,14 @@
     "reranking",
     "ranking",
     "retrieval",
-    "retrieval"
+    "retrieval",
+    "recommendation",
+    "ranking",
+    "llm4rec"
   ],
   "selected": [
-    "2611.33628",
-    "2611.31940",
-    "2611.31052"
+    "2611.29613",
+    "2611.31175",
+    "2611.28604"
   ]
 }
