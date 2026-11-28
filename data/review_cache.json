@@ -1409,5 +1409,52 @@
     ],
     "source_type": "pdf_fulltext",
     "pdf_pages": 10
+  },
+  "52613b5bcbddfb2e88fa3bf524a5bfbf1686a9b1417163ded27b744d7a82515d/2611.30156v1": {
+    "id": "2611.30156",
+    "title": "Beyond Knowledge Transfer: How User Overlap Shapes Diversity in Cross-Domain Recommendation",
+    "abstract": "A common paradigm in cross-domain recommendation (CDR) transfers knowledge through users shared by source and target domains. Although this overlap bridge is effective in improving accuracy, its effect on diversity remains unclear. We identify two bottlenecks: the bridge can be too narrow when overlapping users cover limited target-domain tastes, and too loud when shared signals dominate the sparse personal evidence of non-overlapping users. To address both, we propose DivCDR, a model-agnostic Push--Pull framework. Pull constructs confidence-gated virtual positives for overlapping users and optimizes their exposure-entropy gain, broadening the preferences carried by the bridge. Push uses overlap-density-guided negative sampling to move non-overlapping users away from overlap-dense regions. Experiments on three datasets and five representative CDR backbones show that DivCDR improves recommendation diversity while preserving or improving accuracy in most settings.",
+    "authors": [
+      "Yuhan Zhao",
+      "Weixin Chen",
+      "Shu Chen",
+      "Li Chen"
+    ],
+    "published": "2026-11-23T07:03:46Z",
+    "url": "https://arxiv.org/abs/2611.30156v1",
+    "pdf_url": "https://arxiv.org/pdf/2611.30156v1",
+    "explanation": {
+      "problem": "跨域推荐借重叠用户迁移知识时，常让推荐更同质、多样性不升反降，论文要弄清原因并缓解。",
+      "method": "先分析两种失效：重叠用户曝光过窄、非重叠用户被重叠信号淹没。对重叠用户，沿个性化方向微调正样本，用置信度控制幅度，并直接最大化曝光熵增益；对非重叠用户，估计其与重叠用户曝光的相似度，沿降低该相似度的方向采样负样本，相似度越高采样越尖锐。两者只改训练目标，不改骨干结构。",
+      "application": "推测可把推拉损失作为插件加到电商跨域精排或召回训练中，按用户是否跨域重叠分组施加不同干预，并以曝光熵、覆盖率和NDCG共同评估。",
+      "caveat": "证据仅来自三个公开数据集的离线实验，无线上A/B或用户留存验证。"
+    },
+    "title_zh": "超越知识迁移：用户重叠如何塑造跨域推荐中的多样性",
+    "summary": "提出模型无关的推拉框架DivCDR：对重叠用户构造置信门控虚拟正样本以扩大曝光熵，对非重叠用户按重叠密度引导负采样以逃离同质区域。在三个数据集和五个跨域骨干上多数设置提升多样性且保持或提升准确率。",
+    "reason": "为跨域迁移中的多样性退化提供可插拔的推拉干预，但仅离线评测、无线上验证。",
+    "score": 60,
+    "rubric": {
+      "fit": 3,
+      "evidence": 3,
+      "action": 3
+    },
+    "primary_topic": "recommendation",
+    "evidence": {
+      "page": 7,
+      "finding": "表2显示在三个数据集、五个骨干上多数设置多样性指标提升且准确率保持或提升，但均为离线评测，无线上A/B。"
+    },
+    "tags": [
+      "跨域推荐",
+      "多样性",
+      "负采样",
+      "用户重叠",
+      "曝光熵"
+    ],
+    "institutions": [
+      "Hong Kong Baptist University",
+      "Shenzhen University"
+    ],
+    "source_type": "pdf_fulltext",
+    "pdf_pages": 10
   }
 }
